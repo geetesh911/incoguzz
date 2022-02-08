@@ -1,0 +1,437 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk, unique]
+  email String [unique, not null]
+  username String [unique, not null]
+  password String
+  googleUserId String
+  role Role [not null, default: 'USER']
+  accountType AccountType [not null, default: 'ANONYMOUS']
+  isVerified Boolean [not null, default: false]
+  verificationExpires DateTime [default: `now()`, not null]
+  loginAttempts Int [not null, default: 0]
+  blockExpires DateTime [default: `now()`, not null]
+  active Boolean [not null, default: true]
+  lastLogin DateTime [default: `now()`, not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  profile Profile
+  tokens Token [not null]
+  posts Post [not null]
+  likes Like [not null]
+  comments Comment [not null]
+  followers Follower [not null]
+  followings Following [not null]
+  sentFollowRequests FollowRequest [not null]
+  receivedFollowRequests FollowRequest [not null]
+  sentMessages Message [not null]
+  receivedMessages Message [not null]
+  stories Story [not null]
+  activities Activity [not null]
+  blockedBy Blocked [not null]
+  blocked Blocked [not null]
+  settings Settings
+  pollAnswers PollAnswer [not null]
+  commentReplies CommentReplies [not null]
+}
+
+Table Profile {
+  id String [pk, unique]
+  nickname String [not null]
+  bio String
+  mobileNo String [unique]
+  country String
+  gender Gender
+  dob DateTime
+  interestedIn InterestedInTypes
+  relationshipStatus RelationshipStatus
+  website String
+  dpUrl String
+  user User
+  userId String [unique]
+}
+
+Table Settings {
+  id String [pk, unique]
+  user User
+  userId String [unique]
+}
+
+Table Token {
+  id String [pk, unique]
+  user User [not null]
+  userId String [not null]
+  token String [unique, not null]
+  firstUsed Boolean [not null, default: false]
+  finalUsed Boolean [not null, default: false]
+  expires DateTime
+  type TokenType [not null]
+  ip String [not null]
+  browser String [not null]
+  country String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Blocked {
+  id String [pk, unique]
+  sourceUser User [not null]
+  sourceUserId String [not null]
+  targetUser User [not null]
+  targetUserId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Post {
+  id String [pk, unique]
+  user User [not null]
+  userId String [not null]
+  caption String
+  type PostType [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  tags Tag [not null]
+  place Place
+  placeId String
+  poll Poll
+  photos Photo [not null]
+  video Video
+  clip Clip
+  textual Textual
+  audio Audio
+  likes Like [not null]
+  comments Comment [not null]
+  activities Activity [not null]
+  archive Boolean [not null, default: false]
+  published Boolean [not null, default: true]
+  slug String [unique, not null]
+  message Message [not null]
+}
+
+Table Poll {
+  id String [pk, unique]
+  question String [not null]
+  post Post [not null]
+  postId String [unique, not null]
+  pollOptions PollOption [not null]
+  pollAnswers PollAnswer [not null]
+}
+
+Table PollOption {
+  id String [pk, unique]
+  option String [not null]
+  poll Poll [not null]
+  pollId String [not null]
+  pollAnswers PollAnswer [not null]
+}
+
+Table PollAnswer {
+  id String [pk, unique]
+  user User [not null]
+  userId String [unique, not null]
+  poll Poll [not null]
+  pollId String [unique, not null]
+  pollOption PollOption [not null]
+  pollOptionId String [unique, not null]
+}
+
+Table Photo {
+  id String [pk, unique]
+  url String [not null]
+  post Post [not null]
+  postId String [not null]
+}
+
+Table Video {
+  id String [pk, unique]
+  thumbnailUrl String [not null]
+  url String [not null]
+  post Post [not null]
+  postId String [unique, not null]
+}
+
+Table ClipAudio {
+  id String [pk, unique]
+  name String [not null]
+  audioUrl String [not null]
+  clips Clip [not null]
+}
+
+Table Clip {
+  id String [pk, unique]
+  url String [not null]
+  post Post [not null]
+  postId String [unique, not null]
+  thumbnailUrl String [not null]
+  clipAudio ClipAudio [not null]
+  clipAudioId String [not null]
+}
+
+Table Textual {
+  id String [pk, unique]
+  text String [not null]
+  post Post [not null]
+  postId String [unique, not null]
+}
+
+Table Audio {
+  id String [pk, unique]
+  url String [not null]
+  post Post [not null]
+  postId String [unique, not null]
+}
+
+Table Tag {
+  id String [pk, unique]
+  name String [unique, not null]
+  posts Post [not null]
+}
+
+Table Place {
+  id String [pk, unique]
+  name String [not null]
+  address String [unique, not null]
+  posts Post [not null]
+}
+
+Table Like {
+  id String [pk, unique]
+  post Post [not null]
+  postId String [not null]
+  user User [not null]
+  userId String [not null]
+}
+
+Table Comment {
+  id String [pk, unique]
+  comment String [not null]
+  post Post [not null]
+  postId String [not null]
+  user User [not null]
+  userId String [not null]
+  commentReplies CommentReplies [not null]
+}
+
+Table CommentReplies {
+  id String [pk, unique]
+  comment String [not null]
+  repliedTo Comment [not null]
+  repliedToId String [not null]
+  user User [not null]
+  userId String [not null]
+}
+
+Table Follower {
+  id String [pk, unique]
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Following {
+  id String [pk, unique]
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table FollowRequest {
+  id String [pk, unique]
+  message String
+  sourceUser User [not null]
+  sourceUserId String [not null]
+  targetUser User [not null]
+  targetUserId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Message {
+  id String [pk, unique]
+  message String
+  mediaUrl String
+  post Post
+  postId String
+  story Story
+  storyId String
+  sourceUser User [not null]
+  sourceUserId String [not null]
+  targetUser User [not null]
+  targetUserId String [not null]
+  replyToId String
+  replyTo Message
+  replyToMessage Message [not null]
+  mediaType MessageMediaType [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table Story {
+  id String [pk, unique]
+  mediaUrl String [not null]
+  link String
+  user User [not null]
+  userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+  message Message [not null]
+}
+
+Table Activity {
+  id String [pk, unique]
+  type ActivityType [not null]
+  user User [not null]
+  userId String [not null]
+  post Post [not null]
+  postId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+}
+
+Table PostToTag {
+  tagsId String [ref: > Tag.id]
+  postsId String [ref: > Post.id]
+}
+
+Enum Gender {
+  MALE
+  FEMALE
+}
+
+Enum InterestedInTypes {
+  MEN
+  FEMALE
+}
+
+Enum RelationshipStatus {
+  SINGLE
+  ENGAGED
+  MARRIED
+  SEPERATED
+  DIVORCED
+  WIDOWED
+  ITS_COMPLICATED
+  IN_A_RELATIONSHIP
+}
+
+Enum Role {
+  USER
+  ADMIN
+}
+
+Enum PostType {
+  POLL
+  PHOTO
+  VIDEO
+  CLIP
+  TEXTUAL
+  AUDIO
+}
+
+Enum AccountType {
+  PUBLIC
+  ANONYMOUS
+  PRIVATE
+}
+
+Enum TokenType {
+  REFRESH
+  ACCESS
+  VERIFICATION
+  FORGOT_PASSWORD
+}
+
+Enum ActivityType {
+  LIKED
+  COMMENTED
+  POSTED
+  SHARED
+}
+
+Enum MessageMediaType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  POST
+  STORY
+}
+
+Ref: Profile.userId - User.id [delete: Cascade]
+
+Ref: Settings.userId - User.id [delete: Cascade]
+
+Ref: Token.userId > User.id [delete: Cascade]
+
+Ref: Blocked.sourceUserId > User.id
+
+Ref: Blocked.targetUserId > User.id
+
+Ref: Post.userId > User.id [delete: Cascade]
+
+Ref: Post.placeId > Place.id
+
+Ref: Poll.postId - Post.id [delete: Cascade]
+
+Ref: PollOption.pollId > Poll.id [delete: Cascade]
+
+Ref: PollAnswer.userId > User.id
+
+Ref: PollAnswer.pollId > Poll.id
+
+Ref: PollAnswer.pollOptionId > PollOption.id
+
+Ref: Photo.postId > Post.id [delete: Cascade]
+
+Ref: Video.postId - Post.id [delete: Cascade]
+
+Ref: Clip.postId - Post.id [delete: Cascade]
+
+Ref: Clip.clipAudioId > ClipAudio.id [delete: Cascade]
+
+Ref: Textual.postId - Post.id [delete: Cascade]
+
+Ref: Audio.postId - Post.id [delete: Cascade]
+
+Ref: Like.postId > Post.id [delete: Cascade]
+
+Ref: Like.userId > User.id [delete: Cascade]
+
+Ref: Comment.postId > Post.id [delete: Cascade]
+
+Ref: Comment.userId > User.id [delete: Cascade]
+
+Ref: CommentReplies.repliedToId > Comment.id [delete: Cascade]
+
+Ref: CommentReplies.userId > User.id [delete: Cascade]
+
+Ref: Follower.userId > User.id [delete: Cascade]
+
+Ref: Following.userId > User.id [delete: Cascade]
+
+Ref: FollowRequest.sourceUserId > User.id [delete: Cascade]
+
+Ref: FollowRequest.targetUserId > User.id [delete: Cascade]
+
+Ref: Message.postId > Post.id [delete: Set Null]
+
+Ref: Message.storyId > Story.id [delete: Set Null]
+
+Ref: Message.sourceUserId > User.id [delete: Cascade]
+
+Ref: Message.targetUserId > User.id [delete: Cascade]
+
+Ref: Message.replyToId - Message.id [delete: No Action]
+
+Ref: Story.userId > User.id [delete: Cascade]
+
+Ref: Activity.userId > User.id [delete: Cascade]
+
+Ref: Activity.postId > Post.id [delete: Cascade]

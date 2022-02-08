@@ -1,0 +1,12 @@
+export { AggregateBlockedArgs } from "./AggregateBlockedArgs";
+export { CreateBlockedArgs } from "./CreateBlockedArgs";
+export { CreateManyBlockedArgs } from "./CreateManyBlockedArgs";
+export { DeleteBlockedArgs } from "./DeleteBlockedArgs";
+export { DeleteManyBlockedArgs } from "./DeleteManyBlockedArgs";
+export { FindFirstBlockedArgs } from "./FindFirstBlockedArgs";
+export { FindManyBlockedArgs } from "./FindManyBlockedArgs";
+export { FindUniqueBlockedArgs } from "./FindUniqueBlockedArgs";
+export { GroupByBlockedArgs } from "./GroupByBlockedArgs";
+export { UpdateBlockedArgs } from "./UpdateBlockedArgs";
+export { UpdateManyBlockedArgs } from "./UpdateManyBlockedArgs";
+export { UpsertBlockedArgs } from "./UpsertBlockedArgs";

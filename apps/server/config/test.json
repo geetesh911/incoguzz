@@ -1,0 +1,27 @@
+{
+  "env": "test",
+  "dbConfig": {
+    "host": "localhost",
+    "database": "mongoose",
+    "port": 27017,
+    "connectionString": "mongodb+srv://admin:admin@node-app.ta6ie.mongodb.net/node-app?retryWrites=true&w=majority"
+  },
+  "secretKey": "secretKey",
+  "mailConfig": {
+    "username": "geetesh.pillarplus@gmail.com",
+    "password": "gee/2000119"
+  },
+  "cryptrSecretKey": "cryptrSecretKey",
+  "googleConfig": {
+    "GOOGLE_CLIENT_ID": "297953034597-vt9reu37mldk4r1v4qu29kqaavbo6llq.apps.googleusercontent.com",
+    "GOOGLE_CLIENT_SECRET": "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"
+  },
+  "log": {
+    "format": "dev",
+    "dir": "../logs"
+  },
+  "cors": {
+    "origin": true,
+    "credentials": true
+  }
+}

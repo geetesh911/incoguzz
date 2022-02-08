@@ -1,0 +1,391 @@
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity", "interactiveTransactions", "extendedIndexes", "fullTextIndex"]
+}
+
+generator typegraphql {
+  provider = "typegraphql-prisma"
+  output   = "../prisma/generated/type-graphql"
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+  output   = "../prisma/generated/dbml"
+}
+
+// generator docs {
+//   provider = "ts-node ../../../../node_modules/prisma-docs-generator/src"
+//   output   = "../prisma/generated/docs"
+// }
+
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   output   = "../prisma/generated/erd/ERD.svg"
+//   theme    = "forest"
+// }
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum InterestedInTypes {
+  MEN
+  FEMALE
+}
+
+enum RelationshipStatus {
+  SINGLE
+  ENGAGED
+  MARRIED
+  SEPERATED
+  DIVORCED
+  WIDOWED
+  ITS_COMPLICATED
+  IN_A_RELATIONSHIP
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostType {
+  POLL
+  PHOTO
+  VIDEO
+  CLIP
+  TEXTUAL
+  AUDIO
+}
+
+enum AccountType {
+  PUBLIC
+  ANONYMOUS
+  PRIVATE
+}
+
+enum TokenType {
+  REFRESH
+  ACCESS
+  VERIFICATION
+  FORGOT_PASSWORD
+}
+
+enum ActivityType {
+  LIKED
+  COMMENTED
+  POSTED
+  SHARED
+}
+
+enum MessageMediaType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+  POST
+  STORY
+}
+
+model User {
+  id                     String           @id @unique @default(cuid())
+  email                  String           @unique
+  username               String           @unique
+  password               String?          @db.Text
+  googleUserId           String?
+  role                   Role             @default(USER)
+  accountType            AccountType      @default(ANONYMOUS)
+  isVerified             Boolean          @default(false)
+  verificationExpires    DateTime         @default(now())
+  loginAttempts          Int              @default(0)
+  blockExpires           DateTime         @default(now())
+  active                 Boolean          @default(true)
+  lastLogin              DateTime         @default(now())
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @default(now()) @updatedAt
+  profile                Profile?
+  tokens                 Token[]
+  posts                  Post[]
+  likes                  Like[]
+  comments               Comment[]
+  followers              Follower[]
+  followings             Following[]
+  sentFollowRequests     FollowRequest[]  @relation("requestSourceUser")
+  receivedFollowRequests FollowRequest[]  @relation("requestTargetUser")
+  sentMessages           Message[]        @relation("messageSourceUser")
+  receivedMessages       Message[]        @relation("messageTargetUser")
+  stories                Story[]
+  activities             Activity[]
+  blockedBy              Blocked[]        @relation("blockedSourceUser")
+  blocked                Blocked[]        @relation("blockedTargetUser")
+  settings               Settings?
+  pollAnswers            PollAnswer[]
+  commentReplies         CommentReplies[]
+}
+
+model Profile {
+  id                 String              @id @unique @default(cuid())
+  nickname           String
+  bio                String?             @db.Text
+  mobileNo           String?             @unique
+  country            String?
+  gender             Gender?
+  dob                DateTime?
+  interestedIn       InterestedInTypes?
+  relationshipStatus RelationshipStatus?
+  website            String?             @db.Text
+  dpUrl              String?             @db.Text
+  user               User?               @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId             String?             @unique
+}
+
+model Settings {
+  id     String  @id @unique @default(cuid())
+  user   User?   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId String? @unique
+}
+
+model Token {
+  id        String    @id @unique @default(cuid())
+  user      User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  token     String    @unique(length: 191) @db.VarChar(3000)
+  firstUsed Boolean   @default(false)
+  finalUsed Boolean   @default(false)
+  expires   DateTime?
+  type      TokenType
+  ip        String
+  browser   String
+  country   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+}
+
+model Blocked {
+  id           String   @id @unique @default(cuid())
+  sourceUser   User     @relation(name: "blockedSourceUser", fields: [sourceUserId], references: [id])
+  sourceUserId String
+  targetUser   User     @relation(name: "blockedTargetUser", fields: [targetUserId], references: [id])
+  targetUserId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model Post {
+  id         String     @id @unique @default(cuid())
+  user       User       @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId     String
+  caption    String?    @db.Text
+  type       PostType
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @default(now()) @updatedAt
+  tags       Tag[]
+  place      Place?     @relation(fields: [placeId], references: [id])
+  placeId    String?
+  poll       Poll?
+  photos     Photo[]
+  video      Video?
+  clip       Clip?
+  textual    Textual?
+  audio      Audio?
+  likes      Like[]
+  comments   Comment[]
+  activities Activity[]
+  archive    Boolean    @default(false)
+  published  Boolean    @default(true)
+  slug       String     @unique(length: 191) @db.VarChar(3000)
+  message    Message[]
+
+  @@index([archive, published])
+}
+
+model Poll {
+  id          String       @id @unique @default(cuid())
+  question    String
+  post        Post         @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId      String       @unique
+  pollOptions PollOption[]
+  pollAnswers PollAnswer[]
+}
+
+model PollOption {
+  id          String       @id @unique @default(cuid())
+  option      String       @db.Text
+  poll        Poll         @relation(fields: [pollId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  pollId      String
+  pollAnswers PollAnswer[]
+}
+
+model PollAnswer {
+  id           String     @id @unique @default(cuid())
+  user         User       @relation(fields: [userId], references: [id])
+  userId       String     @unique
+  poll         Poll       @relation(fields: [pollId], references: [id])
+  pollId       String     @unique
+  pollOption   PollOption @relation(fields: [pollOptionId], references: [id])
+  pollOptionId String     @unique
+}
+
+model Photo {
+  id     String @id @unique @default(cuid())
+  url    String
+  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId String
+}
+
+model Video {
+  id           String @id @unique @default(cuid())
+  thumbnailUrl String @db.Text
+  url          String
+  post         Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId       String @unique
+}
+
+model ClipAudio {
+  id       String @id @unique @default(cuid())
+  name     String
+  audioUrl String @db.Text
+  clips    Clip[]
+}
+
+model Clip {
+  id           String    @id @unique @default(cuid())
+  url          String
+  post         Post      @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId       String    @unique
+  thumbnailUrl String    @db.Text
+  clipAudio    ClipAudio @relation(fields: [clipAudioId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  clipAudioId  String
+}
+
+model Textual {
+  id     String @id @unique @default(cuid())
+  text   String @db.Text
+  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId String @unique
+}
+
+model Audio {
+  id     String @id @unique @default(cuid())
+  url    String @db.Text
+  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId String @unique
+}
+
+model Tag {
+  id    String @id @unique @default(cuid())
+  name  String @unique
+  posts Post[]
+}
+
+model Place {
+  id      String @id @unique @default(cuid())
+  name    String
+  address String @unique(length: 191) @db.VarChar(3000)
+  posts   Post[]
+}
+
+model Like {
+  id     String @id @unique @default(cuid())
+  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId String
+  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId String
+}
+
+model Comment {
+  id             String           @id @unique @default(cuid())
+  comment        String           @db.Text
+  post           Post             @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId         String
+  user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId         String
+  commentReplies CommentReplies[]
+}
+
+model CommentReplies {
+  id          String  @id @unique @default(cuid())
+  comment     String  @db.Text
+  repliedTo   Comment @relation(fields: [repliedToId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  repliedToId String
+  user        User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId      String
+}
+
+model Follower {
+  id        String   @id @unique @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Following {
+  id        String   @id @unique @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model FollowRequest {
+  id           String   @id @unique @default(cuid())
+  message      String?  @db.LongText
+  sourceUser   User     @relation(name: "requestSourceUser", fields: [sourceUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  sourceUserId String
+  targetUser   User     @relation(name: "requestTargetUser", fields: [targetUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  targetUserId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now()) @updatedAt
+}
+
+model Message {
+  id             String           @id @unique @default(cuid())
+  message        String?          @db.LongText
+  mediaUrl       String?          @db.Text
+  post           Post?            @relation(fields: [postId], references: [id], onUpdate: SetNull, onDelete: SetNull)
+  postId         String?
+  story          Story?           @relation(fields: [storyId], references: [id], onUpdate: SetNull, onDelete: SetNull)
+  storyId        String?
+  sourceUser     User             @relation(name: "messageSourceUser", fields: [sourceUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  sourceUserId   String
+  targetUser     User             @relation(name: "messageTargetUser", fields: [targetUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  targetUserId   String
+  replyToId      String?
+  replyTo        Message?         @relation(name: "replyTo", fields: [replyToId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  replyToMessage Message[]        @relation("replyTo")
+  mediaType      MessageMediaType
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
+}
+
+model Story {
+  id        String    @id @unique @default(cuid())
+  mediaUrl  String    @db.Text
+  link      String?   @db.Text
+  user      User      @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
+  message   Message[]
+}
+
+model Activity {
+  id        String       @id @unique @default(cuid())
+  type      ActivityType
+  user      User         @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  post      Post         @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId    String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now()) @updatedAt
+}

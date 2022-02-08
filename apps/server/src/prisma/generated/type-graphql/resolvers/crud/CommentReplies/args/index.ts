@@ -1,0 +1,12 @@
+export { AggregateCommentRepliesArgs } from "./AggregateCommentRepliesArgs";
+export { CreateCommentRepliesArgs } from "./CreateCommentRepliesArgs";
+export { CreateManyCommentRepliesArgs } from "./CreateManyCommentRepliesArgs";
+export { DeleteCommentRepliesArgs } from "./DeleteCommentRepliesArgs";
+export { DeleteManyCommentRepliesArgs } from "./DeleteManyCommentRepliesArgs";
+export { FindFirstCommentRepliesArgs } from "./FindFirstCommentRepliesArgs";
+export { FindManyCommentRepliesArgs } from "./FindManyCommentRepliesArgs";
+export { FindUniqueCommentRepliesArgs } from "./FindUniqueCommentRepliesArgs";
+export { GroupByCommentRepliesArgs } from "./GroupByCommentRepliesArgs";
+export { UpdateCommentRepliesArgs } from "./UpdateCommentRepliesArgs";
+export { UpdateManyCommentRepliesArgs } from "./UpdateManyCommentRepliesArgs";
+export { UpsertCommentRepliesArgs } from "./UpsertCommentRepliesArgs";

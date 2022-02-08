@@ -1,0 +1,12 @@
+export { AggregateAudioArgs } from "./AggregateAudioArgs";
+export { CreateAudioArgs } from "./CreateAudioArgs";
+export { CreateManyAudioArgs } from "./CreateManyAudioArgs";
+export { DeleteAudioArgs } from "./DeleteAudioArgs";
+export { DeleteManyAudioArgs } from "./DeleteManyAudioArgs";
+export { FindFirstAudioArgs } from "./FindFirstAudioArgs";
+export { FindManyAudioArgs } from "./FindManyAudioArgs";
+export { FindUniqueAudioArgs } from "./FindUniqueAudioArgs";
+export { GroupByAudioArgs } from "./GroupByAudioArgs";
+export { UpdateAudioArgs } from "./UpdateAudioArgs";
+export { UpdateManyAudioArgs } from "./UpdateManyAudioArgs";
+export { UpsertAudioArgs } from "./UpsertAudioArgs";

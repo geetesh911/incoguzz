@@ -1,0 +1,82 @@
+query GetUser {
+  getUser {
+    id
+    email
+    username
+    role
+    accountType
+    isVerified
+    active
+    lastLogin
+    createdAt
+    updatedAt
+    profile {
+      id
+      nickname
+      bio
+      mobileNo
+      country
+      gender
+      dob
+      interestedIn
+      relationshipStatus
+      website
+      dpUrl
+    }
+  }
+}
+
+query IsUsernameAvailable($username: String!) {
+  isUsernameAvailable(username: $username)
+}
+
+mutation DeactiveUser {
+  deactivateUser
+}
+
+mutation UpdateProfile($profileInput: ProfileInput!) {
+  updateProfile(profileInput: $profileInput) {
+    id
+    nickname
+    bio
+    mobileNo
+    country
+    gender
+    dob
+    interestedIn
+    relationshipStatus
+    website
+    dpUrl
+  }
+}
+
+mutation UpdateUser($updateUserInput: UpdateUserInput!) {
+  updateUser(updateUserInput: $updateUserInput) {
+    username
+    profile {
+      id
+      nickname
+      bio
+      mobileNo
+      country
+      gender
+      dob
+      interestedIn
+      relationshipStatus
+      website
+      dpUrl
+    }
+  }
+}
+
+mutation ChangePassword($changePasswordInput: ChangePasswordInput!) {
+  changePassword(changePasswordInput: $changePasswordInput)
+}
+
+mutation ChangeProfilePicture($picture: Upload!) {
+  changeProfilePicture(picture: $picture)
+}
+
+mutation RemoveProfilePicture {
+  removeProfilePicture
+}

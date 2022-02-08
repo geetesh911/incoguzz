@@ -1,0 +1,12 @@
+export { AggregateClipArgs } from "./AggregateClipArgs";
+export { CreateClipArgs } from "./CreateClipArgs";
+export { CreateManyClipArgs } from "./CreateManyClipArgs";
+export { DeleteClipArgs } from "./DeleteClipArgs";
+export { DeleteManyClipArgs } from "./DeleteManyClipArgs";
+export { FindFirstClipArgs } from "./FindFirstClipArgs";
+export { FindManyClipArgs } from "./FindManyClipArgs";
+export { FindUniqueClipArgs } from "./FindUniqueClipArgs";
+export { GroupByClipArgs } from "./GroupByClipArgs";
+export { UpdateClipArgs } from "./UpdateClipArgs";
+export { UpdateManyClipArgs } from "./UpdateManyClipArgs";
+export { UpsertClipArgs } from "./UpsertClipArgs";

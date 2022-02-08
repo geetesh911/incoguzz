@@ -1,0 +1,12 @@
+export { AggregateSettingsArgs } from "./AggregateSettingsArgs";
+export { CreateManySettingsArgs } from "./CreateManySettingsArgs";
+export { CreateSettingsArgs } from "./CreateSettingsArgs";
+export { DeleteManySettingsArgs } from "./DeleteManySettingsArgs";
+export { DeleteSettingsArgs } from "./DeleteSettingsArgs";
+export { FindFirstSettingsArgs } from "./FindFirstSettingsArgs";
+export { FindManySettingsArgs } from "./FindManySettingsArgs";
+export { FindUniqueSettingsArgs } from "./FindUniqueSettingsArgs";
+export { GroupBySettingsArgs } from "./GroupBySettingsArgs";
+export { UpdateManySettingsArgs } from "./UpdateManySettingsArgs";
+export { UpdateSettingsArgs } from "./UpdateSettingsArgs";
+export { UpsertSettingsArgs } from "./UpsertSettingsArgs";

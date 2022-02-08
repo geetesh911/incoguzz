@@ -1,0 +1,96 @@
+query VerifyAccessToken($accessToken: String!) {
+  verifyAccessToken(accessToken: $accessToken)
+}
+
+mutation SignUp($signUpInput: SignUpInput!) {
+  signUp(signUpInput: $signUpInput) {
+    id
+    email
+    username
+    isVerified
+  }
+}
+mutation GoogleAuth($googleAuthInput: GoogleAuthInput!) {
+  googleAuth(googleAuthInput: $googleAuthInput) {
+    id
+    email
+    username
+    accessToken
+    refreshToken
+    isVerified
+  }
+}
+
+mutation Login($loginInput: LoginInput!) {
+  login(loginInput: $loginInput) {
+    id
+    email
+    username
+    profile {
+      id
+      nickname
+      bio
+      mobileNo
+      country
+      gender
+      dob
+      interestedIn
+      relationshipStatus
+      website
+      dpUrl
+    }
+    accessToken
+    refreshToken
+  }
+}
+
+mutation VerifyUserEmail($verificationToken: String!) {
+  verifyUserEmail(verificationToken: $verificationToken)
+}
+
+mutation ForgotPassword($forgotPasswordInput: ForgotPasswordInput!) {
+  forgotPassword(forgotPasswordInput: $forgotPasswordInput) {
+    email
+    message
+    verificationUuid
+    isVerified
+  }
+}
+
+mutation VerifyResetPasswordToken($verificatonToken: String!) {
+  verifyForgotPassword(verificationToken: $verificatonToken) {
+    email
+    message
+    verificationUuid
+    isVerified
+  }
+}
+
+mutation ResetPassword($resetPasswordInput: ResetPasswordInput!) {
+  resetPassword(resetPasswordInput: $resetPasswordInput) {
+    email
+    message
+    verificationUuid
+    isVerified
+  }
+}
+
+mutation DeactiveUser {
+  deactivateUser
+}
+
+mutation UpdateProfile($profileInput: ProfileInput!) {
+  updateProfile(profileInput: $profileInput) {
+    id
+    nickname
+    bio
+    mobileNo
+    country
+    gender
+    dob
+    interestedIn
+    relationshipStatus
+    website
+    dpUrl
+  }
+}

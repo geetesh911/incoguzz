@@ -2,10 +2,29 @@
   "name": "turborepo-basic-shared",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": {
+    "nohoist": [
+      "@react-native-community/cli-platform-android",
+      "**@babel**",
+      "**@react-native-community**",
+      "@react-native-community/**",
+      "react-native",
+      "react",
+      "react-redux",
+      "react-dom",
+      "**react-native**",
+      "@apollo/client",
+      "react-native/**",
+      "react-native-dev-menu",
+      "react-native-svg",
+      "react-native-splash-screen",
+      "jetifier"
+    ],
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ]
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",

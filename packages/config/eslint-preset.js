@@ -6,6 +6,7 @@ module.exports = {
         "apps/docs/",
         "apps/web/",
         "packages/ui/",
+        "packages/graphql/",
         "packages/config/",
         "packages/tsconfig/",
       ],

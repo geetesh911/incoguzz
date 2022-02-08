@@ -1,0 +1,1 @@
+export { PlacePostsArgs } from "./PlacePostsArgs";

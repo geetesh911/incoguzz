@@ -1,0 +1,12 @@
+export { AggregateStoryArgs } from "./AggregateStoryArgs";
+export { CreateManyStoryArgs } from "./CreateManyStoryArgs";
+export { CreateStoryArgs } from "./CreateStoryArgs";
+export { DeleteManyStoryArgs } from "./DeleteManyStoryArgs";
+export { DeleteStoryArgs } from "./DeleteStoryArgs";
+export { FindFirstStoryArgs } from "./FindFirstStoryArgs";
+export { FindManyStoryArgs } from "./FindManyStoryArgs";
+export { FindUniqueStoryArgs } from "./FindUniqueStoryArgs";
+export { GroupByStoryArgs } from "./GroupByStoryArgs";
+export { UpdateManyStoryArgs } from "./UpdateManyStoryArgs";
+export { UpdateStoryArgs } from "./UpdateStoryArgs";
+export { UpsertStoryArgs } from "./UpsertStoryArgs";

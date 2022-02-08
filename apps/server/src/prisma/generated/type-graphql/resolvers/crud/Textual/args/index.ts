@@ -1,0 +1,12 @@
+export { AggregateTextualArgs } from "./AggregateTextualArgs";
+export { CreateManyTextualArgs } from "./CreateManyTextualArgs";
+export { CreateTextualArgs } from "./CreateTextualArgs";
+export { DeleteManyTextualArgs } from "./DeleteManyTextualArgs";
+export { DeleteTextualArgs } from "./DeleteTextualArgs";
+export { FindFirstTextualArgs } from "./FindFirstTextualArgs";
+export { FindManyTextualArgs } from "./FindManyTextualArgs";
+export { FindUniqueTextualArgs } from "./FindUniqueTextualArgs";
+export { GroupByTextualArgs } from "./GroupByTextualArgs";
+export { UpdateManyTextualArgs } from "./UpdateManyTextualArgs";
+export { UpdateTextualArgs } from "./UpdateTextualArgs";
+export { UpsertTextualArgs } from "./UpsertTextualArgs";

@@ -1,0 +1,118 @@
+query GetUserPosts {
+  getUserPosts {
+    id
+    caption
+    type
+    createdAt
+    updatedAt
+    tags {
+      id
+      name
+    }
+    place {
+      id
+      name
+    }
+    poll {
+      id
+      question
+      pollOptions {
+        id
+        option
+      }
+    }
+    photos {
+      id
+      url
+    }
+    video {
+      id
+      url
+      thumbnailUrl
+    }
+    clip {
+      id
+      url
+      thumbnailUrl
+      clipAudio {
+        id
+        name
+        audioUrl
+      }
+    }
+    textual {
+      id
+      text
+    }
+    audio {
+      id
+      url
+    }
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
+mutation AddVideoPost(
+  $addMediaPostInput: AddMediaPostInput!
+  $media: [Upload!]!
+) {
+  addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
+mutation AddPhotoPost(
+  $addMediaPostInput: AddMediaPostInput!
+  $media: [Upload!]!
+) {
+  addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
+mutation AddTextualPost {
+  addTextualPost(addTextualPostInput: $addTextualPostInput) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
+mutation AddPollPost {
+  addPollPost(addPollPostInput: $addPollPostInput) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
+query GenerateMediaAccessToken {
+  getMediaAccessToken
+}
