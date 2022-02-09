@@ -8,8 +8,7 @@ import {
 import { IInputProps } from "./Input";
 import { ShowError } from "./ShowError";
 import { Pressable } from "react-native";
-import { themes } from "../../../styles/theme";
-import { useAppSelector } from "../../../redux/hooks";
+import { useTheme } from "../../../styles/theme";
 
 interface IPasswordInputProps extends IInputProps {}
 
@@ -20,16 +19,16 @@ export const PasswordInput: FC<IPasswordInputProps> = ({
   placeholder,
   error,
 }) => {
-  const themeMode = useAppSelector(state => state.theme.theme);
-
   const [focused, setFocused] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
 
   const icon = !visible ? "eye-slash" : "eye";
 
+  const theme = useTheme();
+
   const placeholderTextColor = error
-    ? themes[themeMode].colors?.error
-    : themes[themeMode].commonConstants?.placeholderTextColor;
+    ? theme.colors?.error
+    : theme.commonConstants?.placeholderTextColor;
 
   return (
     <StyledPasswordInputUpperContainer>

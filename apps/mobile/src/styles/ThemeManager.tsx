@@ -1,14 +1,14 @@
 import React, { FC } from "react";
 import { StatusBar } from "native-base";
 import { ThemeProvider } from "styled-components/native";
-import { themes } from "./theme";
+import { useTheme } from "./theme";
 import { useAppSelector } from "../redux/hooks";
 import { ThemeEnum } from "@incoguzz/redux";
 
 export const ThemeManager: FC = ({ children }) => {
   const themeMode = useAppSelector(state => state.theme.theme);
 
-  const theme = themes[themeMode];
+  const theme = useTheme();
 
   const statusBarStyle =
     themeMode === ThemeEnum.light ? "dark-content" : "light-content";
@@ -17,7 +17,7 @@ export const ThemeManager: FC = ({ children }) => {
     <ThemeProvider theme={theme}>
       <StatusBar
         barStyle={statusBarStyle}
-        backgroundColor={themes[themeMode].backgrounds.primary}
+        backgroundColor={theme.backgrounds.primary}
       />
       {children}
     </ThemeProvider>

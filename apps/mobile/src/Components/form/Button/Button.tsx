@@ -1,8 +1,7 @@
 import React, { FC } from "react";
 import { GestureResponderEvent } from "react-native";
 import { DefaultTheme } from "styled-components";
-import { useAppSelector } from "../../../redux/hooks";
-import { themes } from "../../../styles/theme";
+import { useTheme } from "../../../styles/theme";
 import { LoadingIcon } from "../../shared/Loading";
 import { StyledButtonText, StyledButtonContainer } from "./styled";
 
@@ -19,21 +18,20 @@ export const Button: FC<IButtonProps> = ({
   isLoading,
   onPress,
 }) => {
-  const themeMode = useAppSelector(state => state.theme.theme);
-
+  const theme = useTheme();
   return (
     <StyledButtonContainer
       style={({ pressed }) => [
         {
           backgroundColor: pressed
-            ? themes[themeMode].hoverColors[color || "primary"]
-            : themes[themeMode].colors[color || "primary"],
+            ? theme.hoverColors[color || "primary"]
+            : theme.colors[color || "primary"],
         },
       ]}
       onPress={onPress}
     >
       {isLoading ? (
-        <LoadingIcon size={25} color={themes[themeMode].textColors.primary} />
+        <LoadingIcon size={25} color={theme.textColors.primary} />
       ) : (
         <StyledButtonText>{title}</StyledButtonText>
       )}

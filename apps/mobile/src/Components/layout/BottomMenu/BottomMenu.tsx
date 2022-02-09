@@ -3,17 +3,14 @@ import { Text } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyledBottomMenuContainer, StyledMenuItem } from "./styled";
 import { RouteIcons } from "../../../constants/RoutesName";
-import { dark, light, themes } from "../../../styles/theme";
-import { useAppSelector } from "../../../redux/hooks";
-import { ThemeEnum } from "@incoguzz/redux";
+import { useTheme } from "../../../styles/theme";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({
   state: navigationState,
   descriptors,
   navigation,
 }) => {
-  const themeMode = useAppSelector(state => state.theme.theme);
-
+  const theme = useTheme();
   return (
     <StyledBottomMenuContainer>
       {navigationState?.routes?.map((route, index) => {
@@ -41,8 +38,8 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
           });
         };
 
-        const activeColor = themes[themeMode]?.colors?.primary;
-        const color = themes[themeMode]?.objectBackgrounds?.secondary;
+        const activeColor = theme?.colors?.primary;
+        const color = theme?.objectBackgrounds?.secondary;
 
         const iconColor = isFocused ? activeColor : color;
 
@@ -53,7 +50,7 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
             accessibilityRole="button"
             onLongPress={onLongPress}
             style={{
-              borderColor: themes[themeMode]?.objectBackgrounds?.primary,
+              borderColor: theme?.objectBackgrounds?.primary,
               borderTopWidth: 3,
             }}
           >

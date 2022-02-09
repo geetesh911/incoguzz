@@ -5,8 +5,7 @@ import {
   StyledInputUpperContainer,
 } from "./styled";
 import { ShowError } from "./ShowError";
-import { themes } from "../../../styles/theme";
-import { useAppSelector } from "../../../redux/hooks";
+import { useTheme } from "../../../styles/theme";
 
 export interface IInputProps {
   value: unknown;
@@ -23,13 +22,12 @@ export const Input: FC<IInputProps> = ({
   placeholder,
   error,
 }) => {
-  const themeMode = useAppSelector(state => state.theme.theme);
-
   const [focused, setFocused] = useState<boolean>(false);
+  const theme = useTheme();
 
   const placeholderTextColor = error
-    ? themes[themeMode].colors?.error
-    : themes[themeMode].commonConstants?.placeholderTextColor;
+    ? theme.colors?.error
+    : theme.commonConstants?.placeholderTextColor;
 
   return (
     <StyledInputUpperContainer>

@@ -5,16 +5,15 @@ import makeApolloClient from "../apollo";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { NativeBaseProvider } from "native-base";
 import { ThemeManager } from "./styles/ThemeManager";
-import { themes } from "./styles/theme";
+import { useTheme } from "./styles/theme";
 import { useAppSelector } from "./redux/hooks";
 import { Routes } from "./Navigation/Routes";
 import AuthHelper from "./helpers/auth.helper";
 
 const App = () => {
-  const themeMode = useAppSelector(state => state.theme.theme);
   const isTokenReceived = useAppSelector(state => state.auth.isTokenReceived);
 
-  const theme = themes[themeMode];
+  const theme = useTheme();
 
   const [client, setClient] = useState(
     makeApolloClient({

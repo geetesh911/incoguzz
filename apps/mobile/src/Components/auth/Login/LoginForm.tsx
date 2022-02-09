@@ -25,6 +25,7 @@ import {
 } from "../styled";
 import { useAppDispatch } from "../../../redux/hooks";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { GoogleButton } from "./GoogleButton";
 
 export const LoginForm: FC = () => {
   const navigation = useNavigation<LoginScreenNavigationProp>();
@@ -97,7 +98,7 @@ export const LoginForm: FC = () => {
 
   const googleSignIn = async () => {
     const userInfo = await GoogleSignin.signIn();
-    console.log(userInfo);
+    console.log("userInfo", userInfo);
   };
   return (
     <View>
@@ -107,11 +108,7 @@ export const LoginForm: FC = () => {
         title="Login"
         isLoading={loading}
       />
-      <Button
-        onPress={() => googleSignIn()}
-        title="Google Login"
-        isLoading={loading}
-      />
+      <GoogleButton onPress={() => googleSignIn()} isLoading={loading} />
       <StyledAuthNavigationMessageContainer>
         <StyledAuthNavigationMessage>
           Don't have an account?

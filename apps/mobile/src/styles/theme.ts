@@ -111,7 +111,7 @@ export const themes: Themes = {
   light,
 };
 
-export const getTheme = () => {
+export const useTheme = () => {
   const themeMode = store.getState().theme.theme;
   return themes[themeMode];
 };
