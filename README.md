@@ -1,6 +1,6 @@
-# Turborepo starter
+# Incoguzz
 
-This is an official Yarn v1 starter turborepo.
+This is an official incoguzz monorepo.
 
 ## What's inside?
 
@@ -10,7 +10,12 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 
 - `docs`: a [Next.js](https://nextjs.org) app
 - `web`: another [Next.js](https://nextjs.org) app
+- `mobile`: a [React Native](https://reactnative.dev) app
+- `server`: a [Node JS](https://nodejs.org) app using [GraphQL](https://graphql.org/)
 - `ui`: a stub React component library shared by both `web` and `docs` applications
+- `graphql`: a graphql types and hooks library shared by `web` and `mobile`
+- `redux`: a redux store shared by `web` and `mobile`
+- `styles`: a style library contains style related logic
 - `config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 
@@ -25,25 +30,27 @@ This turborepo has some additional tools already setup for you:
 - [Jest](https://jestjs.io) test runner for all things JavaScript
 - [Prettier](https://prettier.io) for code formatting
 
-## Setup
+### Install Packages
 
-This repository is used in the `npx create-turbo` command, and selected when choosing which package manager you wish to use with your monorepo (Yarn).
+To install npm packages, run the following command in the root directory:
+
+```
+yarn install
+```
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build all apps and packages, run the following command in the root directory:
 
 ```
-cd my-turborepo
 yarn run build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop all apps and packages, run the following command in the root directory:
 
 ```
-cd my-turborepo
 yarn run dev
 ```
 

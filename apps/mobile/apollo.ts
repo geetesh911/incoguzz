@@ -5,9 +5,13 @@ import {
   createHttpLink,
 } from "@apollo/client";
 
+interface IMakeApolloClient {
+  token?: string;
+}
+
 export function makeApolloClient({
   token,
-}: any): ApolloClient<NormalizedCacheObject> {
+}: IMakeApolloClient): ApolloClient<NormalizedCacheObject> {
   // create an apollo link instance, a network interface for apollo client
   const link = createHttpLink({
     uri: `http://192.168.1.36:5000/graphql`,

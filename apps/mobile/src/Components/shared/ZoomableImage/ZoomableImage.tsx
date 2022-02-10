@@ -1,11 +1,16 @@
 import * as React from "react";
-import { Animated, ImageSourcePropType, ImageStyle } from "react-native";
+import {
+  Animated,
+  ImageSourcePropType,
+  ImageStyle,
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 import {
   PinchGestureHandler,
   PinchGestureHandlerStateChangeEvent,
   State,
 } from "react-native-gesture-handler";
-import { Dimensions, StyleSheet } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
 
