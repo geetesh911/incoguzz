@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Svg, { Path, Defs, LinearGradient, Stop } from "react-native-svg";
-import { IIconInterface } from "../../interfaces/Icons.interface";
+import { IIconInterface } from "./interfaces";
 
 export const LogoIcon: FC<IIconInterface> = ({ height, width }) => {
   return (

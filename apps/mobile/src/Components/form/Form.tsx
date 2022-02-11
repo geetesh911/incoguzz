@@ -1,11 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { FormikProps } from "formik";
-import {
-  IFormComponents,
-  IFormField,
-  IFormFields,
-} from "../../interfaces/Form.interface";
+import { IFormComponents, IFormField, IFormFields } from "./interfaces";
 import { Input, PasswordInput } from "./Input";
 
 interface IFormProps<Values> {

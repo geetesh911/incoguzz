@@ -10,13 +10,16 @@ import {
 } from "@incoguzz/graphql";
 import { useMutation } from "@apollo/client";
 import { useNavigation } from "@react-navigation/native";
-import { IFormFields } from "../../../interfaces/Form.interface";
-import { FormComponentTypes } from "../../../constants/Form";
-import { Form } from "../../form/Form";
-import { Button, TextButton } from "../../form";
+import {
+  FormComponentTypes,
+  IFormFields,
+  Button,
+  TextButton,
+  Form,
+} from "../../form";
 import { signUpErrorMessages } from "../../../static/error-messages/auth";
-import { SignUpScreenNavigationProp } from "../../../interfaces/Navigation.interface";
-import { RouteNames } from "../../../constants/RoutesName";
+import { RouteNames } from "../../../Navigation/constants";
+import { SignUpScreenNavigationProp } from "../../../Navigation/interfaces";
 import {
   StyledAuthNavigationMessage,
   StyledAuthNavigationMessageContainer,

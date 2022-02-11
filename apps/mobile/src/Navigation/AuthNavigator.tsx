@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { RouteNames } from "../constants/RoutesName";
+import { RouteNames } from "./constants";
 import { LoginScreen } from "../Screens/AuthScreen/LoginScreen";
 import { SignUpScreen } from "../Screens/AuthScreen/SignUpScreen";
 import { AuthHomeScreen } from "../Screens/AuthScreen/AuthHomeScreen";

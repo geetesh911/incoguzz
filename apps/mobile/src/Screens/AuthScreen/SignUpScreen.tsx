@@ -1,7 +1,9 @@
 import React, { FC } from "react";
-import { Header } from "../../Components/auth/Header";
-import { SignUpForm } from "../../Components/auth/SignUp/SignUpForm";
-import { StyledAuthScreenContainer } from "../../Components/auth/styled";
+import {
+  Header,
+  SignUpForm,
+  StyledAuthScreenContainer,
+} from "../../Components/auth";
 
 export const SignUpScreen: FC = () => {
   return (

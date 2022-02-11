@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import Svg, { Path } from "react-native-svg";
-import { IIconInterface } from "../../interfaces/Icons.interface";
+import { IIconInterface } from "./interfaces";
 
 export const ExploreIcon: FC<IIconInterface> = ({ color }) => {
   return (

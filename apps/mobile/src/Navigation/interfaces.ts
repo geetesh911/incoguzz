@@ -1,5 +1,5 @@
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { RouteNames } from "../constants/RoutesName";
+import { RouteNames } from "./constants";
 
 type TabParamList = {
   [RouteNames.User]: undefined;

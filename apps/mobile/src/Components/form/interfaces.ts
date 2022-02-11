@@ -1,4 +1,4 @@
-import { FormComponentTypes } from "../constants/Form";
+import { FormComponentTypes } from "./constants";
 
 export interface IFormField<T> {
   name: keyof T;

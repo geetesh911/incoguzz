@@ -194,8 +194,8 @@ const FurnitureCard: FC<{ item: Furniture }> = ({ item }) => {
   return (
     <>
       <LongPressGestureHandler
-        onActivated={e => setOpen(true)}
-        onEnded={e => setOpen(false)}
+        onActivated={() => setOpen(true)}
+        onHandlerStateChange={() => setOpen(false)}
         minDurationMs={100}
       >
         <Image

@@ -8,7 +8,7 @@ import { ThemeManager } from "./styles/ThemeManager";
 import { useTheme } from "./styles/theme";
 import { useAppSelector } from "./redux/hooks";
 import { Routes } from "./Navigation/Routes";
-import AuthHelper from "./helpers/auth.helper";
+import { AuthHelper } from "./Components/auth";
 
 const App = () => {
   const isTokenReceived = useAppSelector(state => state.auth.isTokenReceived);

@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { FC } from "react";
-import { Header } from "../../Components/auth/Header";
 import {
+  Header,
   StyledAuthFormContainer,
   StyledAuthScreenContainer,
-} from "../../Components/auth/styled";
+} from "../../Components/auth";
 import { Button } from "../../Components/form";
-import { RouteNames } from "../../constants/RoutesName";
-import { AuthHomeScreenNavigationProp } from "../../interfaces/Navigation.interface";
+import { RouteNames } from "../../Navigation/constants";
+import { AuthHomeScreenNavigationProp } from "../../Navigation/interfaces";
 
 export const AuthHomeScreen: FC = () => {
   const navigation = useNavigation<AuthHomeScreenNavigationProp>();

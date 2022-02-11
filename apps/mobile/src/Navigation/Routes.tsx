@@ -6,7 +6,7 @@ import { setIsTokenReceived, ThemeEnum } from "@incoguzz/redux";
 import { AppNavigator } from "./AppNavigator";
 import { AuthNavigator } from "./AuthNavigator";
 import { Loading } from "../Components/shared/Loading";
-import AuthHelper from "../helpers/auth.helper";
+import { AuthHelper } from "../Components/auth";
 
 interface IRoutesProps {
   theme: DefaultTheme;

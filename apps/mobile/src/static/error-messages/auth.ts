@@ -1,5 +1,5 @@
 import { LoginInput, SignUpInput } from "@incoguzz/graphql";
-import { IErrorMessage } from "../../interfaces/Static.interface";
+import { IErrorMessage } from "./interfaces";
 
 type ISignUpErrorMessages = { [Property in keyof SignUpInput]: IErrorMessage };
 

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -11,14 +11,17 @@ import {
 import { setIsTokenReceived } from "@incoguzz/redux";
 import { useMutation } from "@apollo/client";
 import { useNavigation } from "@react-navigation/native";
-import { IFormFields } from "../../../interfaces/Form.interface";
-import { FormComponentTypes } from "../../../constants/Form";
 import { Form } from "../../form/Form";
-import { Button, TextButton } from "../../form";
+import {
+  Button,
+  TextButton,
+  FormComponentTypes,
+  IFormFields,
+} from "../../form";
 import { loginErrorMessages } from "../../../static/error-messages/auth";
-import { RouteNames } from "../../../constants/RoutesName";
-import { LoginScreenNavigationProp } from "../../../interfaces/Navigation.interface";
-import AuthHelper from "../../../helpers/auth.helper";
+import { RouteNames } from "../../../Navigation/constants";
+import { LoginScreenNavigationProp } from "../../../Navigation/interfaces";
+import { AuthHelper } from "../helper";
 import {
   StyledAuthNavigationMessage,
   StyledAuthNavigationMessageContainer,

@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Text } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyledBottomMenuContainer, StyledMenuItem } from "./styled";
-import { RouteIcons } from "../../../constants/RoutesName";
+import { RouteIcons } from "../../../Navigation/constants";
 import { useTheme } from "../../../styles/theme";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({

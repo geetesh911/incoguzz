@@ -1,10 +1,10 @@
 import React, { FC } from "react";
-import { Header } from "../../Components/auth/Header";
-import { LoginForm } from "../../Components/auth/Login/LoginForm";
 import {
+  LoginForm,
+  Header,
   StyledAuthFormContainer,
   StyledAuthScreenContainer,
-} from "../../Components/auth/styled";
+} from "../../Components/auth";
 
 export const LoginScreen: FC = () => {
   return (

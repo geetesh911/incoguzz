@@ -3,7 +3,7 @@ import EncryptedStorage from "react-native-encrypted-storage";
 
 type IUserTokens = Pick<LoginOutput, "accessToken" | "refreshToken">;
 
-class AuthHelper {
+export class AuthHelper {
   static async storeTokens({ accessToken, refreshToken }: IUserTokens) {
     try {
       await EncryptedStorage.setItem("accessToken", accessToken);
@@ -27,4 +27,3 @@ class AuthHelper {
     } catch (error) {}
   }
 }
-export default AuthHelper;

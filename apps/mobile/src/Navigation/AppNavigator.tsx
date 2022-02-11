@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { HomeScreen } from "../Screens/AppScreens/HomeScreen";
 import { BottomMenu } from "../Components/layout/BottomMenu";
 import { AboutScreen } from "../Screens/AppScreens/AboutScreen";
-import { RouteNames } from "../constants/RoutesName";
+import { RouteNames } from "./constants";
 
 const Tab = createBottomTabNavigator();
 
