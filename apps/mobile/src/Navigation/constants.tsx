@@ -14,6 +14,8 @@ export enum RouteNames {
   Explore = "Explore",
   Notifications = "Notifications",
   User = "User",
+  Feed = "Feed",
+  Post = "Post",
   AuthHome = "AuthHome",
   Login = "Login",
   SignUp = "SignUp",

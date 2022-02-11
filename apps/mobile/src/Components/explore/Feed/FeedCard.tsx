@@ -1,9 +1,11 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FC, useMemo, useState } from "react";
 import { Alert, ScrollView } from "react-native";
 import {
   LongPressGestureHandler,
   TapGestureHandler,
 } from "react-native-gesture-handler";
+import { ExploreScreenNavigationProp, RouteNames } from "../../../Navigation";
 import { Furniture } from "./Feed";
 import { PostModal } from "./PostModal";
 import { StyledFeedImage } from "./styled";
@@ -14,6 +16,8 @@ interface IFeedCardProps {
 }
 
 const FeedCard: FC<IFeedCardProps> = ({ item, innerRef }) => {
+  const navigation = useNavigation<ExploreScreenNavigationProp>();
+
   const randomBool = useMemo(() => Math.random() < 0.5, []);
   const [open, setOpen] = useState<boolean>(false);
 
@@ -26,7 +30,7 @@ const FeedCard: FC<IFeedCardProps> = ({ item, innerRef }) => {
       >
         <TapGestureHandler
           simultaneousHandlers={innerRef}
-          onActivated={() => Alert.alert("hello")}
+          onActivated={() => navigation.navigate(RouteNames.Post)}
           maxDurationMs={3000}
         >
           <StyledFeedImage

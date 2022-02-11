@@ -6,6 +6,8 @@ type TabParamList = {
   [RouteNames.Explore]: undefined;
   [RouteNames.Notifications]: undefined;
   [RouteNames.Messages]: undefined;
+  [RouteNames.Feed]: undefined;
+  [RouteNames.Post]: undefined;
   [RouteNames.AuthHome]: undefined;
   [RouteNames.Login]: undefined;
   [RouteNames.SignUp]: undefined;
@@ -22,4 +24,9 @@ export type SignUpScreenNavigationProp = BottomTabNavigationProp<
 export type AuthHomeScreenNavigationProp = BottomTabNavigationProp<
   TabParamList,
   RouteNames.AuthHome
+>;
+
+export type ExploreScreenNavigationProp = BottomTabNavigationProp<
+  TabParamList,
+  RouteNames.Explore
 >;
