@@ -1,7 +1,8 @@
-import React, { FC, useState } from "react";
+import React, { FC, useRef, useState } from "react";
 import MasonryList from "@react-native-seoul/masonry-list";
 import FeedCard from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
+import { ScrollView } from "react-native";
 
 export interface Furniture {
   id: string;
@@ -157,14 +158,22 @@ const furnitureData: Furniture[] = [
 ];
 
 export const Feed: FC = () => {
+  const scrollHandler = useRef<ScrollView>();
   const [data, setData] = useState<Furniture[]>(furnitureData);
 
   const renderItem = ({ item }: { item: Furniture; index?: number }) => {
-    return <FeedCard key={`${item.id}${Math.random()}`} item={item} />;
+    return (
+      <FeedCard
+        innerRef={scrollHandler}
+        key={`${item.id}${Math.random()}`}
+        item={item}
+      />
+    );
   };
 
   return (
     <MasonryList
+      innerRef={scrollHandler}
       ListHeaderComponent={<ExploreHeader />}
       contentContainerStyle={{
         paddingHorizontal: 10,
