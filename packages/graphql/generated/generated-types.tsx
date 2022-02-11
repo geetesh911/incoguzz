@@ -5,7 +5,7 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -25,20 +25,69 @@ export enum AccountType {
   Public = 'PUBLIC'
 }
 
-export type AddPostInput = {
+export type AddClipPostInput = {
+  audioId?: InputMaybe<Scalars['String']>;
   caption?: InputMaybe<Scalars['String']>;
-  media?: InputMaybe<Array<Scalars['Upload']>>;
-  place?: InputMaybe<Scalars['String']>;
-  pollOptions?: InputMaybe<Array<Scalars['String']>>;
+  place?: InputMaybe<PlaceInput>;
+  published?: InputMaybe<Scalars['Boolean']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  type: PostType;
+};
+
+export type AddMediaPostInput = {
+  caption?: InputMaybe<Scalars['String']>;
+  place?: InputMaybe<PlaceInput>;
+  published?: InputMaybe<Scalars['Boolean']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  type: PostType;
+};
+
+export type AddPollPostInput = {
+  pollOptions?: InputMaybe<Array<PollOptionInput>>;
   pollQuestion?: InputMaybe<Scalars['String']>;
+  published?: InputMaybe<Scalars['Boolean']>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  type: PostType;
+};
+
+export type AddTextualPostInput = {
+  published?: InputMaybe<Scalars['Boolean']>;
   tags?: InputMaybe<Array<Scalars['String']>>;
   text?: InputMaybe<Scalars['String']>;
   type: PostType;
 };
 
+export type Audio = {
+  __typename?: 'Audio';
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type ChangePasswordInput = {
   newPassword: Scalars['String'];
   oldPassword: Scalars['String'];
+};
+
+export type ClipAudio = {
+  __typename?: 'ClipAudio';
+  _count?: Maybe<ClipAudioCount>;
+  audioUrl: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type ClipAudioCount = {
+  __typename?: 'ClipAudioCount';
+  clips: Scalars['Int'];
+};
+
+export type ClipOutput = {
+  __typename?: 'ClipOutput';
+  clipAudio: ClipAudio;
+  id: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type ForgotPasswordInput = {
@@ -50,6 +99,7 @@ export type ForgotPasswordOutput = {
   email: Scalars['String'];
   isVerified?: Maybe<Scalars['Boolean']>;
   message: Scalars['String'];
+  verificationTokenId?: Maybe<Scalars['String']>;
   verificationUuid?: Maybe<Scalars['String']>;
 };
 
@@ -57,6 +107,25 @@ export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE'
 }
+
+export type GetUserPostsOutput = {
+  __typename?: 'GetUserPostsOutput';
+  _count?: Maybe<PostCount>;
+  audio?: Maybe<Audio>;
+  caption?: Maybe<Scalars['String']>;
+  clip?: Maybe<ClipOutput>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  photos?: Maybe<Array<Photo>>;
+  place?: Maybe<Place>;
+  poll?: Maybe<PollOutput>;
+  tags?: Maybe<Array<Tag>>;
+  textual?: Maybe<Textual>;
+  type: PostType;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+  video?: Maybe<Video>;
+};
 
 export type GoogleAuthInput = {
   googleAccessToken: Scalars['String'];
@@ -95,6 +164,10 @@ export type LoginOutput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  addClipPost: Post;
+  addMediaPost: Post;
+  addPollPost: Post;
+  addTextualPost: Post;
   changePassword: Scalars['Boolean'];
   changeProfilePicture: Scalars['Boolean'];
   deactivateUser: Scalars['Boolean'];
@@ -106,10 +179,34 @@ export type Mutation = {
   removeProfilePicture: Scalars['Boolean'];
   resetPassword: ForgotPasswordOutput;
   signUp: SignUpOutput;
+  singleUpload: Scalars['Boolean'];
   updateProfile: ProfileOutput;
   updateUser: UpdateUserOutput;
   verifyForgotPassword?: Maybe<ForgotPasswordOutput>;
   verifyUserEmail?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationAddClipPostArgs = {
+  addClipPostInput: AddClipPostInput;
+  clipAudioMedia: Scalars['Upload'];
+  clipMedia: Scalars['Upload'];
+};
+
+
+export type MutationAddMediaPostArgs = {
+  addMediaPostInput: AddMediaPostInput;
+  media: Array<Scalars['Upload']>;
+};
+
+
+export type MutationAddPollPostArgs = {
+  addPollPostInput: AddPollPostInput;
+};
+
+
+export type MutationAddTextualPostArgs = {
+  addTextualPostInput: AddTextualPostInput;
 };
 
 
@@ -139,7 +236,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationMultipleUploadFileArgs = {
-  addPostInput: AddPostInput;
+  picture: Array<Scalars['Upload']>;
 };
 
 
@@ -150,6 +247,11 @@ export type MutationResetPasswordArgs = {
 
 export type MutationSignUpArgs = {
   signUpInput: SignUpInput;
+};
+
+
+export type MutationSingleUploadArgs = {
+  picture: Scalars['Upload'];
 };
 
 
@@ -172,12 +274,66 @@ export type MutationVerifyUserEmailArgs = {
   verificationToken: Scalars['String'];
 };
 
+export type Photo = {
+  __typename?: 'Photo';
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  url: Scalars['String'];
+};
+
+export type Place = {
+  __typename?: 'Place';
+  _count?: Maybe<PlaceCount>;
+  address: Scalars['String'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type PlaceCount = {
+  __typename?: 'PlaceCount';
+  posts: Scalars['Int'];
+};
+
+export type PlaceInput = {
+  address?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+};
+
+export type PollOption = {
+  __typename?: 'PollOption';
+  _count?: Maybe<PollOptionCount>;
+  id: Scalars['String'];
+  option: Scalars['String'];
+  pollId: Scalars['String'];
+};
+
+export type PollOptionCount = {
+  __typename?: 'PollOptionCount';
+  pollAnswers: Scalars['Int'];
+};
+
+export type PollOptionInput = {
+  option: Scalars['String'];
+};
+
+export type PollOutput = {
+  __typename?: 'PollOutput';
+  id: Scalars['String'];
+  pollOptions: Array<PollOption>;
+  postId: Scalars['String'];
+  question: Scalars['String'];
+};
+
 export type Post = {
   __typename?: 'Post';
   _count?: Maybe<PostCount>;
+  archive: Scalars['Boolean'];
+  caption?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   id: Scalars['String'];
   placeId?: Maybe<Scalars['String']>;
+  published: Scalars['Boolean'];
+  slug: Scalars['String'];
   type: PostType;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
@@ -188,6 +344,7 @@ export type PostCount = {
   activities: Scalars['Int'];
   comments: Scalars['Int'];
   likes: Scalars['Int'];
+  message: Scalars['Int'];
   photos: Scalars['Int'];
   tags: Scalars['Int'];
 };
@@ -246,8 +403,9 @@ export type ProfileOutput = {
 
 export type Query = {
   __typename?: 'Query';
+  getMediaAccessToken: Scalars['String'];
   getUser?: Maybe<UserOutput>;
-  getUserPosts: Array<Post>;
+  getUserPosts: Array<GetUserPostsOutput>;
   isUsernameAvailable?: Maybe<Scalars['Boolean']>;
   test: Scalars['String'];
   verifyAccessToken?: Maybe<Scalars['Boolean']>;
@@ -277,6 +435,7 @@ export enum RelationshipStatus {
 export type ResetPasswordInput = {
   email: Scalars['String'];
   password: Scalars['String'];
+  verificationTokenId: Scalars['String'];
   verificationUuid: Scalars['String'];
 };
 
@@ -298,6 +457,25 @@ export type SignUpOutput = {
   id: Scalars['String'];
   isVerified: Scalars['Boolean'];
   username: Scalars['String'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  _count?: Maybe<TagCount>;
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type TagCount = {
+  __typename?: 'TagCount';
+  posts: Scalars['Int'];
+};
+
+export type Textual = {
+  __typename?: 'Textual';
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  text: Scalars['String'];
 };
 
 export type UpdateUserInput = {
@@ -326,12 +504,20 @@ export type UserOutput = {
   username: Scalars['String'];
 };
 
+export type Video = {
+  __typename?: 'Video';
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  thumbnailUrl: Scalars['String'];
+  url: Scalars['String'];
+};
+
 export type VerifyAccessTokenQueryVariables = Exact<{
   accessToken: Scalars['String'];
 }>;
 
 
-export type VerifyAccessTokenQuery = { __typename?: 'Query', verifyAccessToken?: boolean | null | undefined };
+export type VerifyAccessTokenQuery = { __typename?: 'Query', verifyAccessToken?: boolean | null };
 
 export type SignUpMutationVariables = Exact<{
   signUpInput: SignUpInput;
@@ -345,42 +531,42 @@ export type GoogleAuthMutationVariables = Exact<{
 }>;
 
 
-export type GoogleAuthMutation = { __typename?: 'Mutation', googleAuth: { __typename?: 'GoogleAuthOutput', id: string, email: string, username: string, accessToken?: string | null | undefined, refreshToken?: string | null | undefined, isVerified: boolean } };
+export type GoogleAuthMutation = { __typename?: 'Mutation', googleAuth: { __typename?: 'GoogleAuthOutput', id: string, email: string, username: string, accessToken?: string | null, refreshToken?: string | null, isVerified: boolean } };
 
 export type LoginMutationVariables = Exact<{
   loginInput: LoginInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', id: string, email: string, username: string, accessToken: string, refreshToken: string, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null | undefined, mobileNo?: string | null | undefined, country?: string | null | undefined, gender?: Gender | null | undefined, dob?: any | null | undefined, interestedIn?: InterestedInTypes | null | undefined, relationshipStatus?: RelationshipStatus | null | undefined, website?: string | null | undefined, dpUrl?: string | null | undefined } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginOutput', id: string, email: string, username: string, accessToken: string, refreshToken: string, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } } };
 
 export type VerifyUserEmailMutationVariables = Exact<{
   verificationToken: Scalars['String'];
 }>;
 
 
-export type VerifyUserEmailMutation = { __typename?: 'Mutation', verifyUserEmail?: boolean | null | undefined };
+export type VerifyUserEmailMutation = { __typename?: 'Mutation', verifyUserEmail?: boolean | null };
 
 export type ForgotPasswordMutationVariables = Exact<{
   forgotPasswordInput: ForgotPasswordInput;
 }>;
 
 
-export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null | undefined, isVerified?: boolean | null | undefined } };
+export type ForgotPasswordMutation = { __typename?: 'Mutation', forgotPassword: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null, isVerified?: boolean | null } };
 
 export type VerifyResetPasswordTokenMutationVariables = Exact<{
   verificatonToken: Scalars['String'];
 }>;
 
 
-export type VerifyResetPasswordTokenMutation = { __typename?: 'Mutation', verifyForgotPassword?: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null | undefined, isVerified?: boolean | null | undefined } | null | undefined };
+export type VerifyResetPasswordTokenMutation = { __typename?: 'Mutation', verifyForgotPassword?: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null, isVerified?: boolean | null } | null };
 
 export type ResetPasswordMutationVariables = Exact<{
   resetPasswordInput: ResetPasswordInput;
 }>;
 
 
-export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null | undefined, isVerified?: boolean | null | undefined } };
+export type ResetPasswordMutation = { __typename?: 'Mutation', resetPassword: { __typename?: 'ForgotPasswordOutput', email: string, message: string, verificationUuid?: string | null, isVerified?: boolean | null } };
 
 export type DeactiveUserMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -392,31 +578,66 @@ export type UpdateProfileMutationVariables = Exact<{
 }>;
 
 
-export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileOutput', id: string, nickname: string, bio?: string | null | undefined, mobileNo?: string | null | undefined, country?: string | null | undefined, gender?: Gender | null | undefined, dob?: any | null | undefined, interestedIn?: InterestedInTypes | null | undefined, relationshipStatus?: RelationshipStatus | null | undefined, website?: string | null | undefined, dpUrl?: string | null | undefined } };
+export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileOutput', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } };
 
 export type GetUserPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'Post', id: string }> };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'GetUserPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+
+export type AddVideoPostMutationVariables = Exact<{
+  addMediaPostInput: AddMediaPostInput;
+  media: Array<Scalars['Upload']> | Scalars['Upload'];
+}>;
+
+
+export type AddVideoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+
+export type AddPhotoPostMutationVariables = Exact<{
+  addMediaPostInput: AddMediaPostInput;
+  media: Array<Scalars['Upload']> | Scalars['Upload'];
+}>;
+
+
+export type AddPhotoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+
+export type AddTextualPostMutationVariables = Exact<{
+  addTextualPost: AddTextualPostInput;
+}>;
+
+
+export type AddTextualPostMutation = { __typename?: 'Mutation', addTextualPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+
+export type AddPollPostMutationVariables = Exact<{
+  addPollPostInput: AddPollPostInput;
+}>;
+
+
+export type AddPollPostMutation = { __typename?: 'Mutation', addPollPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+
+export type GenerateMediaAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateMediaAccessTokenQuery = { __typename?: 'Query', getMediaAccessToken: string };
 
 export type GetUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'UserOutput', id: string, email: string, username: string, role: Role, accountType: AccountType, isVerified: boolean, active: boolean, lastLogin: any, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null | undefined, mobileNo?: string | null | undefined, country?: string | null | undefined, gender?: Gender | null | undefined, dob?: any | null | undefined, interestedIn?: InterestedInTypes | null | undefined, relationshipStatus?: RelationshipStatus | null | undefined, website?: string | null | undefined, dpUrl?: string | null | undefined } } | null | undefined };
+export type GetUserQuery = { __typename?: 'Query', getUser?: { __typename?: 'UserOutput', id: string, email: string, username: string, role: Role, accountType: AccountType, isVerified: boolean, active: boolean, lastLogin: any, createdAt: any, updatedAt: any, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } } | null };
 
 export type IsUsernameAvailableQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type IsUsernameAvailableQuery = { __typename?: 'Query', isUsernameAvailable?: boolean | null | undefined };
+export type IsUsernameAvailableQuery = { __typename?: 'Query', isUsernameAvailable?: boolean | null };
 
 export type UpdateUserMutationVariables = Exact<{
   updateUserInput: UpdateUserInput;
 }>;
 
 
-export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UpdateUserOutput', username: string, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null | undefined, mobileNo?: string | null | undefined, country?: string | null | undefined, gender?: Gender | null | undefined, dob?: any | null | undefined, interestedIn?: InterestedInTypes | null | undefined, relationshipStatus?: RelationshipStatus | null | undefined, website?: string | null | undefined, dpUrl?: string | null | undefined } } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'UpdateUserOutput', username: string, profile: { __typename?: 'Profile', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } } };
 
 export type ChangePasswordMutationVariables = Exact<{
   changePasswordInput: ChangePasswordInput;
@@ -811,6 +1032,57 @@ export const GetUserPostsDocument = gql`
     query GetUserPosts {
   getUserPosts {
     id
+    caption
+    type
+    createdAt
+    updatedAt
+    tags {
+      id
+      name
+    }
+    place {
+      id
+      name
+    }
+    poll {
+      id
+      question
+      pollOptions {
+        id
+        option
+      }
+    }
+    photos {
+      id
+      url
+    }
+    video {
+      id
+      url
+      thumbnailUrl
+    }
+    clip {
+      id
+      url
+      thumbnailUrl
+      clipAudio {
+        id
+        name
+        audioUrl
+      }
+    }
+    textual {
+      id
+      text
+    }
+    audio {
+      id
+      url
+    }
+    _count {
+      likes
+      comments
+    }
   }
 }
     `;
@@ -841,6 +1113,200 @@ export function useGetUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery>;
 export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
 export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
+export const AddVideoPostDocument = gql`
+    mutation AddVideoPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!) {
+  addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+    `;
+export type AddVideoPostMutationFn = Apollo.MutationFunction<AddVideoPostMutation, AddVideoPostMutationVariables>;
+
+/**
+ * __useAddVideoPostMutation__
+ *
+ * To run a mutation, you first call `useAddVideoPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddVideoPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addVideoPostMutation, { data, loading, error }] = useAddVideoPostMutation({
+ *   variables: {
+ *      addMediaPostInput: // value for 'addMediaPostInput'
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
+export function useAddVideoPostMutation(baseOptions?: Apollo.MutationHookOptions<AddVideoPostMutation, AddVideoPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddVideoPostMutation, AddVideoPostMutationVariables>(AddVideoPostDocument, options);
+      }
+export type AddVideoPostMutationHookResult = ReturnType<typeof useAddVideoPostMutation>;
+export type AddVideoPostMutationResult = Apollo.MutationResult<AddVideoPostMutation>;
+export type AddVideoPostMutationOptions = Apollo.BaseMutationOptions<AddVideoPostMutation, AddVideoPostMutationVariables>;
+export const AddPhotoPostDocument = gql`
+    mutation AddPhotoPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!) {
+  addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+    `;
+export type AddPhotoPostMutationFn = Apollo.MutationFunction<AddPhotoPostMutation, AddPhotoPostMutationVariables>;
+
+/**
+ * __useAddPhotoPostMutation__
+ *
+ * To run a mutation, you first call `useAddPhotoPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPhotoPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPhotoPostMutation, { data, loading, error }] = useAddPhotoPostMutation({
+ *   variables: {
+ *      addMediaPostInput: // value for 'addMediaPostInput'
+ *      media: // value for 'media'
+ *   },
+ * });
+ */
+export function useAddPhotoPostMutation(baseOptions?: Apollo.MutationHookOptions<AddPhotoPostMutation, AddPhotoPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPhotoPostMutation, AddPhotoPostMutationVariables>(AddPhotoPostDocument, options);
+      }
+export type AddPhotoPostMutationHookResult = ReturnType<typeof useAddPhotoPostMutation>;
+export type AddPhotoPostMutationResult = Apollo.MutationResult<AddPhotoPostMutation>;
+export type AddPhotoPostMutationOptions = Apollo.BaseMutationOptions<AddPhotoPostMutation, AddPhotoPostMutationVariables>;
+export const AddTextualPostDocument = gql`
+    mutation AddTextualPost($addTextualPost: AddTextualPostInput!) {
+  addTextualPost(addTextualPostInput: $addTextualPost) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+    `;
+export type AddTextualPostMutationFn = Apollo.MutationFunction<AddTextualPostMutation, AddTextualPostMutationVariables>;
+
+/**
+ * __useAddTextualPostMutation__
+ *
+ * To run a mutation, you first call `useAddTextualPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTextualPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTextualPostMutation, { data, loading, error }] = useAddTextualPostMutation({
+ *   variables: {
+ *      addTextualPost: // value for 'addTextualPost'
+ *   },
+ * });
+ */
+export function useAddTextualPostMutation(baseOptions?: Apollo.MutationHookOptions<AddTextualPostMutation, AddTextualPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTextualPostMutation, AddTextualPostMutationVariables>(AddTextualPostDocument, options);
+      }
+export type AddTextualPostMutationHookResult = ReturnType<typeof useAddTextualPostMutation>;
+export type AddTextualPostMutationResult = Apollo.MutationResult<AddTextualPostMutation>;
+export type AddTextualPostMutationOptions = Apollo.BaseMutationOptions<AddTextualPostMutation, AddTextualPostMutationVariables>;
+export const AddPollPostDocument = gql`
+    mutation AddPollPost($addPollPostInput: AddPollPostInput!) {
+  addPollPost(addPollPostInput: $addPollPostInput) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      likes
+      comments
+    }
+  }
+}
+    `;
+export type AddPollPostMutationFn = Apollo.MutationFunction<AddPollPostMutation, AddPollPostMutationVariables>;
+
+/**
+ * __useAddPollPostMutation__
+ *
+ * To run a mutation, you first call `useAddPollPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPollPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPollPostMutation, { data, loading, error }] = useAddPollPostMutation({
+ *   variables: {
+ *      addPollPostInput: // value for 'addPollPostInput'
+ *   },
+ * });
+ */
+export function useAddPollPostMutation(baseOptions?: Apollo.MutationHookOptions<AddPollPostMutation, AddPollPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddPollPostMutation, AddPollPostMutationVariables>(AddPollPostDocument, options);
+      }
+export type AddPollPostMutationHookResult = ReturnType<typeof useAddPollPostMutation>;
+export type AddPollPostMutationResult = Apollo.MutationResult<AddPollPostMutation>;
+export type AddPollPostMutationOptions = Apollo.BaseMutationOptions<AddPollPostMutation, AddPollPostMutationVariables>;
+export const GenerateMediaAccessTokenDocument = gql`
+    query GenerateMediaAccessToken {
+  getMediaAccessToken
+}
+    `;
+
+/**
+ * __useGenerateMediaAccessTokenQuery__
+ *
+ * To run a query within a React component, call `useGenerateMediaAccessTokenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGenerateMediaAccessTokenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGenerateMediaAccessTokenQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGenerateMediaAccessTokenQuery(baseOptions?: Apollo.QueryHookOptions<GenerateMediaAccessTokenQuery, GenerateMediaAccessTokenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GenerateMediaAccessTokenQuery, GenerateMediaAccessTokenQueryVariables>(GenerateMediaAccessTokenDocument, options);
+      }
+export function useGenerateMediaAccessTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GenerateMediaAccessTokenQuery, GenerateMediaAccessTokenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GenerateMediaAccessTokenQuery, GenerateMediaAccessTokenQueryVariables>(GenerateMediaAccessTokenDocument, options);
+        }
+export type GenerateMediaAccessTokenQueryHookResult = ReturnType<typeof useGenerateMediaAccessTokenQuery>;
+export type GenerateMediaAccessTokenLazyQueryHookResult = ReturnType<typeof useGenerateMediaAccessTokenLazyQuery>;
+export type GenerateMediaAccessTokenQueryResult = Apollo.QueryResult<GenerateMediaAccessTokenQuery, GenerateMediaAccessTokenQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser {
   getUser {

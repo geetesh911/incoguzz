@@ -87,8 +87,8 @@ mutation AddPhotoPost(
   }
 }
 
-mutation AddTextualPost {
-  addTextualPost(addTextualPostInput: $addTextualPostInput) {
+mutation AddTextualPost($addTextualPost: AddTextualPostInput!) {
+  addTextualPost(addTextualPostInput: $addTextualPost) {
     id
     type
     createdAt
@@ -100,7 +100,7 @@ mutation AddTextualPost {
   }
 }
 
-mutation AddPollPost {
+mutation AddPollPost($addPollPostInput: AddPollPostInput!) {
   addPollPost(addPollPostInput: $addPollPostInput) {
     id
     type
