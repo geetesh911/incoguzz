@@ -1,9 +1,12 @@
 import React, { FC, useMemo, useState } from "react";
 import { Image } from "react-native";
 import { LongPressGestureHandler } from "react-native-gesture-handler";
+import { Furniture } from "./Feed";
+import { PostModal } from "./PostModal";
+import { StyledFeedImage } from "./styled";
 
 interface IFeedCardProps {
-  item: any;
+  item: Furniture;
 }
 
 const FeedCard: FC<IFeedCardProps> = ({ item }) => {
@@ -16,18 +19,13 @@ const FeedCard: FC<IFeedCardProps> = ({ item }) => {
         onHandlerStateChange={() => setOpen(false)}
         minDurationMs={100}
       >
-        <Image
+        <StyledFeedImage
           source={{ uri: item.imgURL }}
-          style={{
-            height: randomBool ? 150 : 280,
-            alignSelf: "stretch",
-            margin: 5,
-            borderRadius: 10,
-          }}
+          height={randomBool ? 150 : 280}
           resizeMode="cover"
         />
       </LongPressGestureHandler>
-      {/* <IModal open={open} imgUrl={item.imgURL} /> */}
+      <PostModal open={open} imgUrl={item.imgURL} />
     </>
   );
 };

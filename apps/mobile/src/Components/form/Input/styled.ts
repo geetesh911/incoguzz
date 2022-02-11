@@ -34,6 +34,17 @@ export const StyledInput = styled.TextInput<StyledInputProps>`
   font-size: ${inputConstants.fontSize};
 `;
 
+export const StyledInputWithIcon = styled.TextInput<StyledInputProps>`
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+  border-radius: ${({ theme }) => theme?.commonConstants?.borderRadius};
+  height: ${inputConstants.height};
+  padding: ${inputConstants.padding};
+  color: ${({ theme }) => theme?.textColors?.primary};
+  font-family: ${({ theme }) => theme?.fontFamily?.primary};
+  font-size: ${inputConstants.fontSize};
+  width: 85%;
+`;
+
 export const StyledInputUpperContainer = styled.View`
   margin: 3px 0;
 `;
@@ -64,8 +75,12 @@ export const StyledPasswordInputInnerContainer = styled.View<StyledInputProps>`
   align-self: stretch;
 `;
 
+export const StyledInputWithIconIconContainer = styled.View`
+  margin: 0 0 0 20px;
+`;
+
 export const PasswordIcon = styled(Icon)`
-  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+  color: ${({ theme }) => theme?.commonConstants?.placeholderTextColor};
 `;
 
 export const ErrorContainer = styled.View`

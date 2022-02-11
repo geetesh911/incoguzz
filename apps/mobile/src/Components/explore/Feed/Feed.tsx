@@ -1,18 +1,9 @@
-import { View, Image, Modal, Text } from "react-native";
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useState } from "react";
 import MasonryList from "@react-native-seoul/masonry-list";
-import Animated, {
-  FadeIn,
-  FadeOut,
-  Layout,
-  RotateInDownLeft,
-  ZoomIn,
-  ZoomOut,
-} from "react-native-reanimated";
-import { LongPressGestureHandler } from "react-native-gesture-handler";
-import { StyledModalContainer, StyledModalPost } from "./styled";
+import FeedCard from "./FeedCard";
+import { ExploreHeader } from "../ExploreHeader";
 
-interface Furniture {
+export interface Furniture {
   id: string;
   imgURL: string;
   text: string;
@@ -165,65 +156,16 @@ const furnitureData: Furniture[] = [
   },
 ];
 
-const IModal: FC<{ open: boolean; imgUrl: string }> = ({ open, imgUrl }) => {
-  return (
-    <Modal animationType="fade" transparent={true} visible={open}>
-      <StyledModalContainer entering={FadeIn} exiting={FadeOut}>
-        <StyledModalPost
-          entering={ZoomIn}
-          exiting={ZoomOut}
-          layout={Layout.delay(100)}
-        >
-          <Image
-            source={{ uri: imgUrl }}
-            style={{
-              height: 280,
-              borderRadius: 10,
-            }}
-            resizeMode="cover"
-          />
-        </StyledModalPost>
-      </StyledModalContainer>
-    </Modal>
-  );
-};
-
-const FurnitureCard: FC<{ item: Furniture }> = ({ item }) => {
-  const randomBool = useMemo(() => Math.random() < 0.5, []);
-  const [open, setOpen] = useState<boolean>(false);
-  return (
-    <>
-      <LongPressGestureHandler
-        onActivated={() => setOpen(true)}
-        onHandlerStateChange={() => setOpen(false)}
-        minDurationMs={100}
-      >
-        <Image
-          source={{ uri: item.imgURL }}
-          style={{
-            height: randomBool ? 150 : 280,
-            alignSelf: "stretch",
-            margin: 5,
-            borderRadius: 10,
-          }}
-          resizeMode="cover"
-        />
-      </LongPressGestureHandler>
-      <IModal open={open} imgUrl={item.imgURL} />
-    </>
-  );
-};
-
 export const Feed: FC = () => {
   const [data, setData] = useState<Furniture[]>(furnitureData);
 
   const renderItem = ({ item }: { item: Furniture; index?: number }) => {
-    return <FurnitureCard key={`${item.id}${Math.random()}`} item={item} />;
+    return <FeedCard key={`${item.id}${Math.random()}`} item={item} />;
   };
 
   return (
     <MasonryList
-      ListHeaderComponent={<View />}
+      ListHeaderComponent={<ExploreHeader />}
       contentContainerStyle={{
         paddingHorizontal: 10,
         alignSelf: "stretch",

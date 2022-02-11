@@ -1,28 +1,27 @@
 import React, { FC, useState } from "react";
 import {
-  PasswordIcon,
-  StyledPasswordInput,
+  StyledInputWithIcon,
+  StyledInputWithIconIconContainer,
   StyledPasswordInputInnerContainer,
   StyledPasswordInputUpperContainer,
 } from "./styled";
 import { IInputProps } from "./Input";
 import { ShowError } from "./ShowError";
-import { Pressable } from "react-native";
 import { useTheme } from "../../../styles/theme";
 
-interface IPasswordInputProps extends IInputProps {}
+interface IInputWithIconProps extends IInputProps {
+  icon: JSX.Element;
+}
 
-export const PasswordInput: FC<IPasswordInputProps> = ({
+export const InputWithIcon: FC<IInputWithIconProps> = ({
   value,
   name,
   onChange,
   placeholder,
   error,
+  icon,
 }) => {
   const [focused, setFocused] = useState<boolean>(false);
-  const [visible, setVisible] = useState<boolean>(false);
-
-  const icon = !visible ? "eye-slash" : "eye";
 
   const theme = useTheme();
 
@@ -33,20 +32,20 @@ export const PasswordInput: FC<IPasswordInputProps> = ({
   return (
     <StyledPasswordInputUpperContainer>
       <StyledPasswordInputInnerContainer focused={focused} error={!!error}>
-        <StyledPasswordInput
+        <StyledInputWithIconIconContainer>
+          {icon}
+        </StyledInputWithIconIconContainer>
+        <StyledInputWithIcon
           value={value as string}
+          focused={focused}
+          error={!!error}
           placeholder={placeholder}
-          onChangeText={changedValue => onChange(changedValue)}
+          onChangeText={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           underlineColorAndroid="transparent"
-          textContentType={"password"}
-          secureTextEntry={!visible}
           placeholderTextColor={placeholderTextColor}
         />
-        <Pressable onPress={() => setVisible(!visible)}>
-          <PasswordIcon name={icon} size={17} />
-        </Pressable>
       </StyledPasswordInputInnerContainer>
       <ShowError errorMessage={error} />
     </StyledPasswordInputUpperContainer>

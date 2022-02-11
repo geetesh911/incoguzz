@@ -19,6 +19,7 @@ declare module "styled-components" {
   export interface ObjectBackgrounds {
     primary: string;
     secondary: string;
+    overlay: string;
   }
 
   export interface Colors {
@@ -55,6 +56,7 @@ export const dark: DefaultTheme = {
   objectBackgrounds: {
     primary: "#262626",
     secondary: "#FFFFFF",
+    overlay: "rgba(0, 0, 0, 0.85)",
   },
   colors: {
     primary: "#FBB034",
@@ -88,6 +90,7 @@ export const light: DefaultTheme = {
   objectBackgrounds: {
     primary: "#EAEAEA",
     secondary: "#262626",
+    overlay: "rgba(0, 0, 0, 0.7)",
   },
   colors: {
     primary: "#FBB034",
