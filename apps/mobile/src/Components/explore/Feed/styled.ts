@@ -6,6 +6,9 @@ import Icon from "react-native-vector-icons/FontAwesome5";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+export interface IImageAspectRatio {
+  aspectRatio: number;
+}
 interface IStyledFeedImageProps {
   height: number;
 }
@@ -25,9 +28,7 @@ export const StyledModalContainer = styled(Animated.View)`
   width: ${windowWidth}px;
   padding: 15px;
 `;
-export const StyledModalPost = styled(Animated.Image)<{
-  aspectRatio: number;
-}>`
+export const StyledModalPost = styled(Animated.Image)<IImageAspectRatio>`
   border-radius: 15px;
   height: ${({ aspectRatio }) => windowWidth * 0.9 * aspectRatio}px;
   min-width: ${windowWidth * 0.9}px;

@@ -9,6 +9,7 @@
       "**@react-native-community**",
       "@react-native-community/**",
       "react-native",
+      "react-native-pager-view",
       "react",
       "react-redux",
       "react-dom",

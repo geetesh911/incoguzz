@@ -30,3 +30,8 @@ export type ExploreScreenNavigationProp = BottomTabNavigationProp<
   TabParamList,
   RouteNames.Explore
 >;
+
+export type PostScreenNavigationProp = BottomTabNavigationProp<
+  TabParamList,
+  RouteNames.Post
+>;

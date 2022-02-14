@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  AddIcon,
   ExploreIcon,
   MessagesIcon,
   NotificationIcon,
@@ -16,6 +17,7 @@ export enum RouteNames {
   User = "User",
   Feed = "Feed",
   Post = "Post",
+  AddPost = "AddPost",
   AuthHome = "AuthHome",
   Login = "Login",
   SignUp = "SignUp",
@@ -28,6 +30,7 @@ export const RouteIcons = ({
     Messages: <MessagesIcon color={color} />,
     Explore: <ExploreIcon color={color} />,
     Notifications: <NotificationIcon color={color} />,
+    AddPost: <AddIcon color={color} />,
     User: <UserIcon color={color} />,
   };
   return routeIcons[routeName];

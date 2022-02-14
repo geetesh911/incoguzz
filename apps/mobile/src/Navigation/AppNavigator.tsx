@@ -25,6 +25,10 @@ export const AppNavigator: FC = () => {
       ></Tab.Screen>
       <Tab.Screen
         component={MessagesScreen}
+        name={RouteNames.AddPost}
+      ></Tab.Screen>
+      <Tab.Screen
+        component={MessagesScreen}
         name={RouteNames.Notifications}
       ></Tab.Screen>
       <Tab.Screen component={FeedScreen} name={RouteNames.User}></Tab.Screen>

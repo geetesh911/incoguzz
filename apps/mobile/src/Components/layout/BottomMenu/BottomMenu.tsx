@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Text } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyledBottomMenuContainer, StyledMenuItem } from "./styled";
-import { RouteIcons } from "../../../Navigation/constants";
+import { RouteIcons, RouteNames } from "../../../Navigation/constants";
 import { useTheme } from "../../../styles/theme";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({
@@ -11,12 +11,18 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
   navigation,
 }) => {
   const theme = useTheme();
+
   return (
     <StyledBottomMenuContainer>
       {navigationState?.routes?.map((route, index) => {
         const isFocused = navigationState.index === index;
+        const onAddPress = () => null;
 
         const onPress = () => {
+          if (route.name === RouteNames.AddPost) {
+            onAddPress();
+            return;
+          }
           const event = navigation.emit({
             type: "tabPress",
             target: route.key,

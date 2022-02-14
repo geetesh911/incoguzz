@@ -1,11 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { FC, useMemo, useState } from "react";
-import { Alert, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import {
   LongPressGestureHandler,
   TapGestureHandler,
 } from "react-native-gesture-handler";
-import { ExploreScreenNavigationProp, RouteNames } from "../../../Navigation";
+import { RouteNames } from "../../../Navigation/constants";
+import { ExploreScreenNavigationProp } from "../../../Navigation/interfaces";
 import { Furniture } from "./Feed";
 import { PostModal } from "./PostModal";
 import { StyledFeedImage } from "./styled";
