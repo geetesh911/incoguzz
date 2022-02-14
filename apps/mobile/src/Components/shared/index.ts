@@ -1,3 +1,4 @@
 export * from "./Image";
 export * from "./Loading";
-export * from "./ScreenHeader";
+export * from "./Header";
+export * from "./Icon";

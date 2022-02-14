@@ -5,6 +5,7 @@ import { BottomMenu } from "../Components/layout/BottomMenu";
 import { FeedScreen } from "../Screens/AppScreens/FeedScreen";
 import { RouteNames } from "./constants";
 import ExploreNavigator from "./ExploreNavigator";
+import { AddPostScreen } from "../Screens/AppScreens/AddPostScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ export const AppNavigator: FC = () => {
         name={RouteNames.Explore}
       ></Tab.Screen>
       <Tab.Screen
-        component={MessagesScreen}
+        component={AddPostScreen}
         name={RouteNames.AddPost}
       ></Tab.Screen>
       <Tab.Screen

@@ -1,8 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface IAppState {}
+export interface IAppState {
+  bottomSheetIds: { [key: string]: string };
+}
 
-const initialState: IAppState = {};
+const initialState: IAppState = {
+  bottomSheetIds: {
+    addPost: "addPostBottomSheet",
+  },
+};
 
 export const appSlice = createSlice({
   name: "app",

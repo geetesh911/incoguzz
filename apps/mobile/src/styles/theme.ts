@@ -18,10 +18,17 @@ declare module "styled-components" {
 
   export interface ObjectBackgrounds {
     primary: string;
+    light: string;
     secondary: string;
     overlay: string;
   }
 
+  export interface HoverColors {
+    primary: string;
+    secondary: string;
+    error: string;
+    light: string;
+  }
   export interface Colors {
     primary: string;
     secondary: string;
@@ -34,7 +41,7 @@ declare module "styled-components" {
     fontFamily: FontFamily;
     objectBackgrounds: ObjectBackgrounds;
     colors: Colors;
-    hoverColors: Colors;
+    hoverColors: HoverColors;
     textColors: Colors;
   }
 }
@@ -55,6 +62,7 @@ export const dark: DefaultTheme = {
   },
   objectBackgrounds: {
     primary: "#262626",
+    light: "#404040",
     secondary: "#FFFFFF",
     overlay: "rgba(0, 0, 0, 0.85)",
   },
@@ -65,6 +73,7 @@ export const dark: DefaultTheme = {
   },
   hoverColors: {
     primary: "#FAA61E",
+    light: "#8c8c8c",
     secondary: "#303036",
     error: "#D72A28",
   },
@@ -89,6 +98,7 @@ export const light: DefaultTheme = {
   },
   objectBackgrounds: {
     primary: "#EAEAEA",
+    light: "#FFFFFF",
     secondary: "#262626",
     overlay: "rgba(0, 0, 0, 0.7)",
   },
@@ -99,6 +109,7 @@ export const light: DefaultTheme = {
   },
   hoverColors: {
     primary: "#FAA61E",
+    light: "#f2f2f2",
     secondary: "#303036",
     error: "#D72A28",
   },

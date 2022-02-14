@@ -4,6 +4,8 @@ import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { StyledBottomMenuContainer, StyledMenuItem } from "./styled";
 import { RouteIcons, RouteNames } from "../../../Navigation/constants";
 import { useTheme } from "../../../styles/theme";
+import { SheetManager } from "react-native-actions-sheet";
+import { AddPostScreen } from "../../../Screens/AppScreens/AddPostScreen";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({
   state: navigationState,
@@ -16,7 +18,9 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
     <StyledBottomMenuContainer>
       {navigationState?.routes?.map((route, index) => {
         const isFocused = navigationState.index === index;
-        const onAddPress = () => null;
+        const onAddPress = () => {
+          SheetManager.show("add_post_bottom_sheet");
+        };
 
         const onPress = () => {
           if (route.name === RouteNames.AddPost) {
@@ -66,6 +70,7 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
           </StyledMenuItem>
         );
       })}
+      <AddPostScreen />
     </StyledBottomMenuContainer>
   );
 };
