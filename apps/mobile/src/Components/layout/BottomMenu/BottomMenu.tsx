@@ -6,12 +6,15 @@ import { RouteIcons, RouteNames } from "../../../Navigation/constants";
 import { useTheme } from "../../../styles/theme";
 import { SheetManager } from "react-native-actions-sheet";
 import { AddPostScreen } from "../../../Screens/AppScreens/AddPostScreen";
+import { useAppSelector } from "../../../redux/hooks";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({
   state: navigationState,
   descriptors,
   navigation,
 }) => {
+  const bottomSheetIds = useAppSelector(state => state.app.bottomSheetIds);
+
   const theme = useTheme();
 
   return (
@@ -19,7 +22,7 @@ export const BottomMenu: FC<BottomTabBarProps> = ({
       {navigationState?.routes?.map((route, index) => {
         const isFocused = navigationState.index === index;
         const onAddPress = () => {
-          SheetManager.show("add_post_bottom_sheet");
+          SheetManager.show(bottomSheetIds?.addPost);
         };
 
         const onPress = () => {

@@ -1,5 +1,6 @@
 import React, { FC, useMemo, useState } from "react";
-import { Image, Text } from "react-native";
+import { Image } from "react-native";
+import { PinchableImage } from "../../shared";
 import {
   StyledCaptionContainer,
   StyledCaptionText,
@@ -34,7 +35,11 @@ export const Post: FC<IPostProps> = ({ imgUrl }) => {
     <>
       <StyledPostContainer>
         <StyledMediaContainer>
-          <StyledMedia aspectRatio={aspectRatio} source={{ uri: imgUrl }} />
+          <PinchableImage
+            imageComponent={
+              <StyledMedia aspectRatio={aspectRatio} source={{ uri: imgUrl }} />
+            }
+          />
         </StyledMediaContainer>
       </StyledPostContainer>
       <StyledReactionsContainer>

@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import ActionSheet from "react-native-actions-sheet";
+import { useAppSelector } from "../../../redux/hooks";
 import { useTheme } from "../../../styles/theme";
 import { AddPostBottomSheetHeader } from "./AddPostBottomSheetHeader";
 import { AddPostItem } from "./AddPostItem";
@@ -10,6 +11,7 @@ import {
 } from "./styled";
 
 export const AddPostBottomSheet: FC = () => {
+  const bottomSheetIds = useAppSelector(state => state.app.bottomSheetIds);
   const theme = useTheme();
 
   const items: IAddPostItems = [
@@ -26,7 +28,7 @@ export const AddPostBottomSheet: FC = () => {
       closable
       CustomHeaderComponent={<StyledAddPostBottomSheetGestureHeader />}
       defaultOverlayOpacity={0.7}
-      id="add_post_bottom_sheet"
+      id={bottomSheetIds?.addPost}
     >
       <StyledAddPostBottomSheetContainer>
         <AddPostBottomSheetHeader />
