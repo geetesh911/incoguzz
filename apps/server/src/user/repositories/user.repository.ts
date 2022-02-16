@@ -104,7 +104,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
   }
 
   public async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany({ include: { _count: true } });
+    return this.prisma.user.findMany();
   }
 
   public async findByUsername(
@@ -113,7 +113,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
   ): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { username },
-      include: { ...include, _count: true },
+      include: { ...include },
     });
 
     this.userHelper.isUserVerified(user);
@@ -129,12 +129,12 @@ class UserRepository extends BaseRepository implements TUserRepository {
     if (this.validationHelper.validateEmail(emailOrUsername)) {
       user = await this.prisma.user.findUnique({
         where: { email: emailOrUsername },
-        include: { ...include, _count: true },
+        include: { ...include },
       });
     } else {
       user = await this.prisma.user.findUnique({
         where: { username: emailOrUsername },
-        include: { ...include, _count: true },
+        include: { ...include },
       });
     }
 
@@ -149,7 +149,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
   ): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { ...include, _count: true },
+      include: { ...include },
     });
 
     this.userHelper.isUserVerified(user);
@@ -197,7 +197,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
   public async findByGoogleUserId(googleUserId: string): Promise<User | null> {
     const user = await this.prisma.user.findFirst({
       where: { googleUserId, isVerified: true },
-      include: { profile: true, _count: true },
+      include: { profile: true },
     });
     return user || null;
   }
@@ -269,7 +269,6 @@ class UserRepository extends BaseRepository implements TUserRepository {
         loginAttempts: { increment: 1 },
         updatedAt: this.dateHelper.getCurrentDate(),
       },
-      include: { _count: true },
     });
   }
 
@@ -387,7 +386,6 @@ class UserRepository extends BaseRepository implements TUserRepository {
     return this.prisma.user.update({
       where: { id: userId },
       data: { active: false, updatedAt: this.dateHelper.getCurrentDate() },
-      include: { _count: true },
     });
   }
 
@@ -443,7 +441,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
             update: { ...updateUserInput.profile },
           },
         },
-        include: { _count: true, profile: true },
+        include: { profile: true },
       });
     } catch (error) {
       if (error?.code !== PrismaErrors.NotFound) throw new Error(error);
@@ -461,7 +459,6 @@ class UserRepository extends BaseRepository implements TUserRepository {
           password: newPassword,
           updatedAt: this.dateHelper.getCurrentDate(),
         },
-        include: { _count: true },
       });
     } catch (error) {
       if (error?.code !== PrismaErrors.NotFound) throw new Error(error);
@@ -486,7 +483,6 @@ class UserRepository extends BaseRepository implements TUserRepository {
           },
         },
       },
-      include: { _count: true },
     });
   }
 }

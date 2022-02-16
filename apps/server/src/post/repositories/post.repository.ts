@@ -51,7 +51,6 @@ class PostRepository extends BaseRepository implements TUserRepository {
         textual: true,
         place: true,
         tags: true,
-        _count: true,
       },
     });
   }
