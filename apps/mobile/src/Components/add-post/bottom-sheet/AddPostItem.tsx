@@ -14,16 +14,8 @@ export const AddPostItem: FC<IAddPostItemProps> = ({
 }) => {
   const theme = useTheme();
   return (
-    <StyledAddPostItemContainer
-      style={({ pressed }) => [
-        {
-          backgroundColor: pressed
-            ? theme.hoverColors.light
-            : theme.objectBackgrounds.primary,
-        },
-      ]}
-    >
-      {iconComponent || <RoundIcon iconName={iconName as string} />}
+    <StyledAddPostItemContainer>
+      <RoundIcon iconName={iconName as string} iconComponent={iconComponent} />
       <StyledAddPostItemLabel>{itemLabel}</StyledAddPostItemLabel>
     </StyledAddPostItemContainer>
   );

@@ -2,8 +2,9 @@ import styled from "styled-components/native";
 import PagerView from "react-native-pager-view";
 import Animated from "react-native-reanimated";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import { IImageAspectRatio } from "../Feed";
+import { IImageAspectRatio, IVideoProperties } from "../Feed";
 import { Dimensions } from "react-native";
+import Video from "react-native-video";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -38,7 +39,13 @@ export const StyledPostContainer = styled.View`
   overflow: hidden;
 `;
 
-export const StyledMediaContainer = styled.View``;
+export const StyledMediaContainer = styled.View<Partial<IVideoProperties>>`
+  /* flex: 1; */
+  width: ${windowWidth * 0.9}px;
+  /* height: ${({ height, width }) =>
+    windowWidth * 0.9 * ((height || 1) / (width || 1))}px; */
+  height: ${windowWidth * 0.9 * (4 / 3)}px;
+`;
 
 export const StyledReactionsContainer = styled.View`
   background-color: ${({ theme }) => theme?.backgrounds?.primary};

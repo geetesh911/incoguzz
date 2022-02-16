@@ -30,7 +30,7 @@ export const PostScreen: FC = () => {
           "https://apicms.thestar.com.my/uploads/images/2020/02/21/570850.jpg",
         ].map(imgUrl => (
           <StyledPostPageContainer key={imgUrl}>
-            <Post imgUrl={imgUrl} />
+            <Post url={imgUrl} />
           </StyledPostPageContainer>
         ))}
       </StyledAnimatedPagerView>
