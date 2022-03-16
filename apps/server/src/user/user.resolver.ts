@@ -41,12 +41,7 @@ export class UserResolver {
 
   @Query(() => String)
   async test() {
-    const user = await this.prisma.user.findUnique({
-      where: { username: "mynameis", email: "mynameis" },
-      include: { _count: true },
-    });
-
-    console.log(user);
+    await this.prisma.user.deleteMany({});
     return "tested";
   }
 

@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get("window").height;
 export interface IImageAspectRatio {
   aspectRatio: number;
 }
-export interface IVideoProperties {
+export interface IMediaProperties {
   height: number;
   width: number;
 }

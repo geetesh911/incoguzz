@@ -21,12 +21,23 @@ export class PostResolver {
   }
 
   @Authorized()
+  @Query(() => [GetUserPostsOutput])
+  async getAllPosts(): Promise<GetUserPostsOutput[]> {
+    return this.postService.getAllPosts();
+  }
+
+  @Authorized()
   @Mutation(() => Post)
   async addMediaPost(
     @Ctx() { user }: Context,
-    @Args() { addMediaPostInput, media }: AddMediaPostArgs,
+    @Args() { addMediaPostInput, media, mediaThumbnail }: AddMediaPostArgs,
   ): Promise<Post> {
-    return this.postService.addMediaPost(user.userId, addMediaPostInput, media);
+    return this.postService.addMediaPost(
+      user.userId,
+      addMediaPostInput,
+      media,
+      mediaThumbnail,
+    );
   }
 
   @Authorized()

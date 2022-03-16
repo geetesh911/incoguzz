@@ -13,6 +13,10 @@ class AddMediaPostArgs {
   @ValidateIf(postInput => postInput.addMediaPostInput.type !== PostType.PHOTO)
   @ArrayMaxSize(1)
   media: Promise<FileUpload>[];
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  @ValidateIf(postInput => postInput.addMediaPostInput.type === PostType.AUDIO)
+  mediaThumbnail?: Promise<FileUpload>;
 }
 
 export default AddMediaPostArgs;

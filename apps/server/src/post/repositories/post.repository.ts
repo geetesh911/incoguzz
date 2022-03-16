@@ -17,6 +17,7 @@ import CreateBasicPostInputHelper from "../helpers/create-input.helper";
 
 interface IReader {
   getUserPosts: (userId: string) => Promise<Post[]>;
+  getAllPosts: () => Promise<Post[]>;
 }
 interface IWriter {
   addMediaPost: (
@@ -51,6 +52,30 @@ class PostRepository extends BaseRepository implements TUserRepository {
         textual: true,
         place: true,
         tags: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
+  public async getAllPosts(): Promise<Post[]> {
+    return this.prisma.post.findMany({
+      where: {},
+      include: {
+        photos: true,
+        video: true,
+        clip: {
+          include: { clipAudio: true },
+        },
+        audio: true,
+        poll: { include: { pollOptions: true } },
+        textual: true,
+        place: true,
+        tags: true,
+      },
+      orderBy: {
+        createdAt: "desc",
       },
     });
   }
@@ -126,7 +151,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
         postCreateInput = {
           ...postCreateInput,
           audio: {
-            create: { url: urls[0] },
+            create: { url: urls[0], thumbnailUrl: extraOptions.thumbnailUrl },
           },
         };
 

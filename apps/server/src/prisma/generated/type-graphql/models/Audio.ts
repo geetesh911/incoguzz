@@ -24,4 +24,9 @@ export class Audio {
     nullable: false,
   })
   postId!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl?: string | null;
 }

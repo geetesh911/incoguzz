@@ -25,6 +25,11 @@ export class AudioGroupBy {
   })
   postId!: string;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl!: string | null;
+
   @TypeGraphQL.Field(_type => AudioCountAggregate, {
     nullable: true,
   })

@@ -275,10 +275,11 @@ model Textual {
 }
 
 model Audio {
-  id     String @id @unique @default(cuid())
-  url    String @db.Text
-  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  postId String @unique
+  id           String  @id @unique @default(cuid())
+  url          String  @db.Text
+  post         Post    @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId       String  @unique
+  thumbnailUrl String? @db.Text
 }
 
 model Tag {

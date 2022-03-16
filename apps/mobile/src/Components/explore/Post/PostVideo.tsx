@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import Video, { OnLoadData } from "react-native-video";
-import { IVideoProperties } from "../Feed";
+import { IMediaProperties } from "../Feed";
 import { StyledMediaContainer } from "./styled";
 
 interface IPostVideoProps {
@@ -8,7 +8,7 @@ interface IPostVideoProps {
 }
 
 export const PostVideo: FC<IPostVideoProps> = ({ videoUrl }) => {
-  const [{ height, width }, setVideoProperties] = useState<IVideoProperties>({
+  const [{ height, width }, setVideoProperties] = useState<IMediaProperties>({
     height: 1,
     width: 1,
   });

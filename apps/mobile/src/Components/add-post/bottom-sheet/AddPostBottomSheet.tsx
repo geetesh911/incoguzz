@@ -2,14 +2,7 @@ import React, { FC } from "react";
 import ActionSheet from "react-native-actions-sheet";
 import { useAppSelector } from "../../../redux/hooks";
 import { useTheme } from "../../../styles/theme";
-import {
-  ImageIcon,
-  AudioIcon,
-  TextIcon,
-  VideoIcon,
-  PollIcon,
-  ClipIcon,
-} from "../../icons";
+import { ImageIcon, AudioIcon, TextIcon, VideoIcon } from "../../icons";
 import { AddPostBottomSheetHeader } from "./AddPostBottomSheetHeader";
 import { AddPostItem } from "./AddPostItem";
 import { IAddPostItems } from "./interfaces";
@@ -42,14 +35,6 @@ export const AddPostBottomSheet: FC = () => {
     {
       iconComponent: <AudioIcon height={iconHeight} width={iconWidth} />,
       label: "Audio",
-    },
-    {
-      iconComponent: <ClipIcon height={iconHeight} width={iconWidth} />,
-      label: "Clip",
-    },
-    {
-      iconComponent: <PollIcon height={iconHeight} width={iconWidth} />,
-      label: "Poll",
     },
   ];
   return (

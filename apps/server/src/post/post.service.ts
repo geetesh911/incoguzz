@@ -37,6 +37,10 @@ class PostService {
     return this.postRepository.getUserPosts(userId);
   }
 
+  public async getAllPosts(): Promise<Post[]> {
+    return this.postRepository.getAllPosts();
+  }
+
   public async addTextualPost(
     userId: string,
     addTextualPostInput: AddTextualPostInput,
@@ -104,8 +108,6 @@ class PostService {
       containerName: AzureContainersEnum.CLIP,
     });
 
-    // this.validateAddMediaPostInput(addPostInput, media, metaData);
-
     return new Promise<Post>(async resolve => {
       await this.storageService.uploadFiles(
         this.compressVideoMedia([clipMedia], mediaFiles),
@@ -137,25 +139,42 @@ class PostService {
     userId: string,
     addPostInput: AddMediaPostInput,
     media: Promise<FileUpload>[],
+    mediaThumbnail: Promise<FileUpload>,
   ): Promise<Post> {
-    let thumbnailFileUrl = "";
+    let thumbnailFileUrl: string;
     let metaData: FfprobeData;
 
     const mediaFiles = await Promise.all(media);
 
     this.validateMediaType(mediaFiles, addPostInput.type);
 
-    if (addPostInput.type === PostType.VIDEO) {
-      const videoThumbnailInput = await this.mediaService.getVideoThumbnail(
-        mediaFiles[0],
-      );
+    switch (addPostInput.type) {
+      case PostType.VIDEO:
+        const videoThumbnailInput = await this.mediaService.getVideoThumbnail(
+          mediaFiles[0],
+        );
 
-      metaData = videoThumbnailInput.metadata;
+        metaData = videoThumbnailInput.metadata;
 
-      thumbnailFileUrl = await this.uploadThumbnail({
-        ...videoThumbnailInput,
-        containerName: AzureContainersEnum.VIDEO,
-      });
+        thumbnailFileUrl = await this.uploadThumbnail({
+          ...videoThumbnailInput,
+          containerName: AzureContainersEnum.VIDEO,
+        });
+        break;
+
+      case PostType.AUDIO:
+        const thumbnail = await mediaThumbnail;
+        console.log(thumbnail, mediaThumbnail);
+        const audioThumbnailInput: IGetVideoThumbnail = {
+          thumbnailFilename: thumbnail.filename,
+          thumbnailReadStream: thumbnail.createReadStream,
+        };
+
+        thumbnailFileUrl = await this.uploadThumbnail({
+          ...audioThumbnailInput,
+          containerName: AzureContainersEnum.AUDIO,
+        });
+        break;
     }
 
     this.validateAddMediaPostInput(addPostInput, media, metaData);

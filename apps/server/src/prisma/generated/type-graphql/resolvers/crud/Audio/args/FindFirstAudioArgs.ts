@@ -35,5 +35,5 @@ export class FindFirstAudioArgs {
   @TypeGraphQL.Field(_type => [AudioScalarFieldEnum], {
     nullable: true,
   })
-  distinct?: Array<"id" | "url" | "postId"> | undefined;
+  distinct?: Array<"id" | "url" | "postId" | "thumbnailUrl"> | undefined;
 }

@@ -21,4 +21,9 @@ export class AudioMinAggregate {
     nullable: true,
   })
   postId!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl!: string | null;
 }

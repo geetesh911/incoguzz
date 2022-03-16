@@ -44,6 +44,7 @@ input AddTextualPostInput {
 type Audio {
   id: String!
   postId: String!
+  thumbnailUrl: String
   url: String!
 }
 
@@ -145,7 +146,7 @@ type LoginOutput {
 
 type Mutation {
   addClipPost(addClipPostInput: AddClipPostInput!, clipAudioMedia: Upload!, clipMedia: Upload!): Post!
-  addMediaPost(addMediaPostInput: AddMediaPostInput!, media: [Upload!]!): Post!
+  addMediaPost(addMediaPostInput: AddMediaPostInput!, media: [Upload!]!, mediaThumbnail: Upload): Post!
   addPollPost(addPollPostInput: AddPollPostInput!): Post!
   addTextualPost(addTextualPostInput: AddTextualPostInput!): Post!
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
@@ -284,6 +285,7 @@ type ProfileOutput {
 }
 
 type Query {
+  getAllPosts: [GetUserPostsOutput!]!
   getMediaAccessToken: String!
   getUser: UserOutput
   getUserPosts: [GetUserPostsOutput!]!

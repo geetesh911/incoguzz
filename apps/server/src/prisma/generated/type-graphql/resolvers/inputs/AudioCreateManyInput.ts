@@ -21,4 +21,9 @@ export class AudioCreateManyInput {
     nullable: false,
   })
   postId!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl?: string | undefined;
 }

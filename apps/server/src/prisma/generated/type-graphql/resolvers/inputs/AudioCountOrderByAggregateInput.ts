@@ -22,4 +22,9 @@ export class AudioCountOrderByAggregateInput {
     nullable: true,
   })
   postId?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  thumbnailUrl?: "asc" | "desc" | undefined;
 }

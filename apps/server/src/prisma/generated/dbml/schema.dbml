@@ -183,6 +183,7 @@ Table Audio {
   url String [not null]
   post Post [not null]
   postId String [unique, not null]
+  thumbnailUrl String
 }
 
 Table Tag {

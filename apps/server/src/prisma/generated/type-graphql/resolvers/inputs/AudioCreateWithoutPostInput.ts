@@ -16,4 +16,9 @@ export class AudioCreateWithoutPostInput {
     nullable: false,
   })
   url!: string;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl?: string | undefined;
 }

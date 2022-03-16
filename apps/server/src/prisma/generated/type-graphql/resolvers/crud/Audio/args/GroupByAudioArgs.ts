@@ -20,7 +20,7 @@ export class GroupByAudioArgs {
   @TypeGraphQL.Field(_type => [AudioScalarFieldEnum], {
     nullable: false,
   })
-  by!: Array<"id" | "url" | "postId">;
+  by!: Array<"id" | "url" | "postId" | "thumbnailUrl">;
 
   @TypeGraphQL.Field(_type => AudioScalarWhereWithAggregatesInput, {
     nullable: true,

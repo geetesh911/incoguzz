@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { PostRelationFilter } from "../inputs/PostRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
+import { StringNullableFilter } from "../inputs/StringNullableFilter";
 
 @TypeGraphQL.InputType("AudioWhereInput", {
   isAbstract: true,
@@ -43,4 +44,9 @@ export class AudioWhereInput {
     nullable: true,
   })
   postId?: StringFilter | undefined;
+
+  @TypeGraphQL.Field(_type => StringNullableFilter, {
+    nullable: true,
+  })
+  thumbnailUrl?: StringNullableFilter | undefined;
 }

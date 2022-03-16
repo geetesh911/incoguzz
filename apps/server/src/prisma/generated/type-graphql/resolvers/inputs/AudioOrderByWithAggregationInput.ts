@@ -26,6 +26,11 @@ export class AudioOrderByWithAggregationInput {
   })
   postId?: "asc" | "desc" | undefined;
 
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  thumbnailUrl?: "asc" | "desc" | undefined;
+
   @TypeGraphQL.Field(_type => AudioCountOrderByAggregateInput, {
     nullable: true,
   })

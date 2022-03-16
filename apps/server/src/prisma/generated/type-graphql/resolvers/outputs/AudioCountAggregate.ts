@@ -25,5 +25,10 @@ export class AudioCountAggregate {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false,
   })
+  thumbnailUrl!: number;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false,
+  })
   _all!: number;
 }
