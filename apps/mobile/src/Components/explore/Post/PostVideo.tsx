@@ -1,13 +1,16 @@
 import React, { FC, useState } from "react";
-import Video, { OnLoadData } from "react-native-video";
+import { StyleSheet } from "react-native";
+import { OnLoadData } from "react-native-video";
+import { VideoPlayer } from "../../shared/Video";
 import { IMediaProperties } from "../Feed";
 import { StyledMediaContainer } from "./styled";
 
 interface IPostVideoProps {
   videoUrl: string;
+  thumbnailUrl?: string;
 }
 
-export const PostVideo: FC<IPostVideoProps> = ({ videoUrl }) => {
+export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
   const [{ height, width }, setVideoProperties] = useState<IMediaProperties>({
     height: 1,
     width: 1,
@@ -21,17 +24,24 @@ export const PostVideo: FC<IPostVideoProps> = ({ videoUrl }) => {
   };
   return (
     <StyledMediaContainer height={height} width={width}>
-      <Video
+      <VideoPlayer
         resizeMode={"contain"}
-        style={{ flex: 1 }}
+        style={styles.videoPlayer}
         onLoad={onVideoLoad}
         poster={
-          "https://res.cloudinary.com/geeteshpp/image/upload/v1644933320/0fdddf59-419f-4479-8658-1e6ab58bfc9f_62b34b08-0562-4d59-a61f-f7344c80cc9aRW20seconds_1_thumbnail_xth8dk.jpg"
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png"
         }
         source={{
           uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         }}
+        paused={true}
       />
     </StyledMediaContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  videoPlayer: {
+    flex: 1,
+  },
+});

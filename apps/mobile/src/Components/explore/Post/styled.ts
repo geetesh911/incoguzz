@@ -89,3 +89,16 @@ export const StyledPotraitMedia = styled.Image<IImageAspectRatio>`
 export const StyledLandscapeMedia = styled.Image<IImageAspectRatio>`
   resize-mode: contain;
 `;
+
+export const StyledPostImageCarousel = styled.Image<IImageAspectRatio>`
+  resize-mode: contain;
+`;
+
+export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)`
+  height: ${windowWidth * 0.9 * (4 / 3)}px;
+  width: ${windowWidth * 0.9}px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

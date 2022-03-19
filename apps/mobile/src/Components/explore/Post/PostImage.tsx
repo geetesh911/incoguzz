@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useState } from "react";
-import { Dimensions, Image } from "react-native";
+import { Dimensions, Image, StyleSheet } from "react-native";
 import { PinchableImage } from "../../shared";
 import {
   StyledPotraitMedia,
@@ -39,14 +39,25 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl }) => {
               source={{ uri: imgUrl }}
             />
           ) : (
-            <StyledLandscapeMedia
-              style={{ width: windowWidth * 0.9 }}
-              aspectRatio={aspectRatio}
-              source={{ uri: imgUrl }}
-            />
+            <StyledImageContainer style={styles.landscapeImageContainer}>
+              <StyledLandscapeMedia
+                style={styles.landscapeImage}
+                aspectRatio={aspectRatio}
+                source={{ uri: imgUrl }}
+              />
+            </StyledImageContainer>
           )
         }
       />
     </StyledImageContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  landscapeImageContainer: {
+    height: windowWidth * 0.9 * (4 / 3),
+  },
+  landscapeImage: {
+    width: windowWidth * 0.9,
+  },
+});

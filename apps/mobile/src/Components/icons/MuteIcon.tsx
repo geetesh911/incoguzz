@@ -22,7 +22,7 @@ export const MuteIcon: FC<IIconInterface> = ({ color, height, width }) => {
       <G>
         <Path
           stroke={color || "#fff"}
-          strokeWidth={70}
+          strokeWidth={200}
           d="M2002.75 220.749L220.749 2002.75"
         />
       </G>
