@@ -25,7 +25,7 @@ export const StyledAudioPlayerControlsContainer = styled(Animated.View)`
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
+  /* flex-direction: row; */
 `;
 
 export const StyledSoundButtonContainer = styled.Pressable`
@@ -100,4 +100,45 @@ export const StyledPlaybackText = styled.Text`
   font-family: ${({ theme }) => theme.fontFamily.primary};
   font-weight: bold;
   font-size: 12px;
+  color: ${({ theme }) => theme.textColors.primary};
+`;
+
+export const StyledAudioPlayerPlayControlsContainer = styled.View`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+`;
+
+export const StyledProgressBarContainer = styled.View`
+  width: 90%;
+  position: absolute;
+  bottom: 70px;
+`;
+
+export const StyledProgressBarTimeContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+`;
+
+export const StyledProgressBarLeftTimeText = styled.Text`
+  font-family: ${({ theme }) => theme.fontFamily.primary};
+  font-size: 10px;
+  padding-left: 10px;
+  color: ${({ theme }) => theme.textColors.secondary};
+`;
+
+export const StyledProgressBarRightTimeText = styled.Text`
+  font-family: ${({ theme }) => theme.fontFamily.primary};
+  font-size: 10px;
+  padding-right: 10px;
+  color: ${({ theme }) => theme.textColors.secondary};
 `;

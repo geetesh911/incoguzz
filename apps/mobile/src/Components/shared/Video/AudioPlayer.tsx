@@ -1,12 +1,17 @@
 import React, { createRef, FC, useEffect, useState } from "react";
 import { FadeIn, FadeOut } from "react-native-reanimated";
-import Video, { VideoProperties } from "react-native-video";
+import Video, {
+  OnLoadData,
+  OnProgressData,
+  VideoProperties,
+} from "react-native-video";
 import { useTheme } from "../../../styles/theme";
 import { MuteIcon, PlayIcon, SoundIcon } from "../../icons";
 import { BackwardTenSecIcon } from "../../icons/BackwardTenSecIcon";
 import { ForwardTenSecIcon } from "../../icons/ForwardTenSecIcon";
 import { PauseIcon } from "../../icons/PauseIcon";
-import { IAudioPlayerState } from "./interfaces";
+import { IAudioPlayerState, IOnSeekData } from "./interfaces";
+import { ProgressBar } from "./ProgressBar";
 import {
   StyledPlayButtonContainer,
   StyledSoundButtonContainer,
@@ -15,6 +20,7 @@ import {
   StyledForBackButtonContainer,
   StyledPlaybackRateButtonContainer,
   StyledPlaybackText,
+  StyledAudioPlayerPlayControlsContainer,
 } from "./styled";
 
 export const AudioPlayer: FC<VideoProperties> = props => {
@@ -33,6 +39,19 @@ export const AudioPlayer: FC<VideoProperties> = props => {
   });
 
   const [showControls, setShowControls] = useState<boolean>(false);
+
+  const onLoadEnd = (data: OnLoadData) => {
+    setPlayerState({ ...playerState, duration: data.duration });
+  };
+
+  const onSeek = (data: IOnSeekData) => {
+    audioRef?.current?.seek(data.seekTime);
+    setPlayerState({ ...playerState, currentTime: data.seekTime });
+  };
+
+  const onProgress = (data: OnProgressData) => {
+    setPlayerState({ ...playerState, currentTime: data.currentTime });
+  };
 
   const handlePlaybackRate = () => {
     const currentSpeedIndex = playbackSpeeds.findIndex(
@@ -89,44 +108,55 @@ export const AudioPlayer: FC<VideoProperties> = props => {
           muted={playerState.isMuted}
           paused={playerState.isPaused}
           rate={playerState.playbackRate}
+          onLoad={onLoadEnd}
+          onProgress={onProgress}
         />
         {showControls && (
           <StyledAudioPlayerControlsContainer
             entering={FadeIn}
             exiting={FadeOut}
           >
-            <StyledForBackButtonContainer onPress={handleBackwardTenSeconds}>
-              <BackwardTenSecIcon
-                height={30}
-                width={30}
-                color={theme?.textColors?.secondary}
-              />
-            </StyledForBackButtonContainer>
-            <StyledPlayButtonContainer onPress={handlePlayPause}>
-              {playerState.isPaused ? (
-                <PlayIcon
-                  height={25}
-                  width={25}
+            <StyledAudioPlayerPlayControlsContainer>
+              <StyledForBackButtonContainer onPress={handleBackwardTenSeconds}>
+                <BackwardTenSecIcon
+                  height={30}
+                  width={30}
                   color={theme?.textColors?.secondary}
                 />
-              ) : (
-                <PauseIcon
-                  height={25}
-                  width={25}
+              </StyledForBackButtonContainer>
+              <StyledPlayButtonContainer onPress={handlePlayPause}>
+                {playerState.isPaused ? (
+                  <PlayIcon
+                    height={25}
+                    width={25}
+                    color={theme?.textColors?.primary}
+                  />
+                ) : (
+                  <PauseIcon
+                    height={25}
+                    width={25}
+                    color={theme?.textColors?.primary}
+                  />
+                )}
+              </StyledPlayButtonContainer>
+              <StyledForBackButtonContainer onPress={handleForwardTenSeconds}>
+                <ForwardTenSecIcon
+                  height={30}
+                  width={30}
                   color={theme?.textColors?.secondary}
                 />
-              )}
-            </StyledPlayButtonContainer>
-            <StyledForBackButtonContainer onPress={handleForwardTenSeconds}>
-              <ForwardTenSecIcon
-                height={30}
-                width={30}
-                color={theme?.textColors?.secondary}
-              />
-            </StyledForBackButtonContainer>
-            <StyledPlaybackRateButtonContainer onPress={handlePlaybackRate}>
-              <StyledPlaybackText>{`${playerState?.playbackRate}x`}</StyledPlaybackText>
-            </StyledPlaybackRateButtonContainer>
+              </StyledForBackButtonContainer>
+              <StyledPlaybackRateButtonContainer onPress={handlePlaybackRate}>
+                <StyledPlaybackText>{`${playerState?.playbackRate}x`}</StyledPlaybackText>
+              </StyledPlaybackRateButtonContainer>
+            </StyledAudioPlayerPlayControlsContainer>
+            <ProgressBar
+              currentTime={playerState.currentTime}
+              duration={playerState.duration > 0 ? playerState.duration : 0}
+              onSlideStart={handlePlayPause}
+              onSlideComplete={handlePlayPause}
+              onSlideCapture={onSeek}
+            />
           </StyledAudioPlayerControlsContainer>
         )}
         <StyledSoundButtonContainer onPress={handleMute}>

@@ -29,8 +29,11 @@ export interface IVideoPlayerState1 {
 
 export interface IVideoPlayerState {
   isMuted: boolean;
-  showControls: boolean;
   isFullScreen: boolean;
+  isPaused: boolean;
+  currentTime: number;
+  duration: number;
+  playbackRate: number;
 }
 
 export interface IAudioPlayerState {
@@ -39,4 +42,8 @@ export interface IAudioPlayerState {
   currentTime: number;
   duration: number;
   playbackRate: number;
+}
+
+export interface IOnSeekData {
+  seekTime: number;
 }

@@ -102,3 +102,16 @@ export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)`
   justify-content: center;
   align-items: center;
 `;
+
+export const StyledPostTextContainer = styled.View`
+  padding: 25px;
+`;
+
+export const StyledPostTextScrollView = styled.ScrollView``;
+
+export const StyledPostText = styled.Text`
+  color: ${({ theme }) => theme?.textColors?.primary};
+  font-family: ${({ theme }) => theme?.fontFamily.primary};
+  font-size: 17px;
+  flex-shrink: 1;
+`;

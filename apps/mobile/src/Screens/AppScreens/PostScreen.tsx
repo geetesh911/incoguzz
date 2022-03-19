@@ -23,7 +23,7 @@ export const PostScreen: FC = () => {
         {[
           // "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
           "https://apicms.thestar.com.my/uploads/images/2020/02/21/570850.jpg",
-          // "https://i.picsum.photos/id/866/1500/700.jpg?hmac=OMx1p3NO_fbaq4H-cTQmTpnjFVq54rp5U-bNzSM8N1M",
+          "https://i.picsum.photos/id/866/1500/700.jpg?hmac=OMx1p3NO_fbaq4H-cTQmTpnjFVq54rp5U-bNzSM8N1M",
           // "https://res.cloudinary.com/geeteshpp/image/upload/v1647415142/mountain-climber_jjis3c.jpg",
           // "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
           // "https://i.picsum.photos/id/237/1920/2554.jpg?hmac=FK3Rl-Yws08bivJOmeRRhQ6PABf_UrDLtvgXz8U3FRw",
