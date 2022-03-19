@@ -32,3 +32,11 @@ export interface IVideoPlayerState {
   showControls: boolean;
   isFullScreen: boolean;
 }
+
+export interface IAudioPlayerState {
+  isMuted: boolean;
+  isPaused: boolean;
+  currentTime: number;
+  duration: number;
+  playbackRate: number;
+}

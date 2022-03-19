@@ -1,30 +1,30 @@
 import React, { FC, useState } from "react";
 import { StyleSheet } from "react-native";
 import { OnLoadData } from "react-native-video";
-import { VideoPlayer } from "../../shared/Video";
+import { AudioPlayer } from "../../shared/Video/AudioPlayer";
 import { IMediaProperties } from "../Feed";
 import { StyledMediaContainer } from "./styled";
 
-interface IPostVideoProps {
-  videoUrl: string;
+interface IPostAudioProps {
+  audioUrl: string;
   thumbnailUrl?: string;
 }
 
-export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
-  const [{ height, width }, setVideoProperties] = useState<IMediaProperties>({
+export const PostAudio: FC<IPostAudioProps> = ({ audioUrl, thumbnailUrl }) => {
+  const [{ height, width }, setAudioProperties] = useState<IMediaProperties>({
     height: 1,
     width: 1,
   });
 
   const onVideoLoad = (data: OnLoadData) => {
-    setVideoProperties({
+    setAudioProperties({
       height: data.naturalSize.height,
       width: data.naturalSize.width,
     });
   };
   return (
     <StyledMediaContainer height={height} width={width}>
-      <VideoPlayer
+      <AudioPlayer
         resizeMode={"contain"}
         style={styles.videoPlayer}
         onLoad={onVideoLoad}
@@ -32,9 +32,8 @@ export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
           "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png"
         }
         source={{
-          uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+          uri: "https://pagalworld.com.se/files/download/id/5034",
         }}
-        paused={false}
         audioOnly={true}
       />
     </StyledMediaContainer>

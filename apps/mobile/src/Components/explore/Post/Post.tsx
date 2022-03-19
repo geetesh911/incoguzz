@@ -8,6 +8,7 @@ import {
 } from "./styled";
 import { PostVideo } from "./PostVideo";
 import { PostImageCarousel } from "./PostImageCarousel";
+import { PostAudio } from "./PostAudio";
 
 interface IPostProps {
   url: string;
@@ -28,7 +29,8 @@ export const Post: FC<IPostProps> = ({ url }) => {
   return (
     <>
       <StyledPostContainer>
-        <PostVideo videoUrl={url} />
+        {/* <PostVideo videoUrl={url} /> */}
+        <PostAudio audioUrl={url} />
         {/* <PostImageCarousel imgUrls={dummyUrls} /> */}
       </StyledPostContainer>
       <StyledReactionsContainer>
