@@ -3,6 +3,7 @@ import PagerView from "react-native-pager-view";
 import Animated from "react-native-reanimated";
 import { IImageAspectRatio, IMediaProperties } from "../Feed";
 import { Dimensions } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
 
@@ -103,8 +104,9 @@ export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)`
   align-items: center;
 `;
 
-export const StyledPostTextContainer = styled.View`
+export const StyledPostTextContainer = styled(LinearGradient)`
   padding: 25px;
+  flex: 1;
 `;
 
 export const StyledPostTextScrollView = styled.ScrollView``;
@@ -112,6 +114,7 @@ export const StyledPostTextScrollView = styled.ScrollView``;
 export const StyledPostText = styled.Text`
   color: ${({ theme }) => theme?.textColors?.primary};
   font-family: ${({ theme }) => theme?.fontFamily.primary};
-  font-size: 17px;
+  font-size: 18px;
   flex-shrink: 1;
+  text-align: left;
 `;

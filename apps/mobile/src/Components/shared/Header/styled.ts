@@ -32,7 +32,7 @@ export const StyledBackIconContainer = styled.Pressable`
   position: absolute;
   left: 5px;
   z-index: 2;
-  background-color: ${({ theme }) => theme?.backgrounds?.primary};
+  background-color: transparent;
 `;
 
 export const StyledBackIcon = styled(Icon)`

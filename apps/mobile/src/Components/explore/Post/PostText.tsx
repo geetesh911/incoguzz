@@ -11,7 +11,11 @@ interface IPostTextProps {
 
 export const PostText: FC<IPostTextProps> = ({ text }) => {
   return (
-    <StyledPostTextContainer>
+    <StyledPostTextContainer
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 1 }}
+      colors={["#FFDD00", "#FDCA16", "#FBB034"]}
+    >
       <StyledPostTextScrollView>
         <StyledPostText>{text}</StyledPostText>
       </StyledPostTextScrollView>
