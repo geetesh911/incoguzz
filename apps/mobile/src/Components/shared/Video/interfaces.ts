@@ -31,6 +31,8 @@ export interface IVideoPlayerState {
   isMuted: boolean;
   isFullScreen: boolean;
   isPaused: boolean;
+  isLoading: boolean;
+  isError: boolean;
   currentTime: number;
   duration: number;
   playbackRate: number;

@@ -2,9 +2,9 @@ import React from "react";
 import Slider from "@react-native-community/slider";
 import {
   StyledProgressBarContainer,
-  StyledProgressBarLeftTimeText,
   StyledProgressBarRightTimeText,
   StyledProgressBarTimeContainer,
+  StyledSliderContainer,
 } from "./styled";
 import { useTheme } from "../../../styles/theme";
 
@@ -38,29 +38,27 @@ export const ProgressBar: React.FC<Props> = ({
     onSlideCapture({ seekTime: time });
   }
 
-  const position = getMinutesFromSeconds(currentTime);
-  const fullDuration = getMinutesFromSeconds(duration);
+  const leftDuration = getMinutesFromSeconds(duration - currentTime);
 
   return (
     <StyledProgressBarContainer>
-      <Slider
-        value={currentTime}
-        minimumValue={0}
-        maximumValue={duration}
-        step={1}
-        onValueChange={handleOnSlide}
-        onSlidingStart={onSlideStart}
-        onSlidingComplete={onSlideComplete}
-        minimumTrackTintColor={theme.colors.primary}
-        maximumTrackTintColor={theme.textColors.secondary}
-        thumbTintColor={theme.colors.primary}
-      />
+      <StyledSliderContainer>
+        <Slider
+          value={currentTime}
+          minimumValue={0}
+          maximumValue={duration}
+          step={1}
+          onValueChange={handleOnSlide}
+          onSlidingStart={onSlideStart}
+          onSlidingComplete={onSlideComplete}
+          minimumTrackTintColor={theme.colors.primary}
+          maximumTrackTintColor={theme.textColors.secondary}
+          thumbTintColor={theme.colors.primary}
+        />
+      </StyledSliderContainer>
       <StyledProgressBarTimeContainer>
-        <StyledProgressBarLeftTimeText>
-          {position}
-        </StyledProgressBarLeftTimeText>
         <StyledProgressBarRightTimeText>
-          {fullDuration}
+          {leftDuration}
         </StyledProgressBarRightTimeText>
       </StyledProgressBarTimeContainer>
     </StyledProgressBarContainer>

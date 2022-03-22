@@ -35,6 +35,7 @@ export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
           uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         }}
         paused={false}
+        isFullScreen={true}
       />
     </StyledMediaContainer>
   );
