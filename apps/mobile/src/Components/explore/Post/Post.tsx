@@ -37,9 +37,9 @@ export const Post: FC<IPostProps> = ({ url }) => {
       {!videoPlayerState?.isFullScreen ? (
         <>
           <StyledPostContainer>
-            <PostVideo videoUrl={url} />
+            {/* <PostVideo videoUrl={url} /> */}
             {/* <PostAudio audioUrl={url} /> */}
-            {/* <PostImageCarousel imgUrls={dummyUrls} /> */}
+            <PostImageCarousel imgUrls={dummyUrls} />
             {/* <PostText text={dummyText} /> */}
           </StyledPostContainer>
           <Reactions />
