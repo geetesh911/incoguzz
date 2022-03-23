@@ -16,6 +16,7 @@ export const StyledPageHeader = styled.View`
   justify-content: center;
   flex-direction: row;
   height: 50px;
+  /* margin-top: 20px; */
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
 `;
 

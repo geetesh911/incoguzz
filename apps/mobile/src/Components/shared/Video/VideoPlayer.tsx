@@ -32,9 +32,15 @@ import {
   StyledErrorText,
   StyledErrorTextContainer,
 } from "./styled";
+import Orientation from "react-native-orientation-locker";
+import SystemNavigationBar from "react-native-system-navigation-bar";
+import { useAppDispatch } from "../../../redux/hooks";
+import { setVideoPlayerState } from "@incoguzz/redux";
+import { FullScreenMinimizeIcon } from "../../icons/FullScreenMinimizeIcon";
 
 type IVideoPlayerProps = VideoProperties & {
-  isFullScreen?: boolean;
+  showFullScreenButton?: boolean;
+  defaultState?: IVideoPlayerState;
 };
 
 const AnimatedBackwardTenSecIcon =
@@ -46,29 +52,38 @@ const AnimatedForwardTenSecIcon =
 export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   const theme = useTheme();
 
-  const audioRef = createRef<Video>();
+  const dispatch = useAppDispatch();
+
+  const videoPlayerRef = createRef<Video>();
 
   const [playbackSpeeds] = useState<number[]>([0.5, 1, 1.5, 2]);
 
-  const [playerState, setPlayerState] = useState<IVideoPlayerState>({
-    isMuted: false,
-    isPaused: true,
-    isFullScreen: false,
-    isLoading: false,
-    isError: false,
-    currentTime: 0,
-    duration: 0,
-    playbackRate: 1,
-  });
+  const [playerState, setPlayerState] = useState<IVideoPlayerState>(
+    props.defaultState || {
+      isMuted: false,
+      isPaused: true,
+      isFullScreen: false,
+      isLoading: false,
+      isError: false,
+      isRepeat: false,
+      currentTime: 0,
+      duration: 0,
+      playbackRate: 1,
+    },
+  );
 
   const [showForwardButton, setShowForwardButton] = useState<boolean>(false);
   const [showBackwardButton, setShowBackwardButton] = useState<boolean>(false);
   const [showControls, setShowControls] = useState<boolean>(false);
 
   const onLoadEnd = (data: OnLoadData) => {
+    if (props.defaultState) {
+      videoPlayerRef?.current?.seek(props?.defaultState?.currentTime);
+    }
     setPlayerState({
       ...playerState,
       duration: data.duration,
+      currentTime: props.defaultState ? props.defaultState?.currentTime : 0,
       isLoading: false,
     });
   };
@@ -78,7 +93,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   };
 
   const onSeek = (data: IOnSeekData) => {
-    audioRef?.current?.seek(data.seekTime);
+    videoPlayerRef?.current?.seek(data.seekTime);
     setPlayerState({ ...playerState, currentTime: data.seekTime });
   };
 
@@ -118,42 +133,79 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
 
   const handleForwardTenSeconds = () => {
     const newTime = playerState.currentTime + 10;
-    audioRef?.current?.seek(newTime);
+    videoPlayerRef?.current?.seek(newTime);
     setPlayerState({ ...playerState, currentTime: newTime });
     setShowForwardButton(true);
   };
 
   const handleBackwardTenSeconds = () => {
     const newTime = playerState.currentTime - 10;
-    audioRef?.current?.seek(newTime);
+    videoPlayerRef?.current?.seek(newTime);
     setPlayerState({ ...playerState, currentTime: newTime });
     setShowBackwardButton(true);
   };
 
-  const handleFullScreen = () => {
-    StatusBar.setHidden(!playerState.isFullScreen);
-    setPlayerState({ ...playerState, isFullScreen: !playerState.isFullScreen });
+  const handleEnd = () => {
+    setPlayerState({
+      ...playerState,
+      currentTime: 0,
+      isPaused: !playerState.isRepeat,
+    });
+  };
+
+  const handleFullScreen = async () => {
+    const newFullScreenValue = !playerState.isFullScreen;
+
+    dispatch(
+      setVideoPlayerState({
+        ...playerState,
+        isFullScreen: newFullScreenValue,
+      }),
+    );
+
+    StatusBar.setHidden(newFullScreenValue);
+
+    newFullScreenValue
+      ? SystemNavigationBar?.navigationHide()
+      : SystemNavigationBar?.navigationShow();
+
+    setPlayerState({ ...playerState, isFullScreen: newFullScreenValue });
+
+    if (newFullScreenValue) Orientation.lockToLandscapeLeft();
+    else Orientation.lockToPortrait();
   };
 
   useEffect(() => {
-    setTimeout(() => {
+    const showControlsTimeout = setTimeout(() => {
       if (showControls) setShowControls(false);
     }, 3000);
+
+    return () => {
+      clearTimeout(showControlsTimeout);
+    };
   }, [showControls]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const showBackwardButtonTimeout = setTimeout(() => {
       if (showBackwardButton) setShowBackwardButton(false);
     }, 500);
+
+    return () => {
+      clearTimeout(showBackwardButtonTimeout);
+    };
   }, [showBackwardButton]);
 
   useEffect(() => {
-    setTimeout(() => {
+    const showForwardButtonTimeout = setTimeout(() => {
       if (showForwardButton) setShowForwardButton(false);
     }, 500);
+
+    return () => {
+      clearTimeout(showForwardButtonTimeout);
+    };
   }, [showForwardButton]);
 
-  const BackwardGesture = () => (
+  const BackwardGesture = (
     <TapGesture
       singleTap={handleShowControls}
       doubleTap={handleBackwardTenSeconds}
@@ -172,7 +224,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
     </TapGesture>
   );
 
-  const ForwardGesture = () => (
+  const ForwardGesture = (
     <TapGesture
       singleTap={handleShowControls}
       doubleTap={handleForwardTenSeconds}
@@ -191,7 +243,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
     </TapGesture>
   );
 
-  const Controls = () => (
+  const Controls = (
     <StyledAudioPlayerControlsContainer
       entering={FadeIn}
       exiting={FadeOut}
@@ -229,53 +281,53 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
           onSlideCapture={onSeek}
         />
       </StyledAudioPlayerPlayControlsContainer>
-      <BackwardGesture />
-      <ForwardGesture />
+      {BackwardGesture}
+      {ForwardGesture}
       <StyledForBackContainer></StyledForBackContainer>
       <StyledPlaybackRateButtonContainer onPress={handlePlaybackRate}>
         <StyledPlaybackText>{`${playerState?.playbackRate}x`}</StyledPlaybackText>
       </StyledPlaybackRateButtonContainer>
-      {props.isFullScreen && (
+      {props.showFullScreenButton && (
         <StyledFullScreenButtonContainer onPress={handleFullScreen}>
-          <FullScreenIcon
-            height={15}
-            width={15}
-            color={theme?.textColors?.secondary}
-          />
+          {playerState?.isFullScreen ? (
+            <FullScreenMinimizeIcon
+              height={15}
+              width={15}
+              color={theme?.textColors?.secondary}
+            />
+          ) : (
+            <FullScreenIcon
+              height={15}
+              width={15}
+              color={theme?.textColors?.secondary}
+            />
+          )}
         </StyledFullScreenButtonContainer>
       )}
     </StyledAudioPlayerControlsContainer>
   );
 
-  const LoadingComponent = () => {
-    return (
-      <>
-        {playerState.isLoading && (
-          <StyledVideoLoaderContainer>
-            <ActivityIndicator size="large" color={theme?.textColors.primary} />
-          </StyledVideoLoaderContainer>
-        )}
-      </>
-    );
-  };
+  const LoadingComponent = playerState.isLoading && (
+    <StyledVideoLoaderContainer>
+      <ActivityIndicator size="large" color={theme?.textColors.primary} />
+    </StyledVideoLoaderContainer>
+  );
 
-  const ErrorComponent = () => {
-    return (
-      <>
-        {playerState.isError && (
-          <StyledErrorTextContainer>
-            <StyledErrorText>Some error occured</StyledErrorText>
-          </StyledErrorTextContainer>
-        )}
-      </>
-    );
-  };
+  const ErrorComponent = playerState.isError && (
+    <StyledErrorTextContainer>
+      <StyledErrorText>Some error occured</StyledErrorText>
+    </StyledErrorTextContainer>
+  );
+
   return (
-    <StyledVideoPlayerContainer android_disableSound={true}>
+    <StyledVideoPlayerContainer
+      android_disableSound={true}
+      onPress={handleShowControls}
+    >
       <>
         <Video
           {...props}
-          ref={audioRef}
+          ref={videoPlayerRef}
           muted={playerState.isMuted}
           paused={playerState.isPaused}
           rate={playerState.playbackRate}
@@ -283,12 +335,14 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
           onLoadStart={onLoadStart}
           onProgress={onProgress}
           onError={onError}
+          onEnd={handleEnd}
+          repeat={playerState.isRepeat}
         />
-        {showControls && <Controls />}
-        {!showControls && <BackwardGesture />}
-        {!showControls && <ForwardGesture />}
-        <LoadingComponent />
-        <ErrorComponent />
+        {showControls && Controls}
+        {!showControls && BackwardGesture}
+        {!showControls && ForwardGesture}
+        {LoadingComponent}
+        {ErrorComponent}
         <StyledSoundButtonContainer onPress={handleMute}>
           {playerState?.isMuted ? (
             <MuteIcon

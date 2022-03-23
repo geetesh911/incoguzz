@@ -2,12 +2,14 @@ import styled from "styled-components/native";
 import PagerView from "react-native-pager-view";
 import Animated from "react-native-reanimated";
 import { IImageAspectRatio, IMediaProperties } from "../Feed";
-import { Dimensions } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
+const AnimatedOverlay = Animated.createAnimatedComponent(Pressable);
 
 export const StyledAnimatedPagerView = styled(AnimatedPagerView)`
   width: 100%;
@@ -57,24 +59,27 @@ export const StyledReactionsContainer = styled.View`
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
   width: ${windowWidth}px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  padding: 15px;
+  padding: 15px 30px;
 `;
+
 export const StyledReactionsEmoji = styled.Text`
   font-size: 30px;
   text-align: center;
   flex: 1;
 `;
 
-export const StyledCaptionContainer = styled.View`
+export const StyledReaction = styled.Pressable``;
+
+export const StyledCaptionContainer = styled.Pressable`
   padding: 15px 10px;
 `;
 
 export const StyledCaptionText = styled.Text`
   color: ${({ theme }) => theme?.textColors?.primary};
-  font-size: 22px;
+  font-size: 20px;
   font-family: ${({ theme }) => theme?.fontFamily?.primary};
   font-weight: 600;
   opacity: 0.4;
@@ -117,4 +122,40 @@ export const StyledPostText = styled.Text`
   font-size: 18px;
   flex-shrink: 1;
   text-align: left;
+`;
+
+export const StyledCaptionModal = styled.Modal`
+  height: 200px;
+`;
+
+export const StyledOverlayModalContainer = styled(AnimatedOverlay)`
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.overlayBg};
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  height: ${windowHeight}px;
+  width: ${windowWidth}px;
+`;
+
+export const StyledCaptionModalContainer = styled.View`
+  padding: 25px;
+  width: 90%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+`;
+export const StyledCaptionModalScrollView = styled.ScrollView`
+  z-index: 99;
+`;
+
+export const StyledCaptionModalText = styled.Text`
+  color: ${({ theme }) => theme?.textColors?.primary};
+  font-family: ${({ theme }) => theme?.fontFamily.primary};
+  font-size: 18px;
 `;

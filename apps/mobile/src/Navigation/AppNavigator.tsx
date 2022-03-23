@@ -6,15 +6,20 @@ import { FeedScreen } from "../Screens/AppScreens/FeedScreen";
 import { RouteNames } from "./constants";
 import ExploreNavigator from "./ExploreNavigator";
 import { AddPostScreen } from "../Screens/AppScreens/AddPostScreen";
+import { useAppSelector } from "../redux/hooks";
 
 const Tab = createBottomTabNavigator();
 
 export const AppNavigator: FC = () => {
+  const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
+
   return (
     <Tab.Navigator
       initialRouteName={RouteNames.Explore}
       screenOptions={{ headerShown: false }}
-      tabBar={props => <BottomMenu {...props} />}
+      tabBar={props =>
+        !videoPlayerState.isFullScreen && <BottomMenu {...props} />
+      }
     >
       <Tab.Screen
         component={MessagesScreen}

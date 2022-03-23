@@ -241,3 +241,8 @@ export const StyledErrorText = styled.Text`
   font-size: 14px;
   color: ${({ theme }) => theme?.textColors?.primary};
 `;
+
+export const StyledFullScreenVideoPlayer = styled.View`
+  height: 100%;
+  width: 100%;
+`;

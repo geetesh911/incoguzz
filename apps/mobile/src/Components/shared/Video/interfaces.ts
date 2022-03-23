@@ -33,6 +33,7 @@ export interface IVideoPlayerState {
   isPaused: boolean;
   isLoading: boolean;
   isError: boolean;
+  isRepeat: boolean;
   currentTime: number;
   duration: number;
   playbackRate: number;

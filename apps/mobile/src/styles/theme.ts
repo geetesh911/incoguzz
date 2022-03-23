@@ -21,6 +21,7 @@ declare module "styled-components" {
     light: string;
     secondary: string;
     overlay: string;
+    overlayBg: string;
   }
 
   export interface HoverColors {
@@ -65,6 +66,7 @@ export const dark: DefaultTheme = {
     light: "#404040",
     secondary: "#FFFFFF",
     overlay: "rgba(0, 0, 0, 0.85)",
+    overlayBg: "rgba(0, 0, 0, 0.5)",
   },
   colors: {
     primary: "#FBB034",
@@ -101,6 +103,7 @@ export const light: DefaultTheme = {
     light: "#FFFFFF",
     secondary: "#262626",
     overlay: "rgba(0, 0, 0, 0.7)",
+    overlayBg: "rgba(0, 0, 0, 0.5)",
   },
   colors: {
     primary: "#FBB034",

@@ -38,7 +38,7 @@ export const ProgressBar: React.FC<Props> = ({
     onSlideCapture({ seekTime: time });
   }
 
-  const leftDuration = getMinutesFromSeconds(duration - currentTime);
+  const remainingDuration = getMinutesFromSeconds(duration - currentTime);
 
   return (
     <StyledProgressBarContainer>
@@ -58,7 +58,7 @@ export const ProgressBar: React.FC<Props> = ({
       </StyledSliderContainer>
       <StyledProgressBarTimeContainer>
         <StyledProgressBarRightTimeText>
-          {leftDuration}
+          {remainingDuration}
         </StyledProgressBarRightTimeText>
       </StyledProgressBarTimeContainer>
     </StyledProgressBarContainer>
