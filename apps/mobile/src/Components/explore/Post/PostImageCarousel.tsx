@@ -18,8 +18,8 @@ export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
       transitionStyle="scroll"
       showPageIndicator={true}
     >
-      {imgUrls.map(imageUrl => (
-        <PostImage key={imageUrl} imgUrl={imageUrl} />
+      {imgUrls.map((imageUrl, index) => (
+        <PostImage key={`${imageUrl}${index}`} imgUrl={imageUrl} />
       ))}
     </StyledPostImageCarouselPagerView>
   );

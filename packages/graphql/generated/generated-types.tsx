@@ -61,6 +61,7 @@ export type Audio = {
   __typename?: 'Audio';
   id: Scalars['String'];
   postId: Scalars['String'];
+  thumbnailUrl?: Maybe<Scalars['String']>;
   url: Scalars['String'];
 };
 
@@ -107,6 +108,25 @@ export enum Gender {
   Female = 'FEMALE',
   Male = 'MALE'
 }
+
+export type GetAllPostsOutput = {
+  __typename?: 'GetAllPostsOutput';
+  _count?: Maybe<PostCount>;
+  audio?: Maybe<Audio>;
+  caption?: Maybe<Scalars['String']>;
+  clip?: Maybe<ClipOutput>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  photos?: Maybe<Array<Photo>>;
+  place?: Maybe<Place>;
+  poll?: Maybe<PollOutput>;
+  tags?: Maybe<Array<Tag>>;
+  textual?: Maybe<Textual>;
+  type: PostType;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+  video?: Maybe<Video>;
+};
 
 export type GetUserPostsOutput = {
   __typename?: 'GetUserPostsOutput';
@@ -197,6 +217,7 @@ export type MutationAddClipPostArgs = {
 export type MutationAddMediaPostArgs = {
   addMediaPostInput: AddMediaPostInput;
   media: Array<Scalars['Upload']>;
+  mediaThumbnail?: InputMaybe<Scalars['Upload']>;
 };
 
 
@@ -403,6 +424,7 @@ export type ProfileOutput = {
 
 export type Query = {
   __typename?: 'Query';
+  getAllPosts: Array<GetAllPostsOutput>;
   getMediaAccessToken: Scalars['String'];
   getUser?: Maybe<UserOutput>;
   getUserPosts: Array<GetUserPostsOutput>;
@@ -584,6 +606,11 @@ export type GetUserPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'GetUserPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+
+export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename?: 'GetAllPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
 
 export type AddVideoPostMutationVariables = Exact<{
   addMediaPostInput: AddMediaPostInput;
@@ -1113,6 +1140,92 @@ export function useGetUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery>;
 export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
 export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
+export const GetAllPostsDocument = gql`
+    query GetAllPosts {
+  getAllPosts {
+    id
+    caption
+    type
+    createdAt
+    updatedAt
+    tags {
+      id
+      name
+    }
+    place {
+      id
+      name
+    }
+    poll {
+      id
+      question
+      pollOptions {
+        id
+        option
+      }
+    }
+    photos {
+      id
+      url
+    }
+    video {
+      id
+      url
+      thumbnailUrl
+    }
+    clip {
+      id
+      url
+      thumbnailUrl
+      clipAudio {
+        id
+        name
+        audioUrl
+      }
+    }
+    textual {
+      id
+      text
+    }
+    audio {
+      id
+      url
+      thumbnailUrl
+    }
+    _count {
+      likes
+      comments
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetAllPostsQuery__
+ *
+ * To run a query within a React component, call `useGetAllPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAllPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetAllPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(GetAllPostsDocument, options);
+      }
+export function useGetAllPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(GetAllPostsDocument, options);
+        }
+export type GetAllPostsQueryHookResult = ReturnType<typeof useGetAllPostsQuery>;
+export type GetAllPostsLazyQueryHookResult = ReturnType<typeof useGetAllPostsLazyQuery>;
+export type GetAllPostsQueryResult = Apollo.QueryResult<GetAllPostsQuery, GetAllPostsQueryVariables>;
 export const AddVideoPostDocument = gql`
     mutation AddVideoPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!) {
   addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {

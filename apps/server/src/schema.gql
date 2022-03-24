@@ -93,6 +93,24 @@ enum Gender {
   MALE
 }
 
+type GetAllPostsOutput {
+  _count: PostCount
+  audio: Audio
+  caption: String
+  clip: ClipOutput
+  createdAt: DateTime!
+  id: String!
+  photos: [Photo!]
+  place: Place
+  poll: PollOutput
+  tags: [Tag!]
+  textual: Textual
+  type: PostType!
+  updatedAt: DateTime!
+  userId: String!
+  video: Video
+}
+
 type GetUserPostsOutput {
   _count: PostCount
   audio: Audio
@@ -285,7 +303,7 @@ type ProfileOutput {
 }
 
 type Query {
-  getAllPosts: [GetUserPostsOutput!]!
+  getAllPosts: [GetAllPostsOutput!]!
   getMediaAccessToken: String!
   getUser: UserOutput
   getUserPosts: [GetUserPostsOutput!]!

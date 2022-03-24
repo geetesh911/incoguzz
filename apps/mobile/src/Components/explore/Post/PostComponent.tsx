@@ -1,0 +1,46 @@
+import React, { FC } from "react";
+import { PostType } from "@incoguzz/graphql";
+import { RequireAtLeastOne } from "type-fest";
+import { PostAudio, PostText, PostVideo, PostImageCarousel } from ".";
+
+export interface IPostComponent {
+  url: string | string[];
+  text: string;
+  type: PostType;
+  thumbnailUrl: string;
+  paused?: boolean;
+}
+
+export type IPostComponentProps = RequireAtLeastOne<
+  IPostComponent,
+  "url" | "text"
+>;
+
+export const PostComponent: FC<IPostComponentProps> = ({
+  url,
+  thumbnailUrl,
+  text,
+  type,
+  paused,
+}) => {
+  const Component: Record<PostType, JSX.Element | null> = {
+    [PostType.Photo]: (
+      <PostImageCarousel imgUrls={Array.isArray(url) ? url : [url as string]} />
+    ),
+    [PostType.Video]: (
+      <PostVideo
+        videoUrl={url as string}
+        paused={paused}
+        thumbnailUrl={thumbnailUrl}
+      />
+    ),
+    [PostType.Audio]: (
+      <PostAudio audioUrl={url as string} thumbnailUrl={thumbnailUrl} />
+    ),
+    [PostType.Textual]: <PostText text={text as string} />,
+    [PostType.Clip]: null,
+    [PostType.Poll]: null,
+  };
+
+  return Component[type] || null;
+};

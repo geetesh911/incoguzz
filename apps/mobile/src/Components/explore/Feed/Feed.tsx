@@ -1,191 +1,2688 @@
 import React, { FC, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
 import FeedCard from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
 import { ScrollView } from "react-native";
+import { useQuery } from "@apollo/client";
+import {
+  GetAllPostsQuery,
+  GetAllPostsQueryVariables,
+  GetAllPostsDocument,
+  GetAllPostsOutput,
+  PostType,
+} from "@incoguzz/graphql";
 
-export interface Furniture {
-  id: string;
-  imgURL: string;
-  text: string;
-}
-
-const furnitureData: Furniture[] = [
-  {
-    id: "id123",
-    imgURL:
-      "https://ii1.pepperfry.com/media/catalog/product/m/o/568x625/modern-chaise-lounger-in-grey-colour-by-dreamzz-furniture-modern-chaise-lounger-in-grey-colour-by-dr-tmnirx.jpg",
-    text: "Pioneer LHS Chaise Lounger in Grey Colour",
-  },
-  {
-    id: "id124",
-    imgURL:
-      "https://www.precedent-furniture.com/sites/precedent-furniture.com/files/styles/header_slideshow/public/3360_SL%20CR.jpg?itok=3Ltk6red",
-    text: "Precedant Furniture",
-  },
-  {
-    id: "id125",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/leverette-fabric-queen-upholstered-platform-bed-1594829293.jpg",
-    text: "Leverette Upholstered Platform Bed",
-  },
-  {
-    id: "id126",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/briget-side-table-1582143245.jpg?crop=1.00xw:0.770xh;0,0.129xh&resize=768:*",
-    text: "Briget Accent Table",
-  },
-  {
-    id: "id127",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/rivet-emerly-media-console-1610578756.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Rivet Emerly Media Console",
-  },
-  {
-    id: "id128",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/drew-barrymore-flower-home-petal-chair-1594829759.jpeg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Drew Barrymore Flower Home Accent Chair",
-  },
-  {
-    id: "id129",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/goodee-ecobirdy-charlie-chairs-1594834221.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Ecobirdy Charlie Chair",
-  },
-  {
-    id: "id130",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/hailey-sofa-1571430947.jpg?crop=0.481xw:0.722xh;0.252xw,0.173xh&resize=768:*",
-    text: "Hailey Sofa",
-  },
-  {
-    id: "id131",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/archer-home-designs-dining-table-1594830125.jpg?crop=0.657xw:1.00xh;0.0986xw,0&resize=768:*",
-    text: "Farmhouse Dining Table",
-  },
-  {
-    id: "id132",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/evelyn-coffee-table-1610578857.jpeg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Evelyn Coffee Table",
-  },
-  {
-    id: "id133",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/burrow-nomad-sofa-1594837995.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Slope Nomad Leather Sofa",
-  },
-  {
-    id: "id134",
-    imgURL:
-      "https://apicms.thestar.com.my/uploads/images/2020/02/21/570850.jpg",
-    text: "Chair and Table",
-  },
-  {
-    id: "id223",
-    imgURL:
-      "https://ii1.pepperfry.com/media/catalog/product/m/o/568x625/modern-chaise-lounger-in-grey-colour-by-dreamzz-furniture-modern-chaise-lounger-in-grey-colour-by-dr-tmnirx.jpg",
-    text: "Pioneer LHS Chaise Lounger in Grey Colour",
-  },
-  {
-    id: "id224",
-    imgURL:
-      "https://www.precedent-furniture.com/sites/precedent-furniture.com/files/styles/header_slideshow/public/3360_SL%20CR.jpg?itok=3Ltk6red",
-    text: "Precedant Furniture",
-  },
-  {
-    id: "id225",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/leverette-fabric-queen-upholstered-platform-bed-1594829293.jpg",
-    text: "Leverette Upholstered Platform Bed",
-  },
-  {
-    id: "id226",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/briget-side-table-1582143245.jpg?crop=1.00xw:0.770xh;0,0.129xh&resize=768:*",
-    text: "Briget Accent Table",
-  },
-  {
-    id: "id227",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/rivet-emerly-media-console-1610578756.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Rivet Emerly Media Console",
-  },
-  {
-    id: "id228",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/drew-barrymore-flower-home-petal-chair-1594829759.jpeg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Drew Barrymore Flower Home Accent Chair",
-  },
-  {
-    id: "id229",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/goodee-ecobirdy-charlie-chairs-1594834221.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Ecobirdy Charlie Chair",
-  },
-  {
-    id: "id230",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/hailey-sofa-1571430947.jpg?crop=0.481xw:0.722xh;0.252xw,0.173xh&resize=768:*",
-    text: "Hailey Sofa",
-  },
-  {
-    id: "id231",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/archer-home-designs-dining-table-1594830125.jpg?crop=0.657xw:1.00xh;0.0986xw,0&resize=768:*",
-    text: "Farmhouse Dining Table",
-  },
-  {
-    id: "id232",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/evelyn-coffee-table-1610578857.jpeg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Evelyn Coffee Table",
-  },
-  {
-    id: "id233",
-    imgURL:
-      "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/burrow-nomad-sofa-1594837995.jpg?crop=1xw:1xh;center,top&resize=768:*",
-    text: "Slope Nomad Leather Sofa",
-  },
-  {
-    id: "id234",
-    imgURL:
-      "https://apicms.thestar.com.my/uploads/images/2020/02/21/570850.jpg",
-    text: "Chair and Table",
-  },
-];
+const postsData = {
+  getAllPosts: [
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11426otqbge5x4kh",
+      caption:
+        "Steel Computer Belarus Wooden Planner indexing navigating Designer Loan Tasty",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg52ht0335xktq5wh42y4a",
+          name: "Rubber",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11476otq4tunhja7",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11486otqvgiro2qb",
+          url: "http://placeimg.com/1280/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11496otqnhcunw6l",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11296otq0efgchdk",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11366otqkhj371qt",
+          name: "EXE",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11396otqcs7e1qf1",
+          name: "out-of-the-box",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpeq11416otq20as72mg",
+        text: "Earum suscipit veritatis neque harum ipsa.\nIncidunt animi sapiente aliquam ad blanditiis earum quia est.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11266otqppeuxcjr",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg52ht0340xktq9aa65qs6",
+          name: "customer",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11276otq03kbqto7",
+          name: "Oman",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghblb0202bstqkn79tb3a",
+          name: "override",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpeq11346otqw90052ae",
+        text: "Ut provident incidunt voluptatem inventore esse.\nImpedit blanditiis laudantium cupiditate hic animi dolore.\nOmnis voluptatem voluptatem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10516otq412nni5q",
+      caption:
+        "overriding bandwidth CFA Ball open-source Rubber Small Supervisor flexibility Movies",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgcy0l0226fotqonh968lf",
+          name: "Soft",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3g0911bstqugmlm38q",
+          name: "state",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnpbg10616otqzr26gg1j",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10466otqj04uiqom",
+      caption:
+        "Cliffs Orchestrator Infrastructure Card Chief disintermediate Soap Wooden CSS Kwacha",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbg10526otq5zdcpa4n",
+          name: "Grocery",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghblb0202bstqkn79tb3a",
+          name: "override",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10546otq8adkkmx3",
+          url: "http://placeimg.com/1280/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10556otqo2icjclw",
+          url: "http://placeimg.com/1920/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10566otq2q402cwm",
+          url: "http://placeimg.com/1280/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10406otqpacwqdx9",
+      caption:
+        "workforce Expanded Optimization moratorium Mobility calculate e-business HTTP networks Jamaican",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13bz0654xwtqlagpc55y",
+          name: "Awesome",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbg10416otqj9vkscku",
+          name: "New",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10456otq64404w1x",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10476otqkc587u7m",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10486otq31h3orsa",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbc10226otqilybu9jg",
+      caption:
+        "generating Meadow Operations Phased envisioneer Salad turquoise Gorgeous pink grow",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.360Z",
+      updatedAt: "2022-02-18T13:41:36.360Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbc10316otqn9ejqcuy",
+          name: "Division",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbc10256otqpx1gkftv",
+          name: "real-time",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbc10296otqayf7bs3w",
+          name: "relationships",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbc10346otq2qvl8qgj",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbc10366otq77f8bnox",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbc10376otqpq7gcfus",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbc10196otqaa1anuy5",
+      caption:
+        "Ball scalable red Intelligent Technician Guadeloupe red microchip Liaison explicit",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.360Z",
+      updatedAt: "2022-02-18T13:41:36.360Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbc10206otqucsbvbgc",
+          name: "Balanced",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnpbc10236otqsqcrg06x",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbc10286otqlpwq7424",
+      caption:
+        "Customer Computer tan Borders flexibility Associate withdrawal Reduced Beauty niches",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.360Z",
+      updatedAt: "2022-02-18T13:41:36.360Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbc10336otq0wayg77v",
+          name: "Chips",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnpbc10386otqbc35n94e",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb910046otqdir47fhq",
+      caption:
+        "Baby pink logistical maroon Health Reverse-engineered partnerships e-business Account reboot",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.357Z",
+      updatedAt: "2022-02-18T13:41:36.357Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg12u30500xwtq0jcatkkw",
+          name: "Automotive",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsfsw1n0101j4tqo6oggvlr",
+          name: "deposit",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg12zp0533xwtq9ify37xm",
+          name: "Frozen",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb910166otqcbined4i",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb910176otq5o0o4wkj",
+          url: "http://placeimg.com/1920/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb910186otqp21cu80u",
+          url: "http://placeimg.com/1920/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb909976otq1tf0q798",
+      caption:
+        "Kuna PCI Borders Music Investor e-commerce parse monetize Infrastructure Account",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.357Z",
+      updatedAt: "2022-02-18T13:41:36.357Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb910056otqpz6xob89",
+          name: "Nevada",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghdsz0441bstqeanwoti0",
+          name: "Peso",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg52d40297xktqst7scjoy",
+          name: "XML",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnpb910076otqoam7n8hd",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb909906otqg5g0908c",
+      caption:
+        "Practical Architect withdrawal Ohio parsing azure info-mediaries analyzing Diverse Islands",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.357Z",
+      updatedAt: "2022-02-18T13:41:36.357Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb909916otqqkjzuagt",
+          name: "Delaware",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb909936otqgnixv925",
+          name: "viral",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb909956otqlc78oloz",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb909966otqjy6hywep",
+          url: "http://placeimg.com/1280/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb909986otq54odymhd",
+          url: "http://placeimg.com/760/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb409806otq2mzjnllu",
+      caption:
+        "Switchable HTTP Maryland Assurance face Outdoors next-generation initiatives Texas Analyst",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.352Z",
+      updatedAt: "2022-02-18T13:41:36.352Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb409856otqjq7monip",
+          name: "Forward",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg53zv0487xktqg0i4sbr1",
+          name: "Martin",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb409836otqhkaer6zd",
+          name: "USB",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnpb409876otqfj8pweft",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb309706otqxqevun6c",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.351Z",
+      updatedAt: "2022-02-18T13:41:36.351Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb309756otqzk0k4zx8",
+          name: "Wisconsin",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpb409786otqf1phvt1d",
+        text: "Earum accusantium sapiente voluptatibus tempora.\nAliquid et eos deserunt aut maiores.\nOmnis quos consequuntur autem.\nFacere amet vel.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb309676otq7bkdsxba",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.351Z",
+      updatedAt: "2022-02-18T13:41:36.351Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb309686otqq0ntor30",
+          name: "cultivate",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb309716otq0e7ugb7a",
+          name: "Kids",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpb309736otqawdn1f6q",
+        text: "Pariatur qui modi sunt officiis veniam.\nQui odit numquam nostrum tenetur temporibus eos reprehenderit pariatur.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb109486otq8cjudia4",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.349Z",
+      updatedAt: "2022-02-18T13:41:36.349Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgczub0511fotqiu1c85s6",
+          name: "structure",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpb109526otq2ap23dpu",
+        text: "Sed similique porro temporibus distinctio.\nMolestiae ad velit est sed inventore.\nMagni iure placeat dicta aut quia vero.\nSuscipit ad officiis voluptas et maiores.\nDolorum quo voluptas iusto.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb109516otqvl8q403f",
+      caption:
+        "Malagasy Director radical grey Grocery bluetooth Shirt Soft program Regional",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.349Z",
+      updatedAt: "2022-02-18T13:41:36.349Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13fe0696xwtqx0gdt7qo",
+          name: "Bedfordshire",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpb109576otqdk368yz0",
+          name: "Hill",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb109616otql5g70vdm",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb109626otqnjjxvew1",
+          url: "http://placeimg.com/1920/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpb109636otq89uig0kl",
+          url: "http://placeimg.com/760/1920",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpb109566otqo5o6uwr3",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.349Z",
+      updatedAt: "2022-02-18T13:41:36.349Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnlr002286otq7l8tvyu5",
+          name: "Sausages",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpb109646otqyqtfunjz",
+        text: "Labore blanditiis cum porro sint repellat.\nDignissimos quis nihil ea perferendis dolore adipisci quaerat.\nAdipisci cum quos possimus totam quia nam.\nVero et perspiciatis accusantium nam ipsam facilis necessitatibus placeat distinctio.\nReiciendis minima consectetur ipsum facere.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpay09386otqo5tbmxqe",
+      caption:
+        "Omani Kids Borders matrix multi-tasking deploy Fields blue attitude Shoes",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.346Z",
+      updatedAt: "2022-02-18T13:41:36.346Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg12zt0562xwtqsru7nzfw",
+          name: "blue",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnlr002286otq7l8tvyu5",
+          name: "Sausages",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3g0911bstqugmlm38q",
+          name: "state",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09456otqlbovzyzp",
+          url: "http://placeimg.com/1920/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09466otqyfyx3r0u",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09476otqp5wbn7a9",
+          url: "http://placeimg.com/1280/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpay09306otqvulvzz5a",
+      caption:
+        "Mobility ability Dong Automotive cross-platform expedite edge Senegal Ergonomic Borders",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.346Z",
+      updatedAt: "2022-02-18T13:41:36.346Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpay09326otq79nfzpcw",
+          name: "RAM",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09346otq8n33jk4f",
+          url: "http://placeimg.com/1920/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09356otq6xfdhr5b",
+          url: "http://placeimg.com/1920/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpay09366otqyoy7h5mb",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpay09266otqfnd1bwqm",
+      caption:
+        "Rubber open-source Representative District Computer Australia interactive Operative matrices Beauty",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.346Z",
+      updatedAt: "2022-02-18T13:41:36.346Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghg3g0913bstqlwtsd5ci",
+          name: "Fish",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnpay09296otqutwq53hy",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8908916otq07u1uz44",
+      caption:
+        "Producer Cotton evolve Producer Facilitator Avon Handcrafted empower Auto Niger",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.249Z",
+      updatedAt: "2022-02-18T13:41:36.249Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8909006otq41w038pv",
+          name: "Bhutan",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnp8909076otqh0m7rens",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8908906otqw25d2zz4",
+      caption:
+        "multi-byte convergence payment Generic parsing productize payment Norfolk fuchsia Object-based",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.249Z",
+      updatedAt: "2022-02-18T13:41:36.249Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg51u00195xktqau554c85",
+          name: "Toys",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8908986otqkt3eifi3",
+          name: "ubiquitous",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnp8909016otqrvva343x",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8908896otq9tjcwl6d",
+      caption:
+        "Cambridgeshire withdrawal transmitter Rustic intelligence synthesizing Peso Intranet Baht withdrawal",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.249Z",
+      updatedAt: "2022-02-18T13:41:36.249Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8908926otq24uu51lv",
+          name: "Hampshire",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8908966otqkbicb0yh",
+          name: "Incredible",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8909036otqstu74dy2",
+          url: "http://placeimg.com/760/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8909056otqq0z36f0c",
+          url: "http://placeimg.com/760/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8909066otq6v7o9m0z",
+          url: "http://placeimg.com/1280/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8508716otqawvs3nld",
+      caption:
+        "Cambridgeshire programming Concrete markets Licensed cyan Quality Distributed Customer-focused Metal",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.245Z",
+      updatedAt: "2022-02-18T13:41:36.245Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8508746otqnp41yv2w",
+          name: "Car",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnp8508796otqgurrnqd5",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8508706otqiywtv03x",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.245Z",
+      updatedAt: "2022-02-18T13:41:36.245Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd1f50680fotq27ppx13g",
+          name: "Dinar",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8508766otq6qcf3zo9",
+          name: "Handcrafted",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgcy0l0226fotqonh968lf",
+          name: "Soft",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp8508846otqgv0ro2bx",
+        text: "Asperiores voluptatem repellendus eum voluptatem molestias.\nQuaerat magnam vel nam reprehenderit.\nCum voluptatem ex rerum asperiores nemo et.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8508776otq6nnvkcpl",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.245Z",
+      updatedAt: "2022-02-18T13:41:36.245Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8508836otqz7qih1vi",
+          name: "Pound",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp8508876otqx49nmp3f",
+        text: "Eveniet non adipisci alias dolor nihil qui consequuntur fugit.\nEius velit tenetur dicta eius rerum aliquid est.\nAut possimus reprehenderit sunt autem corrupti dignissimos enim veritatis veniam.\nQuaerat in ea ullam occaecati quo voluptas.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8208616otq2hd0sngi",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.242Z",
+      updatedAt: "2022-02-18T13:41:36.242Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8208646otqxtae1y7w",
+          name: "Burgs",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8208626otq2u7jyzlo",
+          name: "Centers",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8208666otq0pa53hr2",
+          name: "Hat",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp8208686otqh7d2bcyu",
+        text: "Dolorem enim itaque eum excepturi accusamus voluptate.\nOptio facere maxime sed maxime dolorem molestiae sit.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8208526otqce2e4fy2",
+      caption:
+        "Lead Granite systems navigating Crescent compress transition Hampshire Rubber Designer",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.242Z",
+      updatedAt: "2022-02-18T13:41:36.242Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgku9e0203zstqylqovli4",
+          name: "Plastic",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8208576otqlvgabuly",
+          url: "http://placeimg.com/760/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8208586otq5h85xsh1",
+          url: "http://placeimg.com/1280/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp8208596otq86hb8gmh",
+          url: "http://placeimg.com/760/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp8208496otqjdxjucn6",
+      caption:
+        "Accountability back-end Public-key Avon sky vortals Configuration Home invoice synergies",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.242Z",
+      updatedAt: "2022-02-18T13:41:36.242Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp8208506otqj9es8k3v",
+          name: "well-modulated",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnp8208536otqpgttvl1m",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp4307826otqafnpor8x",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.099Z",
+      updatedAt: "2022-02-18T13:41:36.099Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd0a00557fotq9os7pvik",
+          name: "Metrics",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg52ht0335xktq5wh42y4a",
+          name: "Rubber",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp4307846otqktrf7kiz",
+          name: "Wyoming",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp4307916otqcpzihgit",
+        text: "Illum sapiente provident optio in sed.\nImpedit voluptatem quia.\nQuidem sunt nihil est voluptatum facere unde consectetur harum repudiandae.\nEa dolore et delectus et praesentium.\nEa rerum rem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp4307766otqul1ouwu1",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.099Z",
+      updatedAt: "2022-02-18T13:41:36.099Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd0a00562fotqcx4oxfxn",
+          name: "Concrete",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp4307776otqkuloik7o",
+          name: "driver",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp4307816otq7p1z5idt",
+        text: "Optio natus quae recusandae.\nDistinctio delectus atque autem.\nPariatur illo blanditiis placeat voluptatem blanditiis repellat veniam.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp4107606otqh7w0w7nk",
+      caption:
+        "ivory Computer frame Granite calculate Product override Sausages connecting hard",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.097Z",
+      updatedAt: "2022-02-18T13:41:36.097Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp4107716otq1y1zoj7q",
+          name: "navigating",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnmop03516otqsuvqjcca",
+          name: "THX",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnp4107736otqp6zr6ebw",
+          url: "http://placeimg.com/1280/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp4107746otqczwurkej",
+          url: "http://placeimg.com/1920/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp4107756otq8945w8ka",
+          url: "http://placeimg.com/1280/1920",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp4107516otqtek36ku0",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.097Z",
+      updatedAt: "2022-02-18T13:41:36.097Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgcy8m0269fotqqzbofjze",
+          name: "Garden",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp4107656otqmvd1rvq9",
+          name: "Intranet",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3g0911bstqugmlm38q",
+          name: "state",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp4107686otq0m6ntqu4",
+        text: "Quaerat inventore qui ratione ut occaecati quos ipsum enim et.\nVero mollitia quia et ea quisquam sit est.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp4007506otqtt4fjkbg",
+      caption:
+        "Cotton Iranian gold reinvent facilitate Peso Handcrafted International Dynamic compressing",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.097Z",
+      updatedAt: "2022-02-18T13:41:36.097Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13bz0638xwtqbqun7lnf",
+          name: "Account",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp4107526otq974g8ds8",
+          name: "best-of-breed",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghfvz0776bstq5ratr6nc",
+          name: "International",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnp4107636otq3j5fu9v5",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3y07386otqucym5k5h",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.094Z",
+      updatedAt: "2022-02-18T13:41:36.094Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3y07446otqo9o6e2wv",
+          name: "black",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghfvq0733bstq96azj3oi",
+          name: "Markets",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghd0h0333bstq3gsyxfu8",
+          name: "withdrawal",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp3y07486otqseii1d80",
+        text: "Autem nostrum accusantium quasi assumenda sed facere sint aut.\nEt eaque et.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3x07286otq443cb9vs",
+      caption:
+        "bypass override Meadow Harbor Sausages array payment Identity productize Switzerland",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:36.093Z",
+      updatedAt: "2022-02-18T13:41:36.093Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3y07326otqpvjsxqua",
+          name: "Cotton",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3y07366otqb8i8yiky",
+          name: "leading",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3y07346otqde937c0s",
+          name: "Re-contextualized",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgnp3y07396otq1j3ovgvd",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3x07246otqeyduym5m",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.093Z",
+      updatedAt: "2022-02-18T13:41:36.093Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3x07256otqusismpng",
+          name: "benchmark",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3x07276otq9ipexv6c",
+          name: "transmitting",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp3y07306otqtl1o29zc",
+        text: "Consectetur reprehenderit atque.\nLaboriosam ipsam sequi blanditiis dolor enim quisquam tempore nemo nihil.\nQuod ducimus voluptatem modi asperiores.\nRerum quia quas ullam dolorum similique est vero eos nihil.\nVitae et dicta velit eum odio dolorem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3v07086otq64voq9xm",
+      caption:
+        "paradigm open-source online Dynamic national Human THX secondary multimedia Track",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.091Z",
+      updatedAt: "2022-02-18T13:41:36.091Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg524x0260xktqwib7nwgh",
+          name: "South",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnp3v07216otqsp3goe2m",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3v07046otq6qewrc2c",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.091Z",
+      updatedAt: "2022-02-18T13:41:36.091Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3v07106otqilnw8uiu",
+          name: "Alaska",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp3v07136otq2ke60ras",
+        text: "Eaque tenetur debitis laboriosam autem molestias adipisci.\nUllam adipisci accusamus aliquid nesciunt modi consequatur nihil tempore et.\nNemo deserunt vitae ipsum consequatur quibusdam quam.\nConsequatur voluptates cumque illo amet fuga.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3v07036otqm8to4x0r",
+      caption:
+        "Buckinghamshire Turnpike users sensor Alley invoice Granite Minnesota Prairie Bike",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.091Z",
+      updatedAt: "2022-02-18T13:41:36.091Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3v07126otqnwq38avu",
+          name: "Direct",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg10gp0189xwtqu5gmkwbh",
+          name: "Practical",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgcxv40215fotqxvkvp9jh",
+          name: "Wooden",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnp3v07176otq5x2sv973",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3q06816otquag1sei3",
+      caption:
+        "Plastic Gloves Mountains synergistic input Plastic Refined Arkansas Architect Group",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.086Z",
+      updatedAt: "2022-02-18T13:41:36.086Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgkty20162zstqqr5d493e",
+          name: "leverage",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3q06876otq1t7eqo1k",
+          name: "US",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnp3r06976otqo26uhdjt",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3q06776otq54dtlvv9",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.086Z",
+      updatedAt: "2022-02-18T13:41:36.086Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3r06956otq0mkbvtvd",
+          name: "Configurable",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsfsw1n0101j4tqo6oggvlr",
+          name: "deposit",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnp3q06846otqn8f8vcvb",
+          name: "primary",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnp3r06996otqhbos4hmj",
+        text: "Non voluptas eos.\nSed nisi et modi.\nEaque aut consequatur sit.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnp3q06756otqi6s6dqdo",
+      caption:
+        "interfaces compressing synergies Minnesota static copying Soap Savings generating action-items",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.086Z",
+      updatedAt: "2022-02-18T13:41:36.086Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd0a00576fotqalvbat4x",
+          name: "Home",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgkvxz0380zstql9iiebd6",
+          name: "Industrial",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghbtq0223bstqxas3j01j",
+          name: "Orchestrator",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnp3q06866otqiokdm4j6",
+          url: "http://placeimg.com/760/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp3q06886otqwadtqpvm",
+          url: "http://placeimg.com/1280/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnp3q06906otqavkfn7jg",
+          url: "http://placeimg.com/1920/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnom305496otqge79dbo4",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:35.451Z",
+      updatedAt: "2022-02-18T13:41:35.451Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgkuw40291zstq6ai55zne",
+          name: "Administrator",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnom305566otqbnztx09f",
+        text: "Dolorem ea suscipit id molestias neque et sint.\nEst sit quam ut et.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnom305486otqjg8z1wky",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:35.451Z",
+      updatedAt: "2022-02-18T13:41:35.451Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgcxhx0178fotqaddo3dsd",
+          name: "protocol",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnom305506otqzy0ot9yd",
+          name: "synergistic",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnom305586otqv3dsj3po",
+        text: "Dolores nostrum ut et rerum iste non maxime occaecati aut.\nBlanditiis aperiam consequatur cumque quisquam ratione.\nAdipisci voluptas sed quo consequatur voluptate.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnom305576otqvcevv3kl",
+      caption:
+        "Borders Wooden Avon Inverse virtual Pants frictionless European cross-platform Direct",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:35.451Z",
+      updatedAt: "2022-02-18T13:41:35.451Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg12u30500xwtq0jcatkkw",
+          name: "Automotive",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgczk00445fotq2tn8pjsx",
+          name: "Games",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnom305636otq250g5yp4",
+          name: "Unbranded",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnom305696otq9l37xf9f",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno7105256otqkwlgt3ow",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:34.909Z",
+      updatedAt: "2022-02-18T13:41:34.909Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg12zt0576xwtqpryksc2a",
+          name: "invoice",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgno7205296otq861p7k1j",
+          name: "parse",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgno7205316otqh7ywcrnd",
+        text: "Sequi itaque voluptatum harum nesciunt.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno7105156otqxg6iiwmi",
+      caption:
+        "Implementation Infrastructure withdrawal Automotive Berkshire Vanuatu violet AGP Illinois HTTP",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:34.909Z",
+      updatedAt: "2022-02-18T13:41:34.909Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13bz0638xwtqbqun7lnf",
+          name: "Account",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgno7105226otq5824h9ew",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno7105146otqava2ywir",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:34.909Z",
+      updatedAt: "2022-02-18T13:41:34.909Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgkuf30223zstqzrntz7cm",
+          name: "Supervisor",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgno7105186otqxr72pntl",
+        text: "Distinctio neque eaque voluptas voluptate fugiat.\nEst sed aut ad voluptatem unde hic.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1i04976otqk4suw4yu",
+      caption:
+        "white magenta web-readiness Director Producer International Frozen software dynamic Extended",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:34.710Z",
+      updatedAt: "2022-02-18T13:41:34.710Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgno1j05016otqfsm81cj4",
+          name: "Hryvnia",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3f0896bstqfusgjc7t",
+          name: "neural",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3j0923bstqlfpq0362",
+          name: "program",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgno1j05076otqvxvghpta",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1i04866otqy9xc5s9g",
+      caption:
+        "Steel methodologies Checking ADP e-commerce Strategist Avon generating Gabon El",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:34.710Z",
+      updatedAt: "2022-02-18T13:41:34.710Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd1w70999fotqpncjkg9x",
+          name: "Borders",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgno1i04926otq7npfud5v",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1i04856otqzfoeil4n",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:34.710Z",
+      updatedAt: "2022-02-18T13:41:34.710Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg12zp0533xwtq9ify37xm",
+          name: "Frozen",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgku9e0190zstqeyu2tjj2",
+          name: "Research",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsg53zz0501xktquy3hd2no",
+          name: "transform",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgno1i04986otqi5rzgqas",
+        text: "Voluptas minus autem vel sunt magni laborum facere corrupti ipsum.\nAutem excepturi et veniam.\nEius molestiae vitae accusamus et.\nIpsam sit occaecati aliquam incidunt aliquid labore pariatur.\nSunt atque reprehenderit est beatae et.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1e04656otq47akxrfs",
+      caption:
+        "microchip Franc Books Director incentivize Lodge Regional connect Direct throughput",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:34.706Z",
+      updatedAt: "2022-02-18T13:41:34.706Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgno1e04666otqmz55swg2",
+          name: "impactful",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3f0896bstqfusgjc7t",
+          name: "neural",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04736otq9ojnrxkq",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04746otq4uh3rm0d",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04756otqz1ce0q3o",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1e04646otqxe5hza8i",
+      caption:
+        "Extension Salad Account Internal Incredible redundant microchip Metal bandwidth navigating",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:34.706Z",
+      updatedAt: "2022-02-18T13:41:34.706Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgno1e04686otqa1pmjgf4",
+          name: "interactive",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04766otqpd0qrmvp",
+          url: "http://placeimg.com/1280/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04776otq9mroiu02",
+          url: "http://placeimg.com/760/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgno1e04786otqpoz1rzxk",
+          url: "http://placeimg.com/1920/1920",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgno1e04726otqt8n024kr",
+      caption:
+        "multi-tasking Principal Quality digital Direct Specialist Personal Global Concrete Ergonomic",
+      type: PostType.Audio,
+      createdAt: "2022-02-18T13:41:34.706Z",
+      updatedAt: "2022-02-18T13:41:34.706Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghdke0389bstqvy1u6vg1",
+          name: "Coordinator",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: {
+        __typename: "Audio",
+        id: "ckzsgno1e04826otqwm7s4qag",
+        url: "http://codeskulptor-demos.commondatastorage.googleapis.com/pang/paza-moduless.mp3",
+        thumbnailUrl:
+          "https://res.cloudinary.com/geeteshpp/image/upload/v1645083626/Frame_25_fkfw7a.png",
+      },
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnmop03556otqhzpary20",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:32.953Z",
+      updatedAt: "2022-02-18T13:41:32.953Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnmop03576otqr6ga9294",
+          name: "migration",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnmop03596otq2bmrf2eo",
+          name: "Turnpike",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnmop03616otq16o4sqr8",
+        text: "Necessitatibus consequuntur qui culpa et.\nEst a non enim illo explicabo.\nMagni ut aliquam.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnmop03466otqvdh6atjf",
+      caption:
+        "Concrete Borders Fresh Technician Savings GB state Small Industrial Devolved",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:32.953Z",
+      updatedAt: "2022-02-18T13:41:32.953Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnmop03516otqsuvqjcca",
+          name: "THX",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnmop03536otqa30xm3bz",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnmop03456otqwmqemmdk",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:32.953Z",
+      updatedAt: "2022-02-18T13:41:32.953Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnmop03476otq42dqfu2n",
+          name: "hardware",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnmop03496otqu3h0p66j",
+        text: "Unde quo velit consectetur sit fuga repellat.\nEveniet similique aut laudantium laboriosam libero et.\nSoluta corrupti odio suscipit animi at ipsum ut laudantium numquam.\nMagnam autem est ut cupiditate enim qui ut.\nSint sint ut doloremque molestiae dolorem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm7z02896otqp423ko2s",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:32.351Z",
+      updatedAt: "2022-02-18T13:41:32.351Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghblb0202bstqkn79tb3a",
+          name: "override",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z03066otq7zykftt0",
+          name: "productize",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnm7z03116otqbfsi6iur",
+        text: "Exercitationem porro voluptatum et minima aut sequi cumque sequi.\nEst ad porro aut quaerat non temporibus.\nEst nostrum quia quaerat aut omnis libero qui qui temporibus.\nEaque sed deleniti blanditiis neque dolores.\nAd et omnis et et quasi sequi.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm7z02886otq1od82xb3",
+      caption:
+        "infomediaries Future-proofed revolutionize Executive Money sexy Lead USB Chips teal",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:32.351Z",
+      updatedAt: "2022-02-18T13:41:32.351Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13bz0638xwtqbqun7lnf",
+          name: "Account",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z02966otqbgq3eeum",
+          name: "maximize",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z03026otqwq4czej7",
+          name: "needs-based",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnm7z03086otqe575w89w",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm7z02876otquqleve00",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:32.351Z",
+      updatedAt: "2022-02-18T13:41:32.351Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z02936otqmkbkbqf0",
+          name: "Estate",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z02906otq27qtkg3j",
+          name: "infrastructures",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm7z02976otq71nwbbfi",
+          name: "Portugal",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnm7z03036otqmg208l4i",
+        text: "Aspernatur dolores vel sunt.\nVeritatis porro repellendus consequatur perferendis dolore recusandae et voluptatem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm2a02546otqcmz232vl",
+      caption:
+        "Baby Investment driver firewall panel payment Intelligent microchip withdrawal parse",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:32.146Z",
+      updatedAt: "2022-02-18T13:41:32.146Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13fe0693xwtqz0vkqa69",
+          name: "Buckinghamshire",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm2a02606otqvh0f2x2b",
+          name: "Kuwait",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm2a02626otq3qb4kcff",
+          name: "strategize",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnm2a02666otq5w75pgp9",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm2a02496otq9im2u9y3",
+      caption:
+        "program black Accountability Metal Designer National Korean Guinea hacking Krone",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:32.146Z",
+      updatedAt: "2022-02-18T13:41:32.146Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd1f50680fotq27ppx13g",
+          name: "Dinar",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm2a02506otqan27ct4h",
+          name: "Platinum",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnm2a02556otqzrxes3hd",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnm2a02576otqi6hewfdh",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:32.146Z",
+      updatedAt: "2022-02-18T13:41:32.146Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnm2a02706otqgxsq1nu4",
+          name: "Assimilated",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgku9e0192zstqwvoke0bv",
+          name: "calculating",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnm2a02686otqvx0o4u3q",
+          name: "olive",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnm2a02726otqof79sxrl",
+        text: "Qui eos ut ratione ex debitis et inventore quidem.\nAnimi facilis velit odit.\nNulla maxime quia.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlr002256otqa4u66qxb",
+      caption:
+        "red Table Specialist dot-com revolutionize asynchronous Markets GB Georgia Awesome",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:31.740Z",
+      updatedAt: "2022-02-18T13:41:31.740Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghfw30804bstqnnokomcx",
+          name: "Dynamic",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnlr002286otq7l8tvyu5",
+          name: "Sausages",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnlr002326otqf4hkqmr0",
+          url: "http://placeimg.com/760/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnlr002336otqhyrk7xt6",
+          url: "http://placeimg.com/760/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnlr002346otqw2e7xasx",
+          url: "http://placeimg.com/1280/1920",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlr002186otqmcxukpoq",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:31.740Z",
+      updatedAt: "2022-02-18T13:41:31.740Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghfw30812bstqkanmydxa",
+          name: "generate",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnlr002266otqhc676yor",
+        text: "Aspernatur quia ea qui sint rerum maiores.\nPorro omnis saepe dolores qui molestiae.\nTemporibus dicta magni reiciendis sunt aut porro eaque.\nVoluptatibus provident natus quam nisi fuga fugit.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlr002176otq0yksu1i5",
+      caption:
+        "Cotton drive framework Arizona compress parsing generation database hack leverage",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:31.740Z",
+      updatedAt: "2022-02-18T13:41:31.740Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgku9e0192zstqwvoke0bv",
+          name: "calculating",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnlr002216otqobz90h39",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlqw02006otqjly0kgjz",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:31.736Z",
+      updatedAt: "2022-02-18T13:41:31.736Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgd1w70999fotqpncjkg9x",
+          name: "Borders",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgczk00448fotq0odq9n7j",
+          name: "magenta",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnlqw02066otqs02g6ahg",
+          name: "Tools",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnlqw02156otq36ody106",
+        text: "Enim aut consectetur fugiat.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlqw01976otqg8g2ibxg",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:31.736Z",
+      updatedAt: "2022-02-18T13:41:31.736Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsghfhy0618bstqcwjhd4mo",
+          name: "Computers",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnlqw02046otq54t0ytxj",
+          name: "West",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnlqw02086otqwizfmrpn",
+        text: "Vitae et nisi rerum aut alias aut aut nam.\nAut amet ipsa modi voluptas blanditiis aliquam.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlqw01946otq0wg9u1dd",
+      caption:
+        "panel Run matrix National Ergonomic Product Crest GB Accounts Wooden",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:31.736Z",
+      updatedAt: "2022-02-18T13:41:31.736Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg52yy0390xktqhwid1zo0",
+          name: "connect",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnlqw01986otqubelp269",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlfq01616otq7mvpu2ls",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:31.334Z",
+      updatedAt: "2022-02-18T13:41:31.334Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgcysg0332fotqntdewjfw",
+          name: "1080p",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgd1pu0868fotqji7k4dun",
+          name: "Group",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnlfq01686otq1n8m1xjx",
+        text: "In quia cumque eum ut nesciunt.\nAtque ut libero suscipit possimus quis et eius voluptates.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlfq01676otq1t7u9fh9",
+      caption:
+        "Tenge Oregon mindshare hard Rustic withdrawal Generic Fantastic Dynamic sky",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:31.334Z",
+      updatedAt: "2022-02-18T13:41:31.334Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnlfq01746otqtgnvqky8",
+          name: "Designer",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnlfq01776otqwixjn8wn",
+          name: "embrace",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnlfr01796otq9yyzdr1p",
+          url: "http://placeimg.com/1280/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnlfr01806otqaeniumic",
+          url: "http://placeimg.com/1920/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnlfr01816otq7irikrxe",
+          url: "http://placeimg.com/760/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnlfq01626otqjb7pjm4z",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:31.334Z",
+      updatedAt: "2022-02-18T13:41:31.334Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnlfq01706otq18fy0gzr",
+          name: "redefine",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnlfq01726otqtjrzd00q",
+        text: "Consectetur a ipsa libero qui aspernatur quibusdam vero magnam natus.\nDolor voluptatem eveniet culpa distinctio ut illum delectus quo quasi.\nCommodi sed a.\nSimilique illo eveniet itaque.",
+      },
+      audio: null,
+      _count: null,
+    },
+  ],
+};
 
 export const Feed: FC = () => {
-  const scrollHandler = useRef<ScrollView>();
-  const [data, setData] = useState<Furniture[]>(furnitureData);
+  // const { data: apiData } = useQuery<
+  //   GetAllPostsQuery,
+  //   GetAllPostsQueryVariables
+  // >(GetAllPostsDocument);
 
-  const renderItem = ({ item }: { item: Furniture; index?: number }) => {
-    return (
-      <FeedCard
-        innerRef={scrollHandler}
-        key={`${item.id}${Math.random()}`}
-        item={item}
-      />
-    );
+  const scrollHandler = useRef<ScrollView>();
+
+  const renderItem = ({ item: post }: { item: GetAllPostsOutput }) => {
+    return <FeedCard innerRef={scrollHandler} key={post.id} post={post} />;
   };
 
   return (
     <MasonryList
       innerRef={scrollHandler}
       ListHeaderComponent={<ExploreHeader />}
-      contentContainerStyle={{
-        paddingHorizontal: 10,
-        alignSelf: "stretch",
-      }}
+      contentContainerStyle={styles.masonryList}
       numColumns={2}
-      data={data}
+      data={postsData?.getAllPosts || []}
       loading={false}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}
-      onEndReached={() => setData([...data, ...furnitureData])}
+      onEndReached={() => null}
       onEndReachedThreshold={0.2}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  masonryList: {
+    paddingHorizontal: 10,
+    alignSelf: "stretch",
+  },
+});

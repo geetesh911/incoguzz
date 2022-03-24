@@ -55,6 +55,64 @@ query GetUserPosts {
   }
 }
 
+query GetAllPosts {
+  getAllPosts {
+    id
+    caption
+    type
+    createdAt
+    updatedAt
+    tags {
+      id
+      name
+    }
+    place {
+      id
+      name
+    }
+    poll {
+      id
+      question
+      pollOptions {
+        id
+        option
+      }
+    }
+    photos {
+      id
+      url
+    }
+    video {
+      id
+      url
+      thumbnailUrl
+    }
+    clip {
+      id
+      url
+      thumbnailUrl
+      clipAudio {
+        id
+        name
+        audioUrl
+      }
+    }
+    textual {
+      id
+      text
+    }
+    audio {
+      id
+      url
+      thumbnailUrl
+    }
+    _count {
+      likes
+      comments
+    }
+  }
+}
+
 mutation AddVideoPost(
   $addMediaPostInput: AddMediaPostInput!
   $media: [Upload!]!

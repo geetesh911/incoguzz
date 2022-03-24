@@ -8,9 +8,14 @@ import { StyledMediaContainer } from "./styled";
 interface IPostVideoProps {
   videoUrl: string;
   thumbnailUrl?: string;
+  paused?: boolean;
 }
 
-export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
+export const PostVideo: FC<IPostVideoProps> = ({
+  videoUrl,
+  thumbnailUrl,
+  paused,
+}) => {
   const [{ height, width }, setVideoProperties] = useState<IMediaProperties>({
     height: 1,
     width: 1,
@@ -28,13 +33,9 @@ export const PostVideo: FC<IPostVideoProps> = ({ videoUrl, thumbnailUrl }) => {
         resizeMode={"contain"}
         style={styles.videoPlayer}
         onLoad={onVideoLoad}
-        poster={
-          "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png"
-        }
-        source={{
-          uri: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        }}
-        paused={false}
+        poster={thumbnailUrl}
+        source={{ uri: videoUrl }}
+        paused={paused}
         showFullScreenButton={true}
       />
     </StyledMediaContainer>

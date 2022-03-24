@@ -3,4 +3,7 @@ export * from "./PostHeader";
 export * from "./PostImage";
 export * from "./PostImageCarousel";
 export * from "./PostVideo";
+export * from "./PostAudio";
+export * from "./PostText";
 export * from "./styled";
+export * from "./helper";

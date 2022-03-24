@@ -61,7 +61,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   const [playerState, setPlayerState] = useState<IVideoPlayerState>(
     props.defaultState || {
       isMuted: false,
-      isPaused: true,
+      isPaused: false,
       isFullScreen: false,
       isLoading: false,
       isError: false,
@@ -77,6 +77,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   const [showControls, setShowControls] = useState<boolean>(false);
 
   const onLoadEnd = (data: OnLoadData) => {
+    props?.onLoad && props.onLoad(data);
     if (props.defaultState) {
       videoPlayerRef?.current?.seek(props?.defaultState?.currentTime);
     }
@@ -85,6 +86,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
       duration: data.duration,
       currentTime: props.defaultState ? props.defaultState?.currentTime : 0,
       isLoading: false,
+      isPaused: props.paused || false,
     });
   };
 

@@ -11,7 +11,9 @@ export const Caption: FC<ICaptionProps> = ({ caption }) => {
 
   return (
     <>
-      <StyledCaptionContainer onPress={() => setIsCaptionModalOpen(true)}>
+      <StyledCaptionContainer
+        onPress={() => caption && setIsCaptionModalOpen(true)}
+      >
         <StyledCaptionText numberOfLines={2} ellipsizeMode="tail">
           {caption}
         </StyledCaptionText>

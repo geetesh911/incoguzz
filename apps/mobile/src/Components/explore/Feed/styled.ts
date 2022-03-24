@@ -24,7 +24,7 @@ export const StyledFeedImage = styled.Image<IStyledFeedImageProps>`
 `;
 
 export const StyledModalContainer = styled(Animated.View)`
-  background-color: ${({ theme }) => theme?.objectBackgrounds?.overlay};
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.overlayBg};
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -33,13 +33,27 @@ export const StyledModalContainer = styled(Animated.View)`
   padding: 15px;
 `;
 export const StyledModalPost = styled(Animated.Image)<IImageAspectRatio>`
-  border-radius: 15px;
+  /* border-radius: 15px; */
   height: ${({ aspectRatio }) => windowWidth * 0.9 * aspectRatio}px;
   min-width: ${windowWidth * 0.9}px;
   max-width: ${windowWidth * 0.9}px;
   background-color: ${({ theme }) => theme.textColors.primary};
 `;
 
+export const StyledModalPostContainer = styled(Animated.View)`
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+  width: ${windowWidth * 0.9}px;
+  height: ${windowWidth * 0.9 * (4 / 3)}px;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+  /* z-index: 99; */
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 export const StyledSearchIcon = styled(Icon)`
   color: ${({ theme }) => theme?.commonConstants?.placeholderTextColor};
 `;

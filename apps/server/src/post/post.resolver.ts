@@ -8,6 +8,7 @@ import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
 import GetUserPostsOutput from "./outputs/get-user-posts.output";
 import AddClipPostArgs from "./args/add-clip-post.args";
 import AddMediaPostArgs from "./args/add-media-post.args";
+import GetAllPostsOutput from "./outputs/get-all-posts.output";
 
 @Service()
 @Resolver(() => Post)
@@ -21,8 +22,8 @@ export class PostResolver {
   }
 
   @Authorized()
-  @Query(() => [GetUserPostsOutput])
-  async getAllPosts(): Promise<GetUserPostsOutput[]> {
+  @Query(() => [GetAllPostsOutput])
+  async getAllPosts(): Promise<GetAllPostsOutput[]> {
     return this.postService.getAllPosts();
   }
 

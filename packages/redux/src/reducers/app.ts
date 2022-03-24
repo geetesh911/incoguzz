@@ -18,7 +18,7 @@ export const appSlice = createSlice({
   reducers: {
     setVideoPlayerState: (
       state,
-      action: PayloadAction<{ [key: string]: any }>
+      action: PayloadAction<IAppState["videoPlayerState"]>
     ) => {
       state.videoPlayerState = action.payload;
     },

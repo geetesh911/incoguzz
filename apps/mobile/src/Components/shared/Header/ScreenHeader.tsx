@@ -8,7 +8,7 @@ interface IScreenHeaderProps {
 export const ScreenHeader: FC<IScreenHeaderProps> = ({ heading }) => {
   return (
     <StyledScreenHeaderContainer>
-      <StyledScreenHeading>{heading}</StyledScreenHeading>;
+      <StyledScreenHeading>{heading}</StyledScreenHeading>
     </StyledScreenHeaderContainer>
   );
 };

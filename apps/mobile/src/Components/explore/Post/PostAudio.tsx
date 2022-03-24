@@ -22,18 +22,15 @@ export const PostAudio: FC<IPostAudioProps> = ({ audioUrl, thumbnailUrl }) => {
       width: data.naturalSize.width,
     });
   };
+
   return (
     <StyledMediaContainer height={height} width={width}>
       <AudioPlayer
         resizeMode={"contain"}
         style={styles.videoPlayer}
         onLoad={onVideoLoad}
-        poster={
-          "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png"
-        }
-        source={{
-          uri: "https://pagalworld.com.se/files/download/id/5034",
-        }}
+        poster={thumbnailUrl}
+        source={{ uri: audioUrl }}
         audioOnly={true}
       />
     </StyledMediaContainer>

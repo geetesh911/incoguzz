@@ -112,6 +112,7 @@ export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)`
 export const StyledPostTextContainer = styled(LinearGradient)`
   padding: 25px;
   flex: 1;
+  width: 100%;
 `;
 
 export const StyledPostTextScrollView = styled.ScrollView``;
