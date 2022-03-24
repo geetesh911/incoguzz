@@ -1,9 +1,8 @@
 import React, { FC, useRef, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
 import FeedCard from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
-import { ScrollView } from "react-native";
 import { useQuery } from "@apollo/client";
 import {
   GetAllPostsQuery,

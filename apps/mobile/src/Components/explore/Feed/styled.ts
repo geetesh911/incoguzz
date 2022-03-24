@@ -16,11 +16,19 @@ export interface IMediaProperties {
 interface IStyledFeedImageProps {
   height: number;
 }
-export const StyledFeedImage = styled.Image<IStyledFeedImageProps>`
+export const StyledFeedImageContainer = styled.View<IStyledFeedImageProps>`
   height: ${({ height }) => height}px;
   align-self: stretch;
   margin: 5px;
   border-radius: 15px;
+  overflow: hidden;
+`;
+
+export const StyledFeedImage = styled.Image<IStyledFeedImageProps>`
+  height: 100%;
+  align-self: stretch;
+  /* margin: 5px; */
+  /* border-radius: 15px; */
 `;
 
 export const StyledModalContainer = styled(Animated.View)`
@@ -64,4 +72,21 @@ export const StyledExploreHeading = styled.Text`
   font-size: 35px;
   font-family: ${({ theme }) => theme?.fontFamily?.heading};
   color: ${({ theme }) => theme?.textColors?.primary};
+`;
+
+export const StyledPostIcon = styled.View`
+  background-color: ${({ theme }) => theme?.backgrounds?.primary};
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 99;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

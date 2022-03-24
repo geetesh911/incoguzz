@@ -12,8 +12,13 @@ import { RouteNames } from "../../../Navigation/constants";
 import { ExploreScreenNavigationProp } from "../../../Navigation/interfaces";
 import { useAppDispatch } from "../../../redux/hooks";
 import { getPostThumbnailUrl, getPostUrl } from "../Post";
+import { PostIcon } from "../Post/PostIcon";
 import { PostModal } from "./PostModal";
-import { StyledFeedImage } from "./styled";
+import {
+  StyledFeedImage,
+  StyledFeedImageContainer,
+  StyledPostIcon,
+} from "./styled";
 
 interface IFeedCardProps {
   post: GetAllPostsOutput;
@@ -29,8 +34,8 @@ const FeedCard: FC<IFeedCardProps> = ({ post, innerRef }) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const handlePostPress = () => {
-    dispatch(setSelectedPost(post));
     navigation.navigate(RouteNames.Post);
+    dispatch(setSelectedPost(post));
   };
 
   return (
@@ -52,11 +57,16 @@ const FeedCard: FC<IFeedCardProps> = ({ post, innerRef }) => {
           onActivated={handlePostPress}
           maxDurationMs={3000}
         >
-          <StyledFeedImage
-            source={{ uri: getPostThumbnailUrl(post) }}
-            height={randomBool ? 150 : 280}
-            resizeMode="cover"
-          />
+          <StyledFeedImageContainer height={randomBool ? 150 : 280}>
+            <StyledFeedImage
+              source={{ uri: getPostThumbnailUrl(post) }}
+              height={randomBool ? 150 : 280}
+              resizeMode="cover"
+            />
+            <StyledPostIcon>
+              <PostIcon type={post?.type} />
+            </StyledPostIcon>
+          </StyledFeedImageContainer>
         </TapGestureHandler>
       </LongPressGestureHandler>
       <PostModal
