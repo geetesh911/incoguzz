@@ -23,7 +23,13 @@ export const PostModal: FC<IPostModalProps> = ({
 }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={open}>
-      <StyledModalContainer entering={FadeIn} exiting={FadeOut}>
+      <StyledModalContainer
+        source={{ uri: thumbnailUrl }}
+        entering={FadeIn}
+        exiting={FadeOut}
+        blurRadius={100}
+        imageStyle={{ opacity: 0.7 }}
+      >
         <StyledModalPostContainer
           entering={ZoomIn}
           exiting={ZoomOut}

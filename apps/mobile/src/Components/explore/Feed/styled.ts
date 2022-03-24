@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, ImageBackground } from "react-native";
 import Animated from "react-native-reanimated";
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
@@ -31,7 +31,10 @@ export const StyledFeedImage = styled.Image<IStyledFeedImageProps>`
   /* border-radius: 15px; */
 `;
 
-export const StyledModalContainer = styled(Animated.View)`
+const AnimatedImageBackground =
+  Animated.createAnimatedComponent(ImageBackground);
+
+export const StyledModalContainer = styled(AnimatedImageBackground)`
   background-color: ${({ theme }) => theme?.objectBackgrounds?.overlayBg};
   flex: 1;
   justify-content: center;
