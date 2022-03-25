@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { StyleSheet } from "react-native";
 import { OnLoadData } from "react-native-video";
+import { useAppSelector } from "../../../redux/hooks";
 import { VideoPlayer } from "../../shared/Video";
 import { IMediaProperties } from "../Feed";
 import { StyledMediaContainer } from "./styled";
@@ -21,6 +22,8 @@ export const PostVideo: FC<IPostVideoProps> = ({
     width: 1,
   });
 
+  const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
+
   const onVideoLoad = (data: OnLoadData) => {
     setVideoProperties({
       height: data.naturalSize.height,
@@ -28,7 +31,11 @@ export const PostVideo: FC<IPostVideoProps> = ({
     });
   };
   return (
-    <StyledMediaContainer height={height} width={width}>
+    <StyledMediaContainer
+      height={height}
+      width={width}
+      isFullScreen={videoPlayerState?.isFullScreen}
+    >
       <VideoPlayer
         resizeMode={"contain"}
         style={styles.videoPlayer}

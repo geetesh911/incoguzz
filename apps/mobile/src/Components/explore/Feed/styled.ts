@@ -12,6 +12,7 @@ export interface IImageAspectRatio {
 export interface IMediaProperties {
   height: number;
   width: number;
+  isFullScreen?: boolean;
 }
 interface IStyledFeedImageProps {
   height: number;

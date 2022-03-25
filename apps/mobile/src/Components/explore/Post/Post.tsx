@@ -17,25 +17,23 @@ export const Post: FC<IPostProps> = ({ post, unpauseVideo }) => {
   const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
   return (
     <>
-      {!videoPlayerState?.isFullScreen ? (
+      <StyledPostContainer isFullScreen={videoPlayerState?.isFullScreen}>
+        <PostComponent
+          url={getPostUrl(post)}
+          thumbnailUrl={getPostThumbnailUrl(post)}
+          text={post?.textual?.text}
+          type={post?.type}
+          paused={!unpauseVideo}
+        />
+      </StyledPostContainer>
+      {!videoPlayerState?.isFullScreen && (
         <>
-          <StyledPostContainer>
-            <PostComponent
-              url={getPostUrl(post)}
-              thumbnailUrl={getPostThumbnailUrl(post)}
-              text={post?.textual?.text}
-              type={post?.type}
-              paused={!unpauseVideo}
-            />
-          </StyledPostContainer>
           <Reactions />
           <Caption
             caption={post?.caption || ""}
             postId={Math.random().toString()}
           />
         </>
-      ) : (
-        <FullScreenVideoPlayer />
       )}
     </>
   );

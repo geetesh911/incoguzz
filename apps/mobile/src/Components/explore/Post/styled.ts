@@ -25,9 +25,11 @@ export const StyledPostPageContainer = styled.View`
   justify-content: center;
 `;
 
-export const StyledPostContainer = styled.View`
-  height: ${windowWidth * 0.9 * (4 / 3)}px;
-  width: ${windowWidth * 0.9}px;
+export const StyledPostContainer = styled.View<{ isFullScreen: boolean }>`
+  height: ${({ isFullScreen }) =>
+    isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
+  width: ${({ isFullScreen }) =>
+    isFullScreen ? "100%" : windowWidth * 0.9 + "px"};
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
   border-bottom-right-radius: 40px;
@@ -41,7 +43,8 @@ export const StyledPostContainer = styled.View`
 
 export const StyledMediaContainer = styled.View<Partial<IMediaProperties>>`
   width: 100%;
-  height: ${windowWidth * 0.9 * (4 / 3)}px;
+  height: ${({ isFullScreen }) =>
+    isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
   /* display: flex;
   justify-content: center;
   align-items: center; */
@@ -74,7 +77,7 @@ export const StyledReactionsEmoji = styled.Text`
 export const StyledReaction = styled.Pressable``;
 
 export const StyledCaptionContainer = styled.Pressable`
-  padding: 15px 10px;
+  padding: 5px 10px;
 `;
 
 export const StyledCaptionText = styled.Text`
@@ -151,4 +154,45 @@ export const StyledCaptionModalText = styled.Text`
   color: ${({ theme }) => theme?.textColors?.primary};
   font-family: ${({ theme }) => theme?.fontFamily.primary};
   font-size: 18px;
+`;
+
+export const StyledPostActionsContainer = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  width: 100%;
+`;
+
+export const StyledPostActionIconButton = styled.Pressable`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+  margin: 10px 10px 0px;
+`;
+
+export const StyledPostActionTextButton = styled.Pressable`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 40px;
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+  margin: 10px 10px 0px;
+`;
+
+export const StyledPostActionButtonText = styled.Text`
+  font-family: ${({ theme }) => theme?.fontFamily?.primary};
+  font-size: 16px;
 `;
