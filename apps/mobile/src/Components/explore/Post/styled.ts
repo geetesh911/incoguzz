@@ -45,9 +45,6 @@ export const StyledMediaContainer = styled.View<Partial<IMediaProperties>>`
   width: 100%;
   height: ${({ isFullScreen }) =>
     isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
 `;
 
 export const StyledImageContainer = styled.View<Partial<IMediaProperties>>`
@@ -195,4 +192,36 @@ export const StyledPostActionTextButton = styled.Pressable`
 export const StyledPostActionButtonText = styled.Text`
   font-family: ${({ theme }) => theme?.fontFamily?.primary};
   font-size: 16px;
+`;
+
+export const StyledImageCarouselContainer = styled.View`
+  height: 20px;
+  width: 100%;
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  z-index: 99;
+`;
+
+export const StyledImageCarouselIndicatorContainer = styled.View`
+  height: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+`;
+export const StyledImageCarouselIndicator = styled.View<{ active: boolean }>`
+  height: ${({ active }) => (active ? 7 : 5)}px;
+  width: ${({ active }) => (active ? 7 : 5)}px;
+  margin: 0 2px;
+  border-top-right-radius: 40px;
+  border-top-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
+  background-color: ${({ theme, active }) =>
+    active ? theme.colors?.primary : theme?.textColors?.primary};
 `;

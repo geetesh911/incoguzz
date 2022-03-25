@@ -14,11 +14,17 @@ import {
 
 interface IPostImageProps {
   imgUrl: string;
+  totalImages: number;
+  activeIndex: boolean;
 }
 
 const windowWidth = Dimensions.get("window").width;
 
-export const PostImage: FC<IPostImageProps> = ({ imgUrl }) => {
+export const PostImage: FC<IPostImageProps> = ({
+  imgUrl,
+  totalImages,
+  activeIndex,
+}) => {
   const [aspectRatio, setAspectRatio] = useState<number>(0);
 
   const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {

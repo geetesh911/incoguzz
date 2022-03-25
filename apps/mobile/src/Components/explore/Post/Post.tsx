@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { StyledPostContainer } from "./styled";
 import { useAppSelector } from "../../../redux/hooks";
-import { FullScreenVideoPlayer } from "../../shared/Video";
 import { Reactions } from "./Reactions";
 import { Caption } from "./Caption";
 import { PostComponent } from "./PostComponent";
