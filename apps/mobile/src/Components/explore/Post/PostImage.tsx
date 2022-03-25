@@ -1,5 +1,10 @@
-import React, { FC, useMemo, useState } from "react";
-import { Dimensions, Image, StyleSheet } from "react-native";
+import React, { FC, useState } from "react";
+import {
+  Dimensions,
+  ImageLoadEventData,
+  NativeSyntheticEvent,
+  StyleSheet,
+} from "react-native";
 import { PinchableImage } from "../../shared";
 import {
   StyledPotraitMedia,
@@ -16,19 +21,11 @@ const windowWidth = Dimensions.get("window").width;
 export const PostImage: FC<IPostImageProps> = ({ imgUrl }) => {
   const [aspectRatio, setAspectRatio] = useState<number>(0);
 
-  useMemo(
-    () =>
-      Image.getSize(
-        imgUrl,
-        (imageWidth, imageHeight) => {
-          setAspectRatio(imageHeight / imageWidth);
-        },
-        error => {
-          console.error(`Couldn't get the image size: ${error.message}`);
-        },
-      ),
-    [],
-  );
+  const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
+    const { height, width } = event?.nativeEvent?.source;
+    setAspectRatio(height / width);
+  };
+
   return (
     <StyledImageContainer>
       <PinchableImage
@@ -37,6 +34,7 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl }) => {
             <StyledPotraitMedia
               aspectRatio={aspectRatio}
               source={{ uri: imgUrl }}
+              onLoad={onImageLoad}
             />
           ) : (
             <StyledImageContainer style={styles.landscapeImageContainer}>
@@ -44,6 +42,7 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl }) => {
                 style={styles.landscapeImage}
                 aspectRatio={aspectRatio}
                 source={{ uri: imgUrl }}
+                onLoad={onImageLoad}
               />
             </StyledImageContainer>
           )

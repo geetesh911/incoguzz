@@ -1,7 +1,10 @@
 import React, { FC } from "react";
 import { PostType } from "@incoguzz/graphql";
 import { RequireAtLeastOne } from "type-fest";
-import { PostAudio, PostText, PostVideo, PostImageCarousel } from ".";
+import { PostAudio } from "./PostAudio";
+import { PostText } from "./PostText";
+import { PostVideo } from "./PostVideo";
+import { PostImageCarousel } from "./PostImageCarousel";
 
 export interface IPostComponent {
   url: string | string[];

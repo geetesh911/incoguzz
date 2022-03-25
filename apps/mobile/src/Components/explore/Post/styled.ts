@@ -139,20 +139,12 @@ export const StyledOverlayModalContainer = styled(AnimatedOverlay)`
 `;
 
 export const StyledCaptionModalContainer = styled.View`
-  padding: 25px;
-  width: 90%;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-top-right-radius: 10px;
-  border-top-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
   background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
 `;
 export const StyledCaptionModalScrollView = styled.ScrollView`
   z-index: 99;
+  padding: 25px;
+  max-height: 300px;
 `;
 
 export const StyledCaptionModalText = styled.Text`

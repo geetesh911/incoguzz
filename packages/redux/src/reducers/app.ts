@@ -8,6 +8,7 @@ export interface IAppState {
 const initialState: IAppState = {
   bottomSheetIds: {
     addPost: "addPostBottomSheet",
+    caption: "caption",
   },
   videoPlayerState: {},
 };

@@ -15,6 +15,7 @@ export const StyledAddPostBottomSheetHeaderContainer = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
 `;
 
 export const StyledAddPostBottomSheetHeaderIconContainer = styled.Pressable`
