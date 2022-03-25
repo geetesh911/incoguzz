@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from "react";
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, View } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
 import FeedCard from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
@@ -11,6 +11,7 @@ import {
   GetAllPostsOutput,
   PostType,
 } from "@incoguzz/graphql";
+import FeedContentLoader from "./FeedContentLoader";
 
 const postsData = {
   getAllPosts: [
@@ -2652,15 +2653,24 @@ const postsData = {
 };
 
 export const Feed: FC = () => {
-  // const { data: apiData } = useQuery<
-  //   GetAllPostsQuery,
-  //   GetAllPostsQueryVariables
-  // >(GetAllPostsDocument);
+  // const {
+  //   data: apiData,
+  //   loading,
+  //   error,
+  // } = useQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(
+  //   GetAllPostsDocument,
+  // );
+
+  const loading = false;
 
   const scrollHandler = useRef<ScrollView>();
 
   const renderItem = ({ item: post }: { item: GetAllPostsOutput }) => {
-    return <FeedCard innerRef={scrollHandler} key={post.id} post={post} />;
+    return loading ? (
+      <FeedContentLoader key={post?.id} />
+    ) : (
+      <FeedCard innerRef={scrollHandler} key={post.id} post={post} />
+    );
   };
 
   return (
@@ -2668,8 +2678,8 @@ export const Feed: FC = () => {
       innerRef={scrollHandler}
       ListHeaderComponent={<ExploreHeader />}
       contentContainerStyle={styles.masonryList}
-      numColumns={2}
-      data={postsData?.getAllPosts || []}
+      numColumns={loading ? 1 : 2}
+      data={loading ? [{ id: "loading" }] : postsData?.getAllPosts || []}
       loading={false}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}
