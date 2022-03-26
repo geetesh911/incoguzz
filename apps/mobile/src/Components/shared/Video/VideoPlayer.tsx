@@ -1,5 +1,5 @@
 import React, { createRef, FC, useEffect, useState } from "react";
-import { ActivityIndicator, StatusBar } from "react-native";
+import { ActivityIndicator } from "react-native";
 import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import Video, {
   LoadError,
@@ -33,10 +33,10 @@ import {
   StyledErrorTextContainer,
 } from "./styled";
 import Orientation from "react-native-orientation-locker";
-import SystemNavigationBar from "react-native-system-navigation-bar";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setVideoPlayerState } from "@incoguzz/redux";
 import { FullScreenMinimizeIcon } from "../../icons/FullScreenMinimizeIcon";
+import { FullScreenHelper } from "../../../helpers/fullScreen";
 
 type IVideoPlayerProps = VideoProperties & {
   showFullScreenButton?: boolean;
@@ -165,16 +165,13 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
       }),
     );
 
-    StatusBar.setHidden(newFullScreenValue);
-
-    newFullScreenValue
-      ? SystemNavigationBar?.navigationHide()
-      : SystemNavigationBar?.navigationShow();
+    FullScreenHelper.toggleFullScreen(newFullScreenValue);
 
     setPlayerState({ ...playerState, isFullScreen: newFullScreenValue });
 
-    if (newFullScreenValue) Orientation.lockToLandscapeLeft();
-    else Orientation.lockToPortrait();
+    newFullScreenValue
+      ? Orientation.lockToLandscapeLeft()
+      : Orientation.lockToPortrait();
   };
 
   useEffect(() => {
