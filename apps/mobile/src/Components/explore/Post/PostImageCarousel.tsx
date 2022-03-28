@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { FullScreenImage } from "../../shared";
 import { ImageCarouselIndicator } from "./ImageCarouselIndicator";
 import { PostImage } from "./PostImage";
 import { StyledPostImageCarouselPagerView } from "./styled";
@@ -9,6 +10,7 @@ interface IPostImageCarouselProps {
 
 export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [isFullScreenModal, setIsFullScreenModal] = useState<boolean>(false);
 
   return (
     <>
@@ -26,15 +28,20 @@ export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
         {imgUrls.map((imageUrl, index) => (
           <PostImage
             key={`${imageUrl}${index}`}
-            totalImages={imgUrls.length}
-            activeIndex={index === 0}
             imgUrl={imageUrl}
+            onPress={() => setIsFullScreenModal(true)}
           />
         ))}
       </StyledPostImageCarouselPagerView>
       <ImageCarouselIndicator
         totalImages={imgUrls.length}
         activeIndex={activeIndex}
+      />
+      <FullScreenImage
+        open={isFullScreenModal}
+        onClose={() => setIsFullScreenModal(false)}
+        images={imgUrls.map(url => ({ url }))}
+        index={activeIndex}
       />
     </>
   );

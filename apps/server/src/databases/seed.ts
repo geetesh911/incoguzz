@@ -112,12 +112,8 @@ async function main() {
       [...Array(3).keys()].forEach(async () => {
         const tags = faker.random.words().split(" ");
 
-        const types: any = [
-          PostType.TEXTUAL,
-          PostType.AUDIO,
-          PostType.VIDEO,
-          PostType.PHOTO,
-        ];
+        const types = Object.keys(PostType)?.map(postType => postType);
+
         const imageHeights = [1920, 1280, 760];
         const imageWidths = [1920, 1280, 760];
         const type = types[faker.random.number({ min: 0, max: 3 })];
@@ -175,7 +171,7 @@ async function main() {
           slug: `${Math.random()}-${faker.helpers.slugify(
             faker.random.words(2),
           )}`,
-          type,
+          type: type as any,
           tags: {
             connectOrCreate: tags.map(tag => ({
               where: { name: tag },

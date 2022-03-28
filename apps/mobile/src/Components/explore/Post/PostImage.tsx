@@ -3,6 +3,7 @@ import {
   Dimensions,
   ImageLoadEventData,
   NativeSyntheticEvent,
+  Pressable,
   StyleSheet,
 } from "react-native";
 import { PinchableImage } from "../../shared";
@@ -14,17 +15,12 @@ import {
 
 interface IPostImageProps {
   imgUrl: string;
-  totalImages: number;
-  activeIndex: boolean;
+  onPress: () => void;
 }
 
 const windowWidth = Dimensions.get("window").width;
 
-export const PostImage: FC<IPostImageProps> = ({
-  imgUrl,
-  totalImages,
-  activeIndex,
-}) => {
+export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
   const [aspectRatio, setAspectRatio] = useState<number>(0);
 
   const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
@@ -37,13 +33,18 @@ export const PostImage: FC<IPostImageProps> = ({
       <PinchableImage
         imageComponent={
           aspectRatio > 1 ? (
-            <StyledPotraitMedia
-              aspectRatio={aspectRatio}
-              source={{ uri: imgUrl }}
-              onLoad={onImageLoad}
-            />
+            <Pressable onPress={onPress}>
+              <StyledPotraitMedia
+                aspectRatio={aspectRatio}
+                source={{ uri: imgUrl }}
+                onLoad={onImageLoad}
+              />
+            </Pressable>
           ) : (
-            <StyledImageContainer style={styles.landscapeImageContainer}>
+            <StyledImageContainer
+              onPress={onPress}
+              style={styles.landscapeImageContainer}
+            >
               <StyledLandscapeMedia
                 style={styles.landscapeImage}
                 aspectRatio={aspectRatio}

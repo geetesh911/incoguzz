@@ -1,47 +1,51 @@
-import React, { FC, useEffect } from "react";
-import { Modal } from "react-native";
-import { FullScreenHelper } from "../../../helpers/fullScreen";
+import React, { FC } from "react";
+import { Modal, Text } from "react-native";
 import {
-  StyledFullScreenImage,
   StyledFullScreenImageCloseButton,
   StyledFullScreenImageCloseIcon,
-  StyledFullScreenImageContainer,
+  StyledFullScreenImageFooter,
   StyledFullScreenImageHeader,
-  StyledFullScreenImageImageContainer,
 } from "./styled";
+import ImageViewer, {
+  ImageViewerPropsDefine,
+} from "react-native-image-zoom-viewer";
 
 interface IFullScreenImageProps {
   open: boolean;
   onClose?: () => void;
+  images: ImageViewerPropsDefine["imageUrls"];
+  index?: ImageViewerPropsDefine["index"];
 }
 
 export const FullScreenImage: FC<IFullScreenImageProps> = ({
   open,
   onClose,
+  images,
+  index,
 }) => {
-  useEffect(() => {
-    FullScreenHelper.enableFullScreen();
-  }, []);
-  const closeFullScreenImage = () => {
-    onClose && onClose();
-    FullScreenHelper.disableFullScreen();
-  };
   return (
-    <Modal animationType="fade" transparent={true} visible={open}>
-      <StyledFullScreenImageContainer>
-        <StyledFullScreenImageHeader>
-          <StyledFullScreenImageCloseButton onPress={closeFullScreenImage}>
-            <StyledFullScreenImageCloseIcon name="close" />
-          </StyledFullScreenImageCloseButton>
-        </StyledFullScreenImageHeader>
-        <StyledFullScreenImageImageContainer>
-          <StyledFullScreenImage
-            source={{
-              uri: "https://res.cloudinary.com/geeteshpp/image/upload/v1644933320/0fdddf59-419f-4479-8658-1e6ab58bfc9f_62b34b08-0562-4d59-a61f-f7344c80cc9aRW20seconds_1_thumbnail_xth8dk.jpg",
-            }}
+    <Modal animationType="slide" transparent={true} visible={open}>
+      <ImageViewer
+        imageUrls={images}
+        onSwipeDown={onClose}
+        onCancel={onClose}
+        enableSwipeDown
+        renderHeader={() => (
+          <StyledFullScreenImageHeader>
+            <StyledFullScreenImageCloseButton onPress={onClose}>
+              <StyledFullScreenImageCloseIcon name="close" />
+            </StyledFullScreenImageCloseButton>
+          </StyledFullScreenImageHeader>
+        )}
+        renderIndicator={() => <></>}
+        renderFooter={currentIndex => (
+          <StyledFullScreenImageFooter
+            totalImages={images.length}
+            activeIndex={currentIndex}
           />
-        </StyledFullScreenImageImageContainer>
-      </StyledFullScreenImageContainer>
+        )}
+        index={index}
+      />
     </Modal>
   );
 };

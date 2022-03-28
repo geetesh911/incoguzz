@@ -7,7 +7,9 @@ import {
 
 export function makeApolloClient({
   token,
-}: any): ApolloClient<NormalizedCacheObject> {
+}: {
+  token: string;
+}): ApolloClient<NormalizedCacheObject> {
   // create an apollo link instance, a network interface for apollo client
   const link = createHttpLink({
     uri: `http://192.168.1.36:5000/graphql`,
@@ -19,7 +21,7 @@ export function makeApolloClient({
   const cache = new InMemoryCache();
   // instantiate apollo client with apollo link instance and cache instance
   return new ApolloClient({
-    link: link as any,
+    link,
     cache,
   });
 }

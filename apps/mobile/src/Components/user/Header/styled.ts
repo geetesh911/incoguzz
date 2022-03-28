@@ -1,11 +1,12 @@
 import styled from "styled-components/native";
+import { TapView } from "../../shared/Utility";
 
 export const StyledUserHeaderContainer = styled.View`
-  padding: 30px 15px 15px;
+  padding: 30px 15px 0px;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
 `;
 
 export const StyledUserDpContainer = styled.Pressable`
@@ -29,7 +30,9 @@ export const StyledUserName = styled.Text`
   color: ${({ theme }) => theme?.textColors?.primary};
 `;
 
-export const StyledUserTextButton = styled.Pressable``;
+export const StyledUserTextButton = styled(TapView)`
+  height: 25px;
+`;
 
 export const StyledUserTextButtonText = styled.Text`
   font-size: 18px;

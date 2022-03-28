@@ -2685,6 +2685,7 @@ export const Feed: FC = () => {
       onRefresh={() => console.log("refresh")}
       onEndReached={() => null}
       onEndReachedThreshold={0.2}
+      showsVerticalScrollIndicator={false}
     />
   );
 };

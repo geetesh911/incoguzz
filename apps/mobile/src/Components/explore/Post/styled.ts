@@ -47,7 +47,7 @@ export const StyledMediaContainer = styled.View<Partial<IMediaProperties>>`
     isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
 `;
 
-export const StyledImageContainer = styled.View<Partial<IMediaProperties>>`
+export const StyledImageContainer = styled.Pressable<Partial<IMediaProperties>>`
   width: 100%;
   height: ${windowWidth * 0.9 * (4 / 3)}px;
   display: flex;

@@ -17,7 +17,9 @@ export interface IMediaProperties {
 interface IStyledFeedImageProps {
   height: number;
 }
-export const StyledFeedImageContainer = styled.View<IStyledFeedImageProps>`
+export const StyledFeedImageContainer = styled(
+  Animated.View,
+)<IStyledFeedImageProps>`
   height: ${({ height }) => height}px;
   align-self: stretch;
   margin: 5px;

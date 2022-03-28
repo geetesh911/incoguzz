@@ -43,7 +43,11 @@ export const UserHeader: FC<IUserHeaderProps> = ({ name, dpUrl }) => {
         </StyledUserDpContainer>
       </StyledUserHeaderContainer>
       {isDpFullScreen && (
-        <FullScreenImage open={isDpFullScreen} onClose={closeDpFullScreen} />
+        <FullScreenImage
+          open={isDpFullScreen}
+          onClose={closeDpFullScreen}
+          images={[{ url: dpUrl }]}
+        />
       )}
     </>
   );

@@ -168,8 +168,8 @@ class MediaService {
   public async getVideoPreview(
     path: string,
     metadata: FfprobeData,
-  ): Promise<any> {
-    return new Promise<any>((resolveVideoPreview, rejectVideoPreview) => {
+  ): Promise<boolean> {
+    return new Promise<boolean>((resolveVideoPreview, rejectVideoPreview) => {
       const frameIntervalInSeconds = Math.floor(
         metadata?.format?.duration / 10,
       );
