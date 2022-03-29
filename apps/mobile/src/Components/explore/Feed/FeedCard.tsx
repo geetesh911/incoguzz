@@ -1,15 +1,18 @@
+import React, { FC, useMemo, useState } from "react";
 import { GetAllPostsOutput } from "@incoguzz/graphql";
 import { setSelectedPost } from "@incoguzz/redux";
 import { useNavigation } from "@react-navigation/native";
-import React, { FC, useMemo, useState } from "react";
-import { ScrollView } from "react-native";
 import {
-  LongPressGestureHandler,
-  State,
-  TapGestureHandler,
-} from "react-native-gesture-handler";
-import { RouteNames } from "../../../Navigation/constants";
-import { ExploreScreenNavigationProp } from "../../../Navigation/interfaces";
+  ImageLoadEventData,
+  NativeSyntheticEvent,
+  ScrollView,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
+import {
+  TabParamList,
+  ExploreScreenNavigationProp,
+} from "../../../Navigation/interfaces";
 import { useAppDispatch } from "../../../redux/hooks";
 import { getPostThumbnailUrl, getPostUrl } from "../Post";
 import { PostIcon } from "../Post/PostIcon";
@@ -19,56 +22,78 @@ import {
   StyledFeedImageContainer,
   StyledPostIcon,
 } from "./styled";
+import { TapAndLongPressGesture } from "../../shared";
 
 interface IFeedCardProps {
   post: GetAllPostsOutput;
-  innerRef: React.MutableRefObject<ScrollView | undefined>;
+  style?: StyleProp<ViewStyle>;
+  postSection: string;
+  fixed?: boolean;
+  posts: GetAllPostsOutput[];
+  initialIndex: number;
+  navigateTo: keyof TabParamList;
+  innerRef:
+    | React.MutableRefObject<ScrollView | undefined>
+    | React.Ref<unknown>
+    | React.Ref<unknown>[]
+    | undefined;
 }
 
-const FeedCard: FC<IFeedCardProps> = ({ post, innerRef }) => {
+export const FeedCard: FC<IFeedCardProps> = ({
+  post,
+  posts,
+  initialIndex,
+  style,
+  postSection,
+  navigateTo,
+  fixed,
+  innerRef,
+}) => {
   const dispatch = useAppDispatch();
 
   const navigation = useNavigation<ExploreScreenNavigationProp>();
 
-  const randomBool = useMemo(() => Math.random() < 0.5, []);
   const [open, setOpen] = useState<boolean>(false);
+  const [aspectRatio, setAspectRatio] = useState<number>(0);
+
+  const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
+    const { height, width } = event?.nativeEvent?.source;
+    setAspectRatio(height / width);
+  };
 
   const handlePostPress = () => {
-    navigation.navigate(RouteNames.Post);
-    dispatch(setSelectedPost(post));
+    navigation.navigate(navigateTo, {
+      fixed: fixed || false,
+      heading: postSection,
+      initialIndex,
+      posts,
+    });
+    dispatch(setSelectedPost(posts));
   };
 
   return (
     <>
-      <LongPressGestureHandler
-        onActivated={() => setOpen(true)}
-        onHandlerStateChange={event => {
-          if (
-            event?.nativeEvent?.state === State.END ||
-            event?.nativeEvent?.state === State.CANCELLED
-          )
-            setOpen(false);
-        }}
-        minDurationMs={100}
-        maxDist={10000}
+      <TapAndLongPressGesture
+        onLongPress={() => setOpen(true)}
+        onLongPressOver={() => setOpen(false)}
+        onPress={handlePostPress}
+        simultaneousHandlers={innerRef}
       >
-        <TapGestureHandler
-          simultaneousHandlers={innerRef}
-          onActivated={handlePostPress}
-          maxDurationMs={3000}
+        <StyledFeedImageContainer
+          height={aspectRatio <= 1 ? 135 : 280}
+          style={style}
         >
-          <StyledFeedImageContainer height={randomBool ? 150 : 280}>
-            <StyledFeedImage
-              source={{ uri: getPostThumbnailUrl(post) }}
-              height={randomBool ? 150 : 280}
-              resizeMode="cover"
-            />
-            <StyledPostIcon>
-              <PostIcon type={post?.type} />
-            </StyledPostIcon>
-          </StyledFeedImageContainer>
-        </TapGestureHandler>
-      </LongPressGestureHandler>
+          <StyledFeedImage
+            source={{ uri: getPostThumbnailUrl(post) }}
+            height={aspectRatio <= 1 ? 135 : 280}
+            resizeMode="cover"
+            onLoad={onImageLoad}
+          />
+          <StyledPostIcon>
+            <PostIcon type={post?.type} />
+          </StyledPostIcon>
+        </StyledFeedImageContainer>
+      </TapAndLongPressGesture>
       <PostModal
         open={open}
         url={getPostUrl(post)}
@@ -79,5 +104,3 @@ const FeedCard: FC<IFeedCardProps> = ({ post, innerRef }) => {
     </>
   );
 };
-
-export default FeedCard;

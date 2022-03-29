@@ -12,13 +12,20 @@ import {
   TapGestureHandlerEventPayload,
   TapGestureHandlerProps,
 } from "react-native-gesture-handler";
-import { StyledTapContainer } from "./styled";
+import { StyledTapContainer, StyledTapOverlay } from "./styled";
 import { ImageStyle, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { RequireAllOrNone } from "type-fest";
+
+enum TypeEffect {
+  scale = "scale",
+  overlay = "overlay",
+}
 
 type ITapViewProps = RequireAllOrNone<
   {
     tapGestureHandlerProps?: Partial<TapGestureHandlerProps>;
+    effect?: TypeEffect;
+    overlayStyle?: StyleProp<ViewStyle>;
     style?: StyleProp<ViewStyle>;
     customAnimatedStyle?: AnimatedStyleProp<ViewStyle | ImageStyle | TextStyle>;
     customEventHandler?: (
@@ -31,12 +38,15 @@ type ITapViewProps = RequireAllOrNone<
 
 export const TapView: FC<ITapViewProps> = ({
   children,
+  effect,
+  overlayStyle,
   style,
   customAnimatedStyle,
+  tapGestureHandlerProps,
   customEventHandler,
   onPress,
-  tapGestureHandlerProps,
 }) => {
+  effect = effect || TypeEffect.scale;
   const pressed = useSharedValue(false);
 
   const eventHandler =
@@ -52,7 +62,13 @@ export const TapView: FC<ITapViewProps> = ({
   const animatedStyle =
     customAnimatedStyle ||
     useAnimatedStyle(() => ({
-      transform: [{ scale: withSpring(pressed.value ? 0.95 : 1) }],
+      transform: [
+        {
+          scale: withSpring(
+            pressed.value && effect === TypeEffect.scale ? 0.95 : 1,
+          ),
+        },
+      ],
     }));
 
   return (
@@ -63,6 +79,9 @@ export const TapView: FC<ITapViewProps> = ({
     >
       <StyledTapContainer style={[style, animatedStyle]}>
         {children}
+        {pressed && effect === TypeEffect.overlay && (
+          <StyledTapOverlay style={overlayStyle} />
+        )}
       </StyledTapContainer>
     </TapGestureHandler>
   );

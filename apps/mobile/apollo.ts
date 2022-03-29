@@ -14,7 +14,7 @@ export function makeApolloClient({
 }: IMakeApolloClient): ApolloClient<NormalizedCacheObject> {
   // create an apollo link instance, a network interface for apollo client
   const link = createHttpLink({
-    uri: `http://localhost:5000/graphql`,
+    uri: `http://192.168.1.37:5000/graphql`,
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -11,13 +11,14 @@ import {
 
 interface IPageHeaderProps {
   text: string;
+  onBack?: () => void;
 }
 
-export const PageHeader: FC<IPageHeaderProps> = ({ text }) => {
+export const PageHeader: FC<IPageHeaderProps> = ({ text, onBack }) => {
   const navigation = useNavigation<PostScreenNavigationProp>();
   const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
 
-  const onPress = () => navigation.goBack();
+  const onPress = () => (onBack ? onBack() : navigation.goBack());
 
   return (
     <>

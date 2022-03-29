@@ -1,65 +1,296 @@
-import React, { FC, useState } from "react";
-import { ImageLoadEventData, NativeSyntheticEvent } from "react-native";
-import { IMediaProperties } from "../../explore";
-import { FullScreenImage } from "../../shared";
-import {
-  StyledBookmarksContainer,
-  StyledBookmarksImage,
-  StyledBookmarksImageContainer,
-  StyledBookmarksScrollView,
-} from "./styled";
+import React, { FC, useRef } from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import { StyledBookmarksContainer, StyledFeedCard } from "./styled";
+import MasonryList from "@react-native-seoul/masonry-list";
+import { GetAllPostsOutput, PostType } from "@incoguzz/graphql";
+import { RouteNames } from "../../../Navigation/constants";
+
+export const postsData = {
+  getAllPosts: [
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11426otqbge5x4kh",
+      caption:
+        "Steel Computer Belarus Wooden Planner indexing navigating Designer Loan Tasty",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg52ht0335xktq5wh42y4a",
+          name: "Rubber",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11476otq4tunhja7",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11486otqvgiro2qb",
+          url: "http://placeimg.com/1280/760",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpeq11496otqnhcunw6l",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11296otq0efgchdk",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11366otqkhj371qt",
+          name: "EXE",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11396otqcs7e1qf1",
+          name: "out-of-the-box",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpeq11416otq20as72mg",
+        text: "Earum suscipit veritatis neque harum ipsa.\nIncidunt animi sapiente aliquam ad blanditiis earum quia est.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpeq11266otqppeuxcjr",
+      caption: null,
+      type: PostType.Textual,
+      createdAt: "2022-02-18T13:41:36.482Z",
+      updatedAt: "2022-02-18T13:41:36.482Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg52ht0340xktq9aa65qs6",
+          name: "customer",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpeq11276otq03kbqto7",
+          name: "Oman",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghblb0202bstqkn79tb3a",
+          name: "override",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: null,
+      clip: null,
+      textual: {
+        __typename: "Textual",
+        id: "ckzsgnpeq11346otqw90052ae",
+        text: "Ut provident incidunt voluptatem inventore esse.\nImpedit blanditiis laudantium cupiditate hic animi dolore.\nOmnis voluptatem voluptatem.",
+      },
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10516otq412nni5q",
+      caption:
+        "overriding bandwidth CFA Ball open-source Rubber Small Supervisor flexibility Movies",
+      type: PostType.Video,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgcy0l0226fotqonh968lf",
+          name: "Soft",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghg3g0911bstqugmlm38q",
+          name: "state",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [],
+      video: {
+        __typename: "Video",
+        id: "ckzsgnpbg10616otqzr26gg1j",
+        url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
+        thumbnailUrl: "http://placeimg.com/1920/1280",
+      },
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10466otqj04uiqom",
+      caption:
+        "Cliffs Orchestrator Infrastructure Card Chief disintermediate Soap Wooden CSS Kwacha",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbg10526otq5zdcpa4n",
+          name: "Grocery",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsghblb0202bstqkn79tb3a",
+          name: "override",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10546otq8adkkmx3",
+          url: "http://placeimg.com/1280/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10556otqo2icjclw",
+          url: "http://placeimg.com/1920/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10566otq2q402cwm",
+          url: "http://placeimg.com/1280/1280",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+    {
+      __typename: "GetAllPostsOutput",
+      id: "ckzsgnpbg10406otqpacwqdx9",
+      caption:
+        "workforce Expanded Optimization moratorium Mobility calculate e-business HTTP networks Jamaican",
+      type: PostType.Photo,
+      createdAt: "2022-02-18T13:41:36.364Z",
+      updatedAt: "2022-02-18T13:41:36.364Z",
+      tags: [
+        {
+          __typename: "Tag",
+          id: "ckzsg13bz0654xwtqlagpc55y",
+          name: "Awesome",
+        },
+        {
+          __typename: "Tag",
+          id: "ckzsgnpbg10416otqj9vkscku",
+          name: "New",
+        },
+      ],
+      place: null,
+      poll: null,
+      photos: [
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10456otq64404w1x",
+          url: "http://placeimg.com/1920/1280",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10476otqkc587u7m",
+          url: "http://placeimg.com/1280/1920",
+        },
+        {
+          __typename: "Photo",
+          id: "ckzsgnpbg10486otq31h3orsa",
+          url: "http://placeimg.com/1280/760",
+        },
+      ],
+      video: null,
+      clip: null,
+      textual: null,
+      audio: null,
+      _count: null,
+    },
+  ],
+};
 
 export const BookmarksBody: FC = () => {
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const [imageDimensions, setImageDimensions] = useState<{
-    [key: string]: IMediaProperties;
-  }>({});
+  const scrollHandler = useRef<ScrollView>();
 
-  const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
-    const { height, width, uri } = event?.nativeEvent?.source;
-
-    setImageDimensions({ ...imageDimensions, [uri]: { height, width } });
+  const renderItem = ({
+    item: post,
+    i,
+  }: {
+    item: GetAllPostsOutput;
+    i: number;
+  }) => {
+    return (
+      <StyledFeedCard
+        postSection="Bookmarks"
+        height={200}
+        width={200}
+        innerRef={scrollHandler}
+        key={post.id}
+        post={post}
+        posts={(postsData?.getAllPosts as GetAllPostsOutput[]) || []}
+        // posts={[post]}
+        initialIndex={i}
+        navigateTo={RouteNames.BookmarksPost}
+      />
+    );
   };
-
-  const onImagePress = (index: number) => {
-    setActiveIndex(index);
-    setIsFullScreen(true);
-  };
-
-  const images = [
-    "https://res.cloudinary.com/geeteshpp/image/upload/v1647415142/mountain-climber_jjis3c.jpg",
-    "https://res.cloudinary.com/geeteshpp/image/upload/v1644933320/0fdddf59-419f-4479-8658-1e6ab58bfc9f_62b34b08-0562-4d59-a61f-f7344c80cc9aRW20seconds_1_thumbnail_xth8dk.jpg",
-    "https://res.cloudinary.com/geeteshpp/image/upload/v1640068319/sample.jpg",
-    "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png",
-  ];
 
   return (
     <StyledBookmarksContainer>
-      <StyledBookmarksScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        {images.map((imageUrl, index) => (
-          <StyledBookmarksImageContainer
-            key={imageUrl}
-            onPress={() => onImagePress(index)}
-          >
-            <StyledBookmarksImage
-              source={{ uri: imageUrl }}
-              onLoad={onImageLoad}
-              height={imageDimensions[imageUrl]?.height || 200}
-              width={imageDimensions[imageUrl]?.width || 200}
-            />
-          </StyledBookmarksImageContainer>
-        ))}
-      </StyledBookmarksScrollView>
-      <FullScreenImage
-        open={isFullScreen}
-        images={images.map(imageUrl => ({ url: imageUrl }))}
-        index={activeIndex}
-        onClose={() => setIsFullScreen(false)}
+      <MasonryList
+        innerRef={scrollHandler}
+        contentContainerStyle={styles.masonryList}
+        numColumns={1}
+        data={postsData?.getAllPosts || []}
+        loading={false}
+        renderItem={renderItem}
+        onRefresh={() => console.log("refresh")}
+        onEndReached={() => null}
+        onEndReachedThreshold={0.2}
+        showsVerticalScrollIndicator={false}
+        horizontal={true}
       />
     </StyledBookmarksContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  masonryList: {
+    paddingHorizontal: 10,
+    alignSelf: "stretch",
+  },
+});

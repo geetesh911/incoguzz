@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 import Animated from "react-native-reanimated";
 import styled from "styled-components/native";
-import { IMediaProperties } from "../../explore";
+import { FeedCard, IMediaProperties } from "../../explore";
 import { TapView } from "../../shared/Utility";
 
 const windowWidth = Dimensions.get("window").width;
@@ -24,7 +24,7 @@ export const StyledOptionText = styled.Text`
 `;
 
 export const StyledBookmarksContainer = styled.View`
-  height: 200px;
+  height: 220px;
   width: ${windowWidth}px;
 `;
 export const StyledBookmarksScrollView = styled(Animated.ScrollView)``;
@@ -39,6 +39,16 @@ export const StyledBookmarksImageContainer = styled(TapView)`
 `;
 
 export const StyledBookmarksImage = styled.Image<IMediaProperties>`
+  height: 200px;
+  width: ${({ height, width }) => {
+    const factor = 200 / height;
+    return factor * width;
+  }}px;
+  resize-mode: contain;
+  border-radius: 20px;
+`;
+
+export const StyledFeedCard = styled(FeedCard)<IMediaProperties>`
   height: 200px;
   width: ${({ height, width }) => {
     const factor = 200 / height;

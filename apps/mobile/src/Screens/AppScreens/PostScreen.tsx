@@ -1,37 +1,76 @@
-import React, { FC, useState } from "react";
+import { GetAllPostsOutput } from "@incoguzz/graphql";
+import { useRoute } from "@react-navigation/native";
+import React, { FC, useEffect, useRef, useState } from "react";
+import PagerView from "react-native-pager-view";
 import {
   Post,
   StyledAnimatedPagerView,
   StyledPostPageContainer,
 } from "../../Components/explore/Post";
-import { PostHeader } from "../../Components/explore/Post/PostHeader";
-import { useAppSelector } from "../../redux/hooks";
+import { PageHeader } from "../../Components/shared";
+import { PostScreenRouteProp } from "../../Navigation";
 
 export const PostScreen: FC = () => {
-  const [activeIndex, setActiveIndex] = useState<number>(0);
-  const selectedPost = useAppSelector(state => state.post.selectedPost);
+  const route = useRoute<PostScreenRouteProp>();
+
+  const pagerViewRef = useRef<PagerView>(null);
+
+  const [activeIndex, setActiveIndex] = useState<number>(
+    route?.params?.initialIndex,
+  );
+  const [posts, setPosts] = useState<GetAllPostsOutput[]>(
+    // route?.params?.posts
+    //   ? [route?.params?.posts[route?.params?.initialIndex]]
+    //   :
+    [],
+  );
+
+  useEffect(() => {
+    setPosts(route?.params?.posts as GetAllPostsOutput[]);
+  }, []);
+
+  useEffect(() => {
+    if (posts.length > 1) {
+      pagerViewRef.current?.setPage(route?.params?.initialIndex);
+    }
+  }, [posts]);
 
   return (
     <>
-      <PostHeader />
-      <StyledAnimatedPagerView
-        initialPage={0}
-        layoutDirection="ltr"
-        overdrag={true}
-        scrollEnabled={true}
-        pageMargin={0}
-        orientation="vertical"
-        transitionStyle="scroll"
-        showPageIndicator={true}
-        onPageSelected={e => setActiveIndex(e?.nativeEvent?.position)}
-      >
-        {selectedPost &&
-          [selectedPost, selectedPost, selectedPost].map((post, index) => (
+      <PageHeader text={route?.params?.heading} />
+      {posts.length > 0 ? (
+        <StyledAnimatedPagerView
+          initialPage={route?.params?.initialIndex}
+          layoutDirection="ltr"
+          ref={pagerViewRef}
+          overdrag={true}
+          scrollEnabled={true}
+          pageMargin={0}
+          orientation="vertical"
+          transitionStyle="scroll"
+          showPageIndicator={true}
+          onPageSelected={e => setActiveIndex(e?.nativeEvent?.position)}
+        >
+          {posts.map((post, index) => (
             <StyledPostPageContainer key={`${post?.id}${index}`}>
               <Post post={post} unpauseVideo={activeIndex === index} />
             </StyledPostPageContainer>
           ))}
-      </StyledAnimatedPagerView>
+        </StyledAnimatedPagerView>
+      ) : (
+        <StyledPostPageContainer
+          key={`${
+            route?.params?.posts && route?.params?.posts[activeIndex]?.id
+          }${activeIndex}`}
+        >
+          {route?.params?.posts && (
+            <Post
+              post={route?.params?.posts[activeIndex]}
+              unpauseVideo={activeIndex === activeIndex}
+            />
+          )}
+        </StyledPostPageContainer>
+      )}
     </>
   );
 };

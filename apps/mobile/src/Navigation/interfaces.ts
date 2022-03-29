@@ -1,13 +1,23 @@
+import { GetAllPostsOutput } from "@incoguzz/graphql";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { RouteProp } from "@react-navigation/native";
 import { RouteNames } from "./constants";
 
-type TabParamList = {
+type IPostProps = {
+  fixed: boolean;
+  heading: string;
+  initialIndex: number;
+  posts?: GetAllPostsOutput[];
+};
+
+export type TabParamList = {
   [RouteNames.User]: undefined;
   [RouteNames.Explore]: undefined;
   [RouteNames.Notifications]: undefined;
   [RouteNames.Messages]: undefined;
   [RouteNames.Feed]: undefined;
-  [RouteNames.Post]: undefined;
+  [RouteNames.ExplorePost]: IPostProps;
+  [RouteNames.BookmarksPost]: IPostProps;
   [RouteNames.AuthHome]: undefined;
   [RouteNames.Login]: undefined;
   [RouteNames.SignUp]: undefined;
@@ -33,5 +43,10 @@ export type ExploreScreenNavigationProp = BottomTabNavigationProp<
 
 export type PostScreenNavigationProp = BottomTabNavigationProp<
   TabParamList,
-  RouteNames.Post
+  RouteNames.ExplorePost
+>;
+
+export type PostScreenRouteProp = RouteProp<
+  TabParamList,
+  RouteNames.ExplorePost
 >;

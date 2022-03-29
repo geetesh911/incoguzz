@@ -2,11 +2,11 @@ import { GetAllPostsOutput } from "@incoguzz/graphql";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IPostState {
-  selectedPost: GetAllPostsOutput | null;
+  selectedPosts: GetAllPostsOutput[];
 }
 
 const initialState: IPostState = {
-  selectedPost: null,
+  selectedPosts: [],
 };
 
 export const postSlice = createSlice({
@@ -15,9 +15,9 @@ export const postSlice = createSlice({
   reducers: {
     setSelectedPost: (
       state,
-      action: PayloadAction<IPostState["selectedPost"]>
+      action: PayloadAction<IPostState["selectedPosts"]>
     ) => {
-      state.selectedPost = action.payload;
+      state.selectedPosts = action.payload;
     },
   },
 });

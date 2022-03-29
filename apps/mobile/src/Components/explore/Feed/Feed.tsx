@@ -1,7 +1,7 @@
 import React, { FC, useRef, useState } from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
-import FeedCard from "./FeedCard";
+import { FeedCard } from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
 import { useQuery } from "@apollo/client";
 import {
@@ -11,9 +11,10 @@ import {
   GetAllPostsOutput,
   PostType,
 } from "@incoguzz/graphql";
-import FeedContentLoader from "./FeedContentLoader";
+import { FeedContentLoader } from "./FeedContentLoader";
+import { RouteNames } from "../../../Navigation/constants";
 
-const postsData = {
+export const postsData = {
   getAllPosts: [
     {
       __typename: "GetAllPostsOutput",
@@ -2666,10 +2667,16 @@ export const Feed: FC = () => {
   const scrollHandler = useRef<ScrollView>();
 
   const renderItem = ({ item: post }: { item: GetAllPostsOutput }) => {
-    return loading ? (
-      <FeedContentLoader key={post?.id} />
-    ) : (
-      <FeedCard innerRef={scrollHandler} key={post.id} post={post} />
+    return (
+      <FeedCard
+        innerRef={scrollHandler}
+        key={post.id}
+        post={post}
+        postSection="Explore"
+        posts={[post]}
+        initialIndex={0}
+        navigateTo={RouteNames.ExplorePost}
+      />
     );
   };
 
@@ -2678,14 +2685,15 @@ export const Feed: FC = () => {
       innerRef={scrollHandler}
       ListHeaderComponent={<ExploreHeader />}
       contentContainerStyle={styles.masonryList}
-      numColumns={loading ? 1 : 2}
-      data={loading ? [{ id: "loading" }] : postsData?.getAllPosts || []}
-      loading={false}
+      numColumns={2}
+      data={postsData?.getAllPosts || []}
+      loading={loading}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}
       onEndReached={() => null}
       onEndReachedThreshold={0.2}
       showsVerticalScrollIndicator={false}
+      LoadingView={<FeedContentLoader />}
     />
   );
 };

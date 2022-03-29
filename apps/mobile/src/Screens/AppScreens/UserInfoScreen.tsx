@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { UserBody, UserHeader } from "../../Components/user";
 
-export const UserScreen: FC = () => {
+export const UserInfoScreen: FC = () => {
   return (
     <>
       <UserHeader
