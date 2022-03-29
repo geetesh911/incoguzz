@@ -1,6 +1,5 @@
-import React, { FC, useMemo, useState } from "react";
+import React, { FC, useState } from "react";
 import { GetAllPostsOutput } from "@incoguzz/graphql";
-import { setSelectedPost } from "@incoguzz/redux";
 import { useNavigation } from "@react-navigation/native";
 import {
   ImageLoadEventData,
@@ -13,7 +12,6 @@ import {
   TabParamList,
   ExploreScreenNavigationProp,
 } from "../../../Navigation/interfaces";
-import { useAppDispatch } from "../../../redux/hooks";
 import { getPostThumbnailUrl, getPostUrl } from "../Post";
 import { PostIcon } from "../Post/PostIcon";
 import { PostModal } from "./PostModal";
@@ -49,8 +47,6 @@ export const FeedCard: FC<IFeedCardProps> = ({
   fixed,
   innerRef,
 }) => {
-  const dispatch = useAppDispatch();
-
   const navigation = useNavigation<ExploreScreenNavigationProp>();
 
   const [open, setOpen] = useState<boolean>(false);
@@ -68,7 +64,6 @@ export const FeedCard: FC<IFeedCardProps> = ({
       initialIndex,
       posts,
     });
-    dispatch(setSelectedPost(posts));
   };
 
   return (

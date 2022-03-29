@@ -4,8 +4,9 @@ import { StyledBookmarksContainer, StyledFeedCard } from "./styled";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { GetAllPostsOutput, PostType } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
+import { postsData } from "../../explore";
 
-export const postsData = {
+export const postsData1 = {
   getAllPosts: [
     {
       __typename: "GetAllPostsOutput",
@@ -262,7 +263,6 @@ export const BookmarksBody: FC = () => {
         key={post.id}
         post={post}
         posts={(postsData?.getAllPosts as GetAllPostsOutput[]) || []}
-        // posts={[post]}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />

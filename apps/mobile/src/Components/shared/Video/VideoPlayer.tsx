@@ -61,7 +61,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   const [playerState, setPlayerState] = useState<IVideoPlayerState>(
     props.defaultState || {
       isMuted: false,
-      isPaused: false,
+      isPaused: true,
       isFullScreen: false,
       isLoading: false,
       isError: false,

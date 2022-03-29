@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { PagerViewOnPageSelectedEvent } from "react-native-pager-view";
 import { FullScreenImage } from "../../shared";
 import { ImageCarouselIndicator } from "./ImageCarouselIndicator";
 import { PostImage } from "./PostImage";
@@ -23,7 +24,9 @@ export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
         orientation="horizontal"
         transitionStyle="scroll"
         showPageIndicator={true}
-        onPageSelected={e => setActiveIndex(e?.nativeEvent?.position)}
+        onPageSelected={(event: PagerViewOnPageSelectedEvent) =>
+          setActiveIndex(event?.nativeEvent?.position)
+        }
       >
         {imgUrls.map((imageUrl, index) => (
           <PostImage

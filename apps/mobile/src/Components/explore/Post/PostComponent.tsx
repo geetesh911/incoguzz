@@ -38,7 +38,11 @@ export const PostComponent: FC<IPostComponentProps> = ({
       />
     ),
     [PostType.Audio]: (
-      <PostAudio audioUrl={url as string} thumbnailUrl={thumbnailUrl} />
+      <PostAudio
+        audioUrl={url as string}
+        thumbnailUrl={thumbnailUrl}
+        paused={paused}
+      />
     ),
     [PostType.Textual]: <PostText text={text as string} />,
     [PostType.Clip]: null,

@@ -8,9 +8,14 @@ import { StyledMediaContainer } from "./styled";
 interface IPostAudioProps {
   audioUrl: string;
   thumbnailUrl?: string;
+  paused?: boolean;
 }
 
-export const PostAudio: FC<IPostAudioProps> = ({ audioUrl, thumbnailUrl }) => {
+export const PostAudio: FC<IPostAudioProps> = ({
+  audioUrl,
+  thumbnailUrl,
+  paused,
+}) => {
   const [{ height, width }, setAudioProperties] = useState<IMediaProperties>({
     height: 1,
     width: 1,
@@ -31,6 +36,7 @@ export const PostAudio: FC<IPostAudioProps> = ({ audioUrl, thumbnailUrl }) => {
         onLoad={onVideoLoad}
         poster={thumbnailUrl}
         source={{ uri: audioUrl }}
+        paused={paused}
         audioOnly={true}
       />
     </StyledMediaContainer>

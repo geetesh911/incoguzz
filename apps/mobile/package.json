@@ -53,7 +53,7 @@
     "react-native-image-zoom-viewer": "^3.0.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-orientation-locker": "^1.4.0",
-    "react-native-pager-view": "^5.4.9",
+    "react-native-pager-view": "^6.0.0-rc.1",
     "react-native-pinchable": "^0.2.1",
     "react-native-reanimated": "^2.4.1",
     "react-native-safe-area-context": "^3.3.2",

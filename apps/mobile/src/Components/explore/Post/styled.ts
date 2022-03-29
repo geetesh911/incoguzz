@@ -1,5 +1,5 @@
 import styled from "styled-components/native";
-import PagerView from "react-native-pager-view";
+import { LazyPagerView, PagerView } from "react-native-pager-view";
 import Animated from "react-native-reanimated";
 import { IImageAspectRatio, IMediaProperties } from "../Feed";
 import { Dimensions, Pressable } from "react-native";
@@ -8,10 +8,11 @@ import LinearGradient from "react-native-linear-gradient";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+const AnimatedLazyPagerView = Animated.createAnimatedComponent(LazyPagerView);
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const AnimatedOverlay = Animated.createAnimatedComponent(Pressable);
 
-export const StyledAnimatedPagerView = styled(AnimatedPagerView)`
+export const StyledAnimatedPagerView = styled(AnimatedLazyPagerView)`
   width: 100%;
   height: 100px;
   flex: 1;
