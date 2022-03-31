@@ -52,7 +52,7 @@ type Themes = { [key in ThemeEnum]: DefaultTheme };
 
 export const dark: DefaultTheme = {
   commonConstants: {
-    borderRadius: "40px",
+    borderRadius: "50px",
     placeholderTextColor: "rgba(256, 256, 256, 0.5)",
   },
   backgrounds: {

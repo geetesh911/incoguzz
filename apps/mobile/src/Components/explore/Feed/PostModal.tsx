@@ -9,6 +9,8 @@ import {
   ZoomOut,
 } from "react-native-reanimated";
 import { IPostComponentProps, PostComponent } from "../Post/PostComponent";
+import { defalutPostImages } from "../../../constants/defaultImages";
+import { PostType } from "@incoguzz/graphql";
 
 type IPostModalProps = IPostComponentProps & {
   open: boolean;
@@ -24,7 +26,7 @@ export const PostModal: FC<IPostModalProps> = ({
   return (
     <Modal animationType="fade" transparent={true} visible={open}>
       <StyledModalContainer
-        source={{ uri: thumbnailUrl }}
+        source={{ uri: defalutPostImages[PostType.Textual] }}
         entering={FadeIn}
         exiting={FadeOut}
         blurRadius={100}

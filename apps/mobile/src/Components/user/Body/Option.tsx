@@ -2,53 +2,42 @@ import React, { FC } from "react";
 import { useTheme } from "../../../styles/theme";
 import { IIconInterface } from "../../icons";
 import { StyledOptionContainer, StyledOptionText } from "./styled";
-import {
-  GestureEvent,
-  TapGestureHandler,
-  TapGestureHandlerEventPayload,
-} from "react-native-gesture-handler";
-import {
-  useAnimatedGestureHandler,
-  useAnimatedStyle,
-  useSharedValue,
-  withSpring,
-} from "react-native-reanimated";
 import { StyleProp, ViewStyle } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import {
+  TabParamList,
+  UserPostsScreenNavigationProp,
+} from "../../../Navigation";
 
 export interface IOptionProps {
   label: string;
   Icon: React.ComponentType<IIconInterface>;
   body?: JSX.Element;
   style?: StyleProp<ViewStyle>;
+  navigateTo?: keyof TabParamList;
 }
 
-export const Option: FC<IOptionProps> = ({ label, Icon, body, style }) => {
+export const Option: FC<IOptionProps> = ({
+  label,
+  Icon,
+  body,
+  style,
+  navigateTo,
+}) => {
   const theme = useTheme();
 
-  const pressed = useSharedValue(false);
+  const navigation = useNavigation<UserPostsScreenNavigationProp>();
 
-  const eventHandler = useAnimatedGestureHandler<
-    GestureEvent<TapGestureHandlerEventPayload>
-  >({
-    onStart: () => (pressed.value = true),
-    onEnd: () => (pressed.value = false),
-    onFail: () => (pressed.value = false),
-    onCancel: () => (pressed.value = false),
-    onFinish: () => (pressed.value = false),
-  });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(pressed.value ? 0.95 : 1) }],
-  }));
+  const onPress = () => {
+    navigateTo && navigation.navigate(navigateTo);
+  };
 
   return (
     <>
-      <TapGestureHandler onGestureEvent={eventHandler}>
-        <StyledOptionContainer style={[animatedStyle, style]}>
-          <StyledOptionText>{label}</StyledOptionText>
-          <Icon color={theme?.colors?.primary} height={20} width={20} />
-        </StyledOptionContainer>
-      </TapGestureHandler>
+      <StyledOptionContainer style={style} onPress={onPress}>
+        <StyledOptionText>{label}</StyledOptionText>
+        <Icon color={theme?.colors?.primary} height={20} width={20} />
+      </StyledOptionContainer>
       {body}
     </>
   );

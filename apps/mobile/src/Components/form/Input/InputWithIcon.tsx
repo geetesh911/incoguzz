@@ -34,9 +34,6 @@ export const InputWithIcon: FC<IInputWithIconProps> = ({
   return (
     <StyledPasswordInputUpperContainer>
       <StyledPasswordInputInnerContainer focused={focused} error={!!error}>
-        <StyledInputWithIconIconContainer>
-          {icon}
-        </StyledInputWithIconIconContainer>
         <StyledInputWithIcon
           value={value as string}
           focused={focused}
@@ -48,6 +45,9 @@ export const InputWithIcon: FC<IInputWithIconProps> = ({
           underlineColorAndroid="transparent"
           placeholderTextColor={placeholderTextColor}
         />
+        <StyledInputWithIconIconContainer>
+          {icon}
+        </StyledInputWithIconIconContainer>
       </StyledPasswordInputInnerContainer>
       {!disableErrorMsg && <ShowError errorMessage={error} />}
     </StyledPasswordInputUpperContainer>

@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RouteNames } from "./constants";
 import { PostScreen } from "../Screens/AppScreens/PostScreen";
 import { UserInfoScreen } from "../Screens/AppScreens/UserInfoScreen";
+import { UserPostsScreen } from "../Screens/AppScreens/UserPostsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,14 @@ export const UserNavigator: FC = () => {
       <Stack.Screen
         component={PostScreen}
         name={RouteNames.BookmarksPost}
+      ></Stack.Screen>
+      <Stack.Screen
+        component={PostScreen}
+        name={RouteNames.UserPost}
+      ></Stack.Screen>
+      <Stack.Screen
+        component={UserPostsScreen}
+        name={RouteNames.UserPosts}
       ></Stack.Screen>
     </Stack.Navigator>
   );

@@ -217,13 +217,13 @@ export const StyledImageCarouselIndicatorContainer = styled.View`
   flex-direction: row;
 `;
 export const StyledImageCarouselIndicator = styled.View<{ active: boolean }>`
-  height: ${({ active }) => (active ? 7 : 5)}px;
-  width: ${({ active }) => (active ? 7 : 5)}px;
+  height: ${({ active }) => (active ? 6 : 5)}px;
+  width: ${({ active }) => (active ? 6 : 5)}px;
   margin: 0 2px;
   border-top-right-radius: 40px;
   border-top-left-radius: 40px;
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors?.primary : theme?.textColors?.primary};
+  background-color: ${({ theme }) => theme?.textColors?.primary};
+  opacity: ${({ theme, active }) => (active ? 1 : 0.5)};
 `;

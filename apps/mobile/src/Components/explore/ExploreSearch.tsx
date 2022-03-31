@@ -1,14 +1,15 @@
 import React, { FC } from "react";
 import { InputWithIcon } from "../form";
-import { StyledExploreSearchContainer, StyledSearchIcon } from "./Feed";
+import { RightArrowIcon } from "../icons/RightArrowIcon";
+import { StyledExploreSearchContainer } from "./Feed";
 
 export const ExploreSearch: FC = () => {
   return (
     <StyledExploreSearchContainer>
       <InputWithIcon
-        icon={<StyledSearchIcon name="search" size={16} />}
+        icon={<RightArrowIcon height={21} width={21} />}
         value=""
-        placeholder="Search"
+        placeholder="Find something fun"
         onChange={() => null}
         name="search"
         disableErrorMsg

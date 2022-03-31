@@ -37,6 +37,9 @@ interface IFeedCardProps {
     | undefined;
 }
 
+const POTRAIT_IMAGE_HEIGHT = 260;
+const LANDSCAPE_IMAGE_HEIGHT = POTRAIT_IMAGE_HEIGHT / 2 - 5;
+
 export const FeedCard: FC<IFeedCardProps> = ({
   post,
   posts,
@@ -75,12 +78,16 @@ export const FeedCard: FC<IFeedCardProps> = ({
         simultaneousHandlers={innerRef}
       >
         <StyledFeedImageContainer
-          height={aspectRatio <= 1 ? 135 : 280}
+          height={
+            aspectRatio <= 1 ? LANDSCAPE_IMAGE_HEIGHT : POTRAIT_IMAGE_HEIGHT
+          }
           style={style}
         >
           <StyledFeedImage
             source={{ uri: getPostThumbnailUrl(post) }}
-            height={aspectRatio <= 1 ? 135 : 280}
+            height={
+              aspectRatio <= 1 ? LANDSCAPE_IMAGE_HEIGHT : POTRAIT_IMAGE_HEIGHT
+            }
             resizeMode="cover"
             onLoad={onImageLoad}
           />

@@ -15,7 +15,7 @@ export const AppNavigator: FC = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={RouteNames.Explore}
+      initialRouteName={RouteNames.User}
       screenOptions={{ headerShown: false }}
       tabBar={props =>
         !videoPlayerState.isFullScreen && <BottomMenu {...props} />

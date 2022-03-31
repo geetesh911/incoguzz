@@ -6,14 +6,14 @@ import { TapView } from "../../shared/Utility";
 
 const windowWidth = Dimensions.get("window").width;
 
-export const StyledOptionContainer = styled(Animated.View)`
+export const StyledOptionContainer = styled(TapView)`
   height: 82px;
   width: 100%;
   padding: 20px;
   display: flex;
   align-items: center;
   flex-direction: row;
-  z-index: 99;
+  /* z-index: 99; */
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
 `;
 

@@ -109,6 +109,7 @@ export const StyledPostIcon = styled.View`
 export const StyledExploreSearchContainer = styled.View`
   display: flex;
   justify-content: center;
+  align-items: center;
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
   padding: 10px 0;
 `;
