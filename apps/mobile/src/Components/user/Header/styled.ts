@@ -2,11 +2,15 @@ import styled from "styled-components/native";
 import { TapView } from "../../shared/Utility";
 
 export const StyledUserHeaderContainer = styled.View`
-  padding: 30px 15px 0px;
+  padding: 30px 15px 10px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: row;
+  /* position: absolute;
+  top: 0; */
+  z-index: 99;
+  background-color: ${({ theme }) => theme?.backgrounds?.primary};
 `;
 
 export const StyledUserDpContainer = styled.Pressable`

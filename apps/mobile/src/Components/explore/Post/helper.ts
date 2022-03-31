@@ -1,7 +1,7 @@
-import { GetAllPostsOutput, PostType } from "@incoguzz/graphql";
+import { GetPostsOutput, PostType } from "@incoguzz/graphql";
 import { defalutPostImages } from "../../../constants/defaultImages";
 
-export const getPostUrl = (post: GetAllPostsOutput) => {
+export const getPostUrl = (post: GetPostsOutput) => {
   const postUrl: Record<PostType, string | string[]> = {
     [PostType.Photo]: post?.photos
       ? post?.photos?.map(photo => photo?.url)
@@ -15,7 +15,7 @@ export const getPostUrl = (post: GetAllPostsOutput) => {
 
   return postUrl[post.type];
 };
-export const getPostThumbnailUrl = (post: GetAllPostsOutput) => {
+export const getPostThumbnailUrl = (post: GetPostsOutput) => {
   const postThumbnailUrl: Record<PostType, string> = {
     [PostType.Photo]: post?.photos ? post?.photos[0]?.url : "",
     [PostType.Video]: post?.video ? post?.video?.thumbnailUrl : "",

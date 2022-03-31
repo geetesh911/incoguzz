@@ -13,14 +13,16 @@ import {
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
+import { StyleProp, ViewStyle } from "react-native";
 
 export interface IOptionProps {
   label: string;
   Icon: React.ComponentType<IIconInterface>;
   body?: JSX.Element;
+  style?: StyleProp<ViewStyle>;
 }
 
-export const Option: FC<IOptionProps> = ({ label, Icon, body }) => {
+export const Option: FC<IOptionProps> = ({ label, Icon, body, style }) => {
   const theme = useTheme();
 
   const pressed = useSharedValue(false);
@@ -42,7 +44,7 @@ export const Option: FC<IOptionProps> = ({ label, Icon, body }) => {
   return (
     <>
       <TapGestureHandler onGestureEvent={eventHandler}>
-        <StyledOptionContainer style={[animatedStyle]}>
+        <StyledOptionContainer style={[animatedStyle, style]}>
           <StyledOptionText>{label}</StyledOptionText>
           <Icon color={theme?.colors?.primary} height={20} width={20} />
         </StyledOptionContainer>

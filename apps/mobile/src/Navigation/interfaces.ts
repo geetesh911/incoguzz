@@ -1,4 +1,4 @@
-import { GetAllPostsOutput } from "@incoguzz/graphql";
+import { GetPostsOutput } from "@incoguzz/graphql";
 import type { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
 import { RouteProp } from "@react-navigation/native";
 import { RouteNames } from "./constants";
@@ -7,7 +7,7 @@ type IPostProps = {
   fixed: boolean;
   heading: string;
   initialIndex: number;
-  posts?: GetAllPostsOutput[];
+  posts?: GetPostsOutput[];
 };
 
 export type TabParamList = {

@@ -9,13 +9,20 @@ import {
   StyledUserTextButton,
   StyledUserTextButtonText,
 } from "./styled";
+import {
+  GetUserQuery,
+  GetUserQueryVariables,
+  GetUserDocument,
+} from "@incoguzz/graphql";
+import { useQuery } from "@apollo/client";
+import { UserHeaderContentLoader } from "./UserHeaderContentLoader";
 
-interface IUserHeaderProps {
-  name: string;
-  dpUrl: string;
-}
+export const UserHeader: FC = () => {
+  const { data: userData, loading: userDataLoading } = useQuery<
+    GetUserQuery,
+    GetUserQueryVariables
+  >(GetUserDocument);
 
-export const UserHeader: FC<IUserHeaderProps> = ({ name, dpUrl }) => {
   const [isDpFullScreen, setIsDpFullScreen] = useState<boolean>(false);
 
   const displayDpFullScreen = () => {
@@ -25,23 +32,31 @@ export const UserHeader: FC<IUserHeaderProps> = ({ name, dpUrl }) => {
     setIsDpFullScreen(false);
   };
 
+  const dpUrl =
+    userData?.getUser?.profile?.dpUrl ||
+    "https://res.cloudinary.com/geeteshpp/image/upload/v1640068319/sample.jpg";
+
   return (
     <>
-      <StyledUserHeaderContainer>
-        <StyledUserDetailsContainer>
-          <StyledUserName numberOfLines={1} ellipsizeMode="tail">
-            {name}
-          </StyledUserName>
-          <StyledUserTextButton>
-            <StyledUserTextButtonText>
-              View and edit profile
-            </StyledUserTextButtonText>
-          </StyledUserTextButton>
-        </StyledUserDetailsContainer>
-        <StyledUserDpContainer onPress={displayDpFullScreen}>
-          <StyledUserDp source={{ uri: dpUrl }} />
-        </StyledUserDpContainer>
-      </StyledUserHeaderContainer>
+      {userDataLoading ? (
+        <UserHeaderContentLoader />
+      ) : (
+        <StyledUserHeaderContainer>
+          <StyledUserDetailsContainer>
+            <StyledUserName numberOfLines={1} ellipsizeMode="tail">
+              {userData?.getUser?.profile?.nickname}
+            </StyledUserName>
+            <StyledUserTextButton>
+              <StyledUserTextButtonText>
+                View and edit profile
+              </StyledUserTextButtonText>
+            </StyledUserTextButton>
+          </StyledUserDetailsContainer>
+          <StyledUserDpContainer onPress={displayDpFullScreen}>
+            <StyledUserDp source={{ uri: dpUrl }} />
+          </StyledUserDpContainer>
+        </StyledUserHeaderContainer>
+      )}
       {isDpFullScreen && (
         <FullScreenImage
           open={isDpFullScreen}

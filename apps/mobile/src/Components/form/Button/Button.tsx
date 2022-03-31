@@ -55,6 +55,7 @@ export const Button: FC<IButtonProps> = ({
     <StyledButtonContainer
       customAnimatedStyle={animatedStyle}
       customEventHandler={eventHandler}
+      onPress={onPress}
     >
       <>
         {isLoading ? (

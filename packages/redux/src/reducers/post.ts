@@ -1,8 +1,8 @@
-import { GetAllPostsOutput } from "@incoguzz/graphql";
+import { GetPostsOutput } from "@incoguzz/graphql";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IPostState {
-  selectedPosts: GetAllPostsOutput[];
+  selectedPosts: GetPostsOutput[];
 }
 
 const initialState: IPostState = {

@@ -109,27 +109,8 @@ export enum Gender {
   Male = 'MALE'
 }
 
-export type GetAllPostsOutput = {
-  __typename?: 'GetAllPostsOutput';
-  _count?: Maybe<PostCount>;
-  audio?: Maybe<Audio>;
-  caption?: Maybe<Scalars['String']>;
-  clip?: Maybe<ClipOutput>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['String'];
-  photos?: Maybe<Array<Photo>>;
-  place?: Maybe<Place>;
-  poll?: Maybe<PollOutput>;
-  tags?: Maybe<Array<Tag>>;
-  textual?: Maybe<Textual>;
-  type: PostType;
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  video?: Maybe<Video>;
-};
-
-export type GetUserPostsOutput = {
-  __typename?: 'GetUserPostsOutput';
+export type GetPostsOutput = {
+  __typename?: 'GetPostsOutput';
   _count?: Maybe<PostCount>;
   audio?: Maybe<Audio>;
   caption?: Maybe<Scalars['String']>;
@@ -424,10 +405,10 @@ export type ProfileOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllPosts: Array<GetAllPostsOutput>;
+  getAllPosts: Array<GetPostsOutput>;
   getMediaAccessToken: Scalars['String'];
   getUser?: Maybe<UserOutput>;
-  getUserPosts: Array<GetUserPostsOutput>;
+  getUserPosts: Array<GetPostsOutput>;
   isUsernameAvailable?: Maybe<Scalars['Boolean']>;
   test: Scalars['String'];
   verifyAccessToken?: Maybe<Scalars['Boolean']>;
@@ -605,12 +586,12 @@ export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { 
 export type GetUserPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'GetUserPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'GetPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
 
 export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename?: 'GetAllPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename?: 'GetPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
 
 export type AddVideoPostMutationVariables = Exact<{
   addMediaPostInput: AddMediaPostInput;

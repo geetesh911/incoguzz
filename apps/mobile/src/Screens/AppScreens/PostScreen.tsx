@@ -1,39 +1,36 @@
-import { GetAllPostsOutput } from "@incoguzz/graphql";
+import { GetPostsOutput } from "@incoguzz/graphql";
 import { useRoute } from "@react-navigation/native";
 import React, { FC, useEffect, useRef, useState } from "react";
+import { StyleSheet } from "react-native";
 import {
   LazyPagerView,
   PagerViewOnPageSelectedEvent,
 } from "react-native-pager-view";
-import {
-  Post,
-  StyledAnimatedPagerView,
-  StyledPostPageContainer,
-} from "../../Components/explore/Post";
+import { Post, StyledPostPageContainer } from "../../Components/explore/Post";
 import { PageHeader } from "../../Components/shared";
 import { PostScreenRouteProp } from "../../Navigation";
 
 type IItemType = {
-  item: GetAllPostsOutput;
+  item: GetPostsOutput;
   index: number;
 };
 
 export const PostScreen: FC = () => {
   const route = useRoute<PostScreenRouteProp>();
 
-  const pagerViewRef = useRef<LazyPagerView<GetAllPostsOutput>>(null);
+  const pagerViewRef = useRef<LazyPagerView<GetPostsOutput>>(null);
 
   const [activeIndex, setActiveIndex] = useState<number>(
     route?.params?.initialIndex,
   );
-  const [posts, setPosts] = useState<GetAllPostsOutput[]>(
+  const [posts, setPosts] = useState<GetPostsOutput[]>(
     route?.params?.posts
       ? [route?.params?.posts[route?.params?.initialIndex]]
       : [],
   );
 
   useEffect(() => {
-    setPosts(route?.params?.posts as GetAllPostsOutput[]);
+    setPosts(route?.params?.posts as GetPostsOutput[]);
   }, []);
 
   useEffect(() => {
@@ -44,8 +41,8 @@ export const PostScreen: FC = () => {
     }
   }, [posts]);
 
-  const keyExtractor = (post: GetAllPostsOutput, index: number) =>
-    `${post?.id}${index}`;
+  const keyExtractor = (item: GetPostsOutput, index: number) =>
+    `${item?.id}${index}`;
 
   const renderItem = ({ item: post, index }: IItemType) => (
     <StyledPostPageContainer>
@@ -56,9 +53,8 @@ export const PostScreen: FC = () => {
   return (
     <>
       <PageHeader text={route?.params?.heading} />
-      <StyledAnimatedPagerView
+      <LazyPagerView
         initialPage={route?.params?.initialIndex}
-        layoutDirection="ltr"
         ref={pagerViewRef}
         overdrag={true}
         scrollEnabled={true}
@@ -71,10 +67,19 @@ export const PostScreen: FC = () => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         data={posts}
-        onPageSelected={(event: PagerViewOnPageSelectedEvent) =>
-          setActiveIndex(event?.nativeEvent?.position)
-        }
+        style={styles.lazyPagerView}
+        onPageSelected={(event: PagerViewOnPageSelectedEvent) => {
+          setActiveIndex(event?.nativeEvent?.position);
+        }}
       />
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  lazyPagerView: {
+    width: "100%",
+    height: 100,
+    flex: 1,
+  },
+});

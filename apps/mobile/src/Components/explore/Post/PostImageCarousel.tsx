@@ -17,7 +17,6 @@ export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
     <>
       <StyledPostImageCarouselPagerView
         initialPage={0}
-        layoutDirection="ltr"
         overdrag={true}
         scrollEnabled={true}
         pageMargin={0}

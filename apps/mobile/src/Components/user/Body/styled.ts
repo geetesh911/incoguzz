@@ -8,10 +8,13 @@ const windowWidth = Dimensions.get("window").width;
 
 export const StyledOptionContainer = styled(Animated.View)`
   height: 82px;
+  width: 100%;
   padding: 20px;
   display: flex;
   align-items: center;
   flex-direction: row;
+  z-index: 99;
+  background-color: ${({ theme }) => theme?.backgrounds?.primary};
 `;
 
 export const StyledOptionText = styled.Text`
@@ -24,7 +27,7 @@ export const StyledOptionText = styled.Text`
 `;
 
 export const StyledBookmarksContainer = styled.View`
-  height: 220px;
+  height: 170px;
   width: ${windowWidth}px;
 `;
 export const StyledBookmarksScrollView = styled(Animated.ScrollView)``;
@@ -49,11 +52,11 @@ export const StyledBookmarksImage = styled.Image<IMediaProperties>`
 `;
 
 export const StyledFeedCard = styled(FeedCard)<IMediaProperties>`
-  height: 200px;
+  height: 150px;
   width: ${({ height, width }) => {
-    const factor = 200 / height;
+    const factor = 150 / height;
     return factor * width;
   }}px;
   resize-mode: contain;
-  border-radius: 20px;
+  margin: 5px 10px 5px 0;
 `;

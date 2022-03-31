@@ -32,26 +32,8 @@ export type ForgotPasswordOutputFieldPolicy = {
 	verificationTokenId?: FieldPolicy<any> | FieldReadFunction<any>,
 	verificationUuid?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type GetAllPostsOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | GetAllPostsOutputKeySpecifier)[];
-export type GetAllPostsOutputFieldPolicy = {
-	_count?: FieldPolicy<any> | FieldReadFunction<any>,
-	audio?: FieldPolicy<any> | FieldReadFunction<any>,
-	caption?: FieldPolicy<any> | FieldReadFunction<any>,
-	clip?: FieldPolicy<any> | FieldReadFunction<any>,
-	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	photos?: FieldPolicy<any> | FieldReadFunction<any>,
-	place?: FieldPolicy<any> | FieldReadFunction<any>,
-	poll?: FieldPolicy<any> | FieldReadFunction<any>,
-	tags?: FieldPolicy<any> | FieldReadFunction<any>,
-	textual?: FieldPolicy<any> | FieldReadFunction<any>,
-	type?: FieldPolicy<any> | FieldReadFunction<any>,
-	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
-	userId?: FieldPolicy<any> | FieldReadFunction<any>,
-	video?: FieldPolicy<any> | FieldReadFunction<any>
-};
-export type GetUserPostsOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | GetUserPostsOutputKeySpecifier)[];
-export type GetUserPostsOutputFieldPolicy = {
+export type GetPostsOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | GetPostsOutputKeySpecifier)[];
+export type GetPostsOutputFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
 	audio?: FieldPolicy<any> | FieldReadFunction<any>,
 	caption?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -276,13 +258,9 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | ForgotPasswordOutputKeySpecifier | (() => undefined | ForgotPasswordOutputKeySpecifier),
 		fields?: ForgotPasswordOutputFieldPolicy,
 	},
-	GetAllPostsOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | GetAllPostsOutputKeySpecifier | (() => undefined | GetAllPostsOutputKeySpecifier),
-		fields?: GetAllPostsOutputFieldPolicy,
-	},
-	GetUserPostsOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
-		keyFields?: false | GetUserPostsOutputKeySpecifier | (() => undefined | GetUserPostsOutputKeySpecifier),
-		fields?: GetUserPostsOutputFieldPolicy,
+	GetPostsOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | GetPostsOutputKeySpecifier | (() => undefined | GetPostsOutputKeySpecifier),
+		fields?: GetPostsOutputFieldPolicy,
 	},
 	GoogleAuthOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | GoogleAuthOutputKeySpecifier | (() => undefined | GoogleAuthOutputKeySpecifier),

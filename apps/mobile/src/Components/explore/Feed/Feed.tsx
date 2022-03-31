@@ -1,6 +1,6 @@
-import React, { FC, useRef, useState } from "react";
-import { StyleSheet, ScrollView, View } from "react-native";
-import MasonryList from "@react-native-seoul/masonry-list";
+import React, { FC, useRef } from "react";
+import { StyleSheet } from "react-native";
+import LocalMasonryList from "../../shared/List/MasonryList";
 import { FeedCard } from "./FeedCard";
 import { ExploreHeader } from "../ExploreHeader";
 import { useQuery } from "@apollo/client";
@@ -8,16 +8,18 @@ import {
   GetAllPostsQuery,
   GetAllPostsQueryVariables,
   GetAllPostsDocument,
-  GetAllPostsOutput,
+  GetPostsOutput,
   PostType,
 } from "@incoguzz/graphql";
 import { FeedContentLoader } from "./FeedContentLoader";
 import { RouteNames } from "../../../Navigation/constants";
+import Animated from "react-native-reanimated";
+import ExploreSearch from "../ExploreSearch";
 
 export const postsData = {
   getAllPosts: [
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpeq11426otqbge5x4kh",
       caption:
         "Steel Computer Belarus Wooden Planner indexing navigating Designer Loan Tasty",
@@ -57,7 +59,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpeq11296otq0efgchdk",
       caption: null,
       type: PostType.Textual,
@@ -89,7 +91,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpeq11266otqppeuxcjr",
       caption: null,
       type: PostType.Textual,
@@ -126,7 +128,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbg10516otq412nni5q",
       caption:
         "overriding bandwidth CFA Ball open-source Rubber Small Supervisor flexibility Movies",
@@ -160,7 +162,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbg10466otqj04uiqom",
       caption:
         "Cliffs Orchestrator Infrastructure Card Chief disintermediate Soap Wooden CSS Kwacha",
@@ -205,7 +207,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbg10406otqpacwqdx9",
       caption:
         "workforce Expanded Optimization moratorium Mobility calculate e-business HTTP networks Jamaican",
@@ -250,7 +252,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbc10226otqilybu9jg",
       caption:
         "generating Meadow Operations Phased envisioneer Salad turquoise Gorgeous pink grow",
@@ -300,7 +302,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbc10196otqaa1anuy5",
       caption:
         "Ball scalable red Intelligent Technician Guadeloupe red microchip Liaison explicit",
@@ -330,7 +332,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpbc10286otqlpwq7424",
       caption:
         "Customer Computer tan Borders flexibility Associate withdrawal Reduced Beauty niches",
@@ -360,7 +362,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb910046otqdir47fhq",
       caption:
         "Baby pink logistical maroon Health Reverse-engineered partnerships e-business Account reboot",
@@ -410,7 +412,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb909976otq1tf0q798",
       caption:
         "Kuna PCI Borders Music Investor e-commerce parse monetize Infrastructure Account",
@@ -449,7 +451,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb909906otqg5g0908c",
       caption:
         "Practical Architect withdrawal Ohio parsing azure info-mediaries analyzing Diverse Islands",
@@ -494,7 +496,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb409806otq2mzjnllu",
       caption:
         "Switchable HTTP Maryland Assurance face Outdoors next-generation initiatives Texas Analyst",
@@ -533,7 +535,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb309706otqxqevun6c",
       caption: null,
       type: PostType.Textual,
@@ -560,7 +562,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb309676otq7bkdsxba",
       caption: null,
       type: PostType.Textual,
@@ -592,7 +594,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb109486otq8cjudia4",
       caption: null,
       type: PostType.Textual,
@@ -619,7 +621,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb109516otqvl8q403f",
       caption:
         "Malagasy Director radical grey Grocery bluetooth Shirt Soft program Regional",
@@ -664,7 +666,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpb109566otqo5o6uwr3",
       caption: null,
       type: PostType.Textual,
@@ -691,7 +693,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpay09386otqo5tbmxqe",
       caption:
         "Omani Kids Borders matrix multi-tasking deploy Fields blue attitude Shoes",
@@ -741,7 +743,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpay09306otqvulvzz5a",
       caption:
         "Mobility ability Dong Automotive cross-platform expedite edge Senegal Ergonomic Borders",
@@ -781,7 +783,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnpay09266otqfnd1bwqm",
       caption:
         "Rubber open-source Representative District Computer Australia interactive Operative matrices Beauty",
@@ -811,7 +813,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8908916otq07u1uz44",
       caption:
         "Producer Cotton evolve Producer Facilitator Avon Handcrafted empower Auto Niger",
@@ -841,7 +843,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8908906otqw25d2zz4",
       caption:
         "multi-byte convergence payment Generic parsing productize payment Norfolk fuchsia Object-based",
@@ -875,7 +877,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8908896otq9tjcwl6d",
       caption:
         "Cambridgeshire withdrawal transmitter Rustic intelligence synthesizing Peso Intranet Baht withdrawal",
@@ -920,7 +922,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8508716otqawvs3nld",
       caption:
         "Cambridgeshire programming Concrete markets Licensed cyan Quality Distributed Customer-focused Metal",
@@ -950,7 +952,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8508706otqiywtv03x",
       caption: null,
       type: PostType.Textual,
@@ -987,7 +989,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8508776otq6nnvkcpl",
       caption: null,
       type: PostType.Textual,
@@ -1014,7 +1016,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8208616otq2hd0sngi",
       caption: null,
       type: PostType.Textual,
@@ -1051,7 +1053,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8208526otqce2e4fy2",
       caption:
         "Lead Granite systems navigating Crescent compress transition Hampshire Rubber Designer",
@@ -1091,7 +1093,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp8208496otqjdxjucn6",
       caption:
         "Accountability back-end Public-key Avon sky vortals Configuration Home invoice synergies",
@@ -1121,7 +1123,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp4307826otqafnpor8x",
       caption: null,
       type: PostType.Textual,
@@ -1158,7 +1160,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp4307766otqul1ouwu1",
       caption: null,
       type: PostType.Textual,
@@ -1190,7 +1192,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp4107606otqh7w0w7nk",
       caption:
         "ivory Computer frame Granite calculate Product override Sausages connecting hard",
@@ -1235,7 +1237,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp4107516otqtek36ku0",
       caption: null,
       type: PostType.Textual,
@@ -1272,7 +1274,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp4007506otqtt4fjkbg",
       caption:
         "Cotton Iranian gold reinvent facilitate Peso Handcrafted International Dynamic compressing",
@@ -1311,7 +1313,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3y07386otqucym5k5h",
       caption: null,
       type: PostType.Textual,
@@ -1348,7 +1350,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3x07286otq443cb9vs",
       caption:
         "bypass override Meadow Harbor Sausages array payment Identity productize Switzerland",
@@ -1388,7 +1390,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3x07246otqeyduym5m",
       caption: null,
       type: PostType.Textual,
@@ -1420,7 +1422,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3v07086otq64voq9xm",
       caption:
         "paradigm open-source online Dynamic national Human THX secondary multimedia Track",
@@ -1449,7 +1451,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3v07046otq6qewrc2c",
       caption: null,
       type: PostType.Textual,
@@ -1476,7 +1478,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3v07036otqm8to4x0r",
       caption:
         "Buckinghamshire Turnpike users sensor Alley invoice Granite Minnesota Prairie Bike",
@@ -1515,7 +1517,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3q06816otquag1sei3",
       caption:
         "Plastic Gloves Mountains synergistic input Plastic Refined Arkansas Architect Group",
@@ -1549,7 +1551,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3q06776otq54dtlvv9",
       caption: null,
       type: PostType.Textual,
@@ -1586,7 +1588,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnp3q06756otqi6s6dqdo",
       caption:
         "interfaces compressing synergies Minnesota static copying Soap Savings generating action-items",
@@ -1636,7 +1638,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnom305496otqge79dbo4",
       caption: null,
       type: PostType.Textual,
@@ -1663,7 +1665,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnom305486otqjg8z1wky",
       caption: null,
       type: PostType.Textual,
@@ -1695,7 +1697,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnom305576otqvcevv3kl",
       caption:
         "Borders Wooden Avon Inverse virtual Pants frictionless European cross-platform Direct",
@@ -1734,7 +1736,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno7105256otqkwlgt3ow",
       caption: null,
       type: PostType.Textual,
@@ -1766,7 +1768,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno7105156otqxg6iiwmi",
       caption:
         "Implementation Infrastructure withdrawal Automotive Berkshire Vanuatu violet AGP Illinois HTTP",
@@ -1795,7 +1797,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno7105146otqava2ywir",
       caption: null,
       type: PostType.Textual,
@@ -1822,7 +1824,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1i04976otqk4suw4yu",
       caption:
         "white magenta web-readiness Director Producer International Frozen software dynamic Extended",
@@ -1861,7 +1863,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1i04866otqy9xc5s9g",
       caption:
         "Steel methodologies Checking ADP e-commerce Strategist Avon generating Gabon El",
@@ -1890,7 +1892,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1i04856otqzfoeil4n",
       caption: null,
       type: PostType.Textual,
@@ -1927,7 +1929,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1e04656otq47akxrfs",
       caption:
         "microchip Franc Books Director incentivize Lodge Regional connect Direct throughput",
@@ -1972,7 +1974,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1e04646otqxe5hza8i",
       caption:
         "Extension Salad Account Internal Incredible redundant microchip Metal bandwidth navigating",
@@ -2012,7 +2014,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgno1e04726otqt8n024kr",
       caption:
         "multi-tasking Principal Quality digital Direct Specialist Personal Global Concrete Ergonomic",
@@ -2042,7 +2044,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnmop03556otqhzpary20",
       caption: null,
       type: PostType.Textual,
@@ -2074,7 +2076,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnmop03466otqvdh6atjf",
       caption:
         "Concrete Borders Fresh Technician Savings GB state Small Industrial Devolved",
@@ -2103,7 +2105,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnmop03456otqwmqemmdk",
       caption: null,
       type: PostType.Textual,
@@ -2130,7 +2132,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm7z02896otqp423ko2s",
       caption: null,
       type: PostType.Textual,
@@ -2162,7 +2164,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm7z02886otq1od82xb3",
       caption:
         "infomediaries Future-proofed revolutionize Executive Money sexy Lead USB Chips teal",
@@ -2201,7 +2203,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm7z02876otquqleve00",
       caption: null,
       type: PostType.Textual,
@@ -2238,7 +2240,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm2a02546otqcmz232vl",
       caption:
         "Baby Investment driver firewall panel payment Intelligent microchip withdrawal parse",
@@ -2277,7 +2279,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm2a02496otq9im2u9y3",
       caption:
         "program black Accountability Metal Designer National Korean Guinea hacking Krone",
@@ -2311,7 +2313,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnm2a02576otqi6hewfdh",
       caption: null,
       type: PostType.Textual,
@@ -2348,7 +2350,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlr002256otqa4u66qxb",
       caption:
         "red Table Specialist dot-com revolutionize asynchronous Markets GB Georgia Awesome",
@@ -2393,7 +2395,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlr002186otqmcxukpoq",
       caption: null,
       type: PostType.Textual,
@@ -2420,7 +2422,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlr002176otq0yksu1i5",
       caption:
         "Cotton drive framework Arizona compress parsing generation database hack leverage",
@@ -2449,7 +2451,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlqw02006otqjly0kgjz",
       caption: null,
       type: PostType.Textual,
@@ -2486,7 +2488,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlqw01976otqg8g2ibxg",
       caption: null,
       type: PostType.Textual,
@@ -2518,7 +2520,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlqw01946otq0wg9u1dd",
       caption:
         "panel Run matrix National Ergonomic Product Crest GB Accounts Wooden",
@@ -2547,7 +2549,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlfq01616otq7mvpu2ls",
       caption: null,
       type: PostType.Textual,
@@ -2579,7 +2581,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlfq01676otq1t7u9fh9",
       caption:
         "Tenge Oregon mindshare hard Rustic withdrawal Generic Fantastic Dynamic sky",
@@ -2624,7 +2626,7 @@ export const postsData = {
       _count: null,
     },
     {
-      __typename: "GetAllPostsOutput",
+      __typename: "GetPostsOutput",
       id: "ckzsgnlfq01626otqjb7pjm4z",
       caption: null,
       type: PostType.Textual,
@@ -2654,19 +2656,14 @@ export const postsData = {
 };
 
 export const Feed: FC = () => {
-  // const {
-  //   data: apiData,
-  //   loading,
-  //   error,
-  // } = useQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(
-  //   GetAllPostsDocument,
-  // );
+  const { data, loading } = useQuery<
+    GetAllPostsQuery,
+    GetAllPostsQueryVariables
+  >(GetAllPostsDocument);
 
-  const loading = false;
+  const scrollHandler = useRef<Animated.ScrollView | null>(null);
 
-  const scrollHandler = useRef<ScrollView>();
-
-  const renderItem = ({ item: post }: { item: GetAllPostsOutput }) => {
+  const renderItem = ({ item: post }: { item: GetPostsOutput }) => {
     return (
       <FeedCard
         innerRef={scrollHandler}
@@ -2681,12 +2678,14 @@ export const Feed: FC = () => {
   };
 
   return (
-    <MasonryList
+    <LocalMasonryList
       innerRef={scrollHandler}
       ListHeaderComponent={<ExploreHeader />}
+      StickyComponent={<ExploreSearch />}
+      stickyHeaderIndices={[1]}
       contentContainerStyle={styles.masonryList}
       numColumns={2}
-      data={postsData?.getAllPosts || []}
+      data={(data?.getAllPosts as GetPostsOutput[]) || []}
       loading={loading}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}

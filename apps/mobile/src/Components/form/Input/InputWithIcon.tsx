@@ -11,6 +11,7 @@ import { useTheme } from "../../../styles/theme";
 
 interface IInputWithIconProps extends IInputProps {
   icon: JSX.Element;
+  disableErrorMsg?: boolean;
 }
 
 export const InputWithIcon: FC<IInputWithIconProps> = ({
@@ -20,6 +21,7 @@ export const InputWithIcon: FC<IInputWithIconProps> = ({
   placeholder,
   error,
   icon,
+  disableErrorMsg,
 }) => {
   const [focused, setFocused] = useState<boolean>(false);
 
@@ -47,7 +49,7 @@ export const InputWithIcon: FC<IInputWithIconProps> = ({
           placeholderTextColor={placeholderTextColor}
         />
       </StyledPasswordInputInnerContainer>
-      <ShowError errorMessage={error} />
+      {!disableErrorMsg && <ShowError errorMessage={error} />}
     </StyledPasswordInputUpperContainer>
   );
 };

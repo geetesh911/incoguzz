@@ -5,10 +5,9 @@ import { Authorized } from "@/auth/decorators/auth-checker.decorator";
 import { Context } from "@/common/interfaces/context.interface";
 import PostService from "./post.service";
 import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
-import GetUserPostsOutput from "./outputs/get-user-posts.output";
 import AddClipPostArgs from "./args/add-clip-post.args";
 import AddMediaPostArgs from "./args/add-media-post.args";
-import GetAllPostsOutput from "./outputs/get-all-posts.output";
+import GetPostsOutput from "./outputs/get-posts.output";
 
 @Service()
 @Resolver(() => Post)
@@ -16,14 +15,14 @@ export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
   @Authorized()
-  @Query(() => [GetUserPostsOutput])
-  async getUserPosts(@Ctx() { user }: Context): Promise<GetUserPostsOutput[]> {
+  @Query(() => [GetPostsOutput])
+  async getUserPosts(@Ctx() { user }: Context): Promise<GetPostsOutput[]> {
     return this.postService.getUserPosts(user.userId);
   }
 
   @Authorized()
-  @Query(() => [GetAllPostsOutput])
-  async getAllPosts(): Promise<GetAllPostsOutput[]> {
+  @Query(() => [GetPostsOutput])
+  async getAllPosts(): Promise<GetPostsOutput[]> {
     return this.postService.getAllPosts();
   }
 

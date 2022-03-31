@@ -8,7 +8,8 @@ import LinearGradient from "react-native-linear-gradient";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-const AnimatedLazyPagerView = Animated.createAnimatedComponent(LazyPagerView);
+export const AnimatedLazyPagerView =
+  Animated.createAnimatedComponent(LazyPagerView);
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 const AnimatedOverlay = Animated.createAnimatedComponent(Pressable);
 

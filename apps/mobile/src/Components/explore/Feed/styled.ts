@@ -72,7 +72,16 @@ export const StyledSearchIcon = styled(Icon)`
   color: ${({ theme }) => theme?.commonConstants?.placeholderTextColor};
 `;
 
-export const StyledExploreHeaderContainer = styled.View``;
+export const StyledExploreHeaderContainer = styled(Animated.View)`
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  padding: 0 10px;
+  z-index: 99;
+  background-color: ${({ theme }) => theme?.backgrounds?.primary}; */
+`;
 
 export const StyledExploreHeading = styled.Text`
   font-size: 35px;
@@ -95,4 +104,11 @@ export const StyledPostIcon = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+export const StyledExploreSearchContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  background-color: ${({ theme }) => theme?.backgrounds?.primary};
+  padding: 10px 0;
 `;
