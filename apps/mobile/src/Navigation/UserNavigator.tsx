@@ -4,6 +4,7 @@ import { RouteNames } from "./constants";
 import { PostScreen } from "../Screens/AppScreens/PostScreen";
 import { UserInfoScreen } from "../Screens/AppScreens/UserInfoScreen";
 import { UserPostsScreen } from "../Screens/AppScreens/UserPostsScreen";
+import { UserBookmarks } from "../Components/user";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,10 @@ export const UserNavigator: FC = () => {
       <Stack.Screen
         component={UserPostsScreen}
         name={RouteNames.UserPosts}
+      ></Stack.Screen>
+      <Stack.Screen
+        component={UserBookmarks}
+        name={RouteNames.Bookmarks}
       ></Stack.Screen>
     </Stack.Navigator>
   );

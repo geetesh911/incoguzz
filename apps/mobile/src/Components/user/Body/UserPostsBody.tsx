@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
 import { GetPostsOutput, PostType } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
-import { FeedCard, postsData } from "../../explore";
+import { FeedCard } from "../../explore";
 
 export const postsData1 = {
   getAllPosts: [
@@ -259,7 +259,7 @@ export const UserPostsBody: FC = () => {
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        posts={(postsData?.getAllPosts as GetPostsOutput[]) || []}
+        posts={(postsData1?.getAllPosts as GetPostsOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />

@@ -15,4 +15,8 @@ export const StyledTapOverlay = styled(Animated.View)`
   z-index: 99;
   background-color: #fff;
   opacity: 0.2;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 `;

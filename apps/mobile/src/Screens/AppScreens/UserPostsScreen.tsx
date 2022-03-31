@@ -1,10 +1,6 @@
-import { View, Text } from "react-native";
 import React, { FC } from "react";
+import { UserPostsTimeline } from "../../Components/user";
 
 export const UserPostsScreen: FC = () => {
-  return (
-    <View>
-      <Text>UserPostsScreen</Text>
-    </View>
-  );
+  return <UserPostsTimeline />;
 };

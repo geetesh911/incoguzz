@@ -12,7 +12,7 @@ export const FeedContentLoader: FC = () => {
   const rectWidth = (windowWidth - 30) / 2;
   return (
     <ContentLoader
-      height={windowHeight - 235}
+      height={windowHeight}
       width={windowWidth}
       speed={1}
       backgroundColor={theme?.objectBackgrounds?.primary}

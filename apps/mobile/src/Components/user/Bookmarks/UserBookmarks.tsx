@@ -8,14 +8,14 @@ import {
   GetPostsOutput,
 } from "@incoguzz/graphql";
 import LocalMasonryList from "../../shared/List/MasonryList";
-import { FeedCard } from "./FeedCard";
-import { ExploreHeader } from "../ExploreHeader";
-import { FeedContentLoader } from "./FeedContentLoader";
-import { RouteNames } from "../../../Navigation/constants";
+import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
+import { ScreenHeader } from "../../shared";
 import Animated from "react-native-reanimated";
-import ExploreSearch from "../ExploreSearch";
+import { FeedCard } from "../../explore";
+import { RouteNames } from "../../../Navigation/constants";
+import { IRenderItemType } from "../Body/BookmarksBody";
 
-export const Feed: FC = () => {
+export const UserBookmarks: FC = () => {
   const { data, loading } = useQuery<
     GetAllPostsQuery,
     GetAllPostsQueryVariables
@@ -23,16 +23,16 @@ export const Feed: FC = () => {
 
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
 
-  const renderItem = ({ item: post }: { item: GetPostsOutput }) => {
+  const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
       <FeedCard
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        postSection="Explore"
-        posts={[post]}
-        initialIndex={0}
-        navigateTo={RouteNames.ExplorePost}
+        postSection="Bookmarks"
+        posts={(data?.getAllPosts as GetPostsOutput[]) || []}
+        initialIndex={i}
+        navigateTo={RouteNames.BookmarksPost}
       />
     );
   };
@@ -40,9 +40,7 @@ export const Feed: FC = () => {
   return (
     <LocalMasonryList
       innerRef={scrollHandler}
-      ListHeaderComponent={<ExploreHeader />}
-      StickyComponent={<ExploreSearch />}
-      stickyHeaderIndices={[1]}
+      ListHeaderComponent={<ScreenHeader heading="Bookmarks" />}
       contentContainerStyle={styles.masonryList}
       numColumns={2}
       data={(data?.getAllPosts as GetPostsOutput[]) || []}

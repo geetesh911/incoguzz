@@ -16,7 +16,7 @@ import { StyledTapContainer, StyledTapOverlay } from "./styled";
 import { ImageStyle, StyleProp, TextStyle, ViewStyle } from "react-native";
 import { RequireAllOrNone } from "type-fest";
 
-enum TypeEffect {
+export enum TypeEffect {
   scale = "scale",
   overlay = "overlay",
 }
@@ -71,6 +71,12 @@ export const TapView: FC<ITapViewProps> = ({
       ],
     }));
 
+  const overlayAnimatedStyle =
+    customAnimatedStyle ||
+    useAnimatedStyle(() => ({
+      display: pressed.value && effect === TypeEffect.overlay ? "flex" : "none",
+    }));
+
   return (
     <TapGestureHandler
       onGestureEvent={eventHandler}
@@ -80,7 +86,7 @@ export const TapView: FC<ITapViewProps> = ({
       <StyledTapContainer style={[style, animatedStyle]}>
         {children}
         {pressed && effect === TypeEffect.overlay && (
-          <StyledTapOverlay style={overlayStyle} />
+          <StyledTapOverlay style={[overlayAnimatedStyle, overlayStyle]} />
         )}
       </StyledTapContainer>
     </TapGestureHandler>

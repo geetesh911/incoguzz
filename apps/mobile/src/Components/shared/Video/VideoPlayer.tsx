@@ -36,7 +36,7 @@ import Orientation from "react-native-orientation-locker";
 import { useAppDispatch } from "../../../redux/hooks";
 import { setVideoPlayerState } from "@incoguzz/redux";
 import { FullScreenMinimizeIcon } from "../../icons/FullScreenMinimizeIcon";
-import { FullScreenHelper } from "../../../helpers/fullScreen";
+import { FullScreenHelper } from "../../../helpers/fullScreen.helper";
 
 type IVideoPlayerProps = VideoProperties & {
   showFullScreenButton?: boolean;

@@ -42,7 +42,7 @@ export const StyledInputWithIcon = styled.TextInput<StyledInputProps>`
   color: ${({ theme }) => theme?.textColors?.primary};
   font-family: ${({ theme }) => theme?.fontFamily?.primary};
   font-size: ${inputConstants.fontSize};
-  width: 85.5%;
+  width: 86%;
 `;
 
 export const StyledInputUpperContainer = styled.View`

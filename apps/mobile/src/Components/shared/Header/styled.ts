@@ -1,13 +1,20 @@
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
 
-export const StyledScreenHeaderContainer = styled.Text`
+export const StyledScreenHeaderContainer = styled.View`
   padding: 30px 5px 15px;
 `;
+export const StyledScreenSubHeadingContainer = styled.View``;
 export const StyledScreenHeading = styled.Text`
+  width: 100%;
   font-size: 35px;
   font-family: ${({ theme }) => theme?.fontFamily?.heading};
   color: ${({ theme }) => theme?.textColors?.primary};
+`;
+export const StyledScreenSubHeading = styled.Text`
+  font-size: 18px;
+  font-family: ${({ theme }) => theme?.fontFamily?.primary};
+  color: ${({ theme }) => theme?.colors?.primary};
 `;
 
 export const StyledPageHeader = styled.View`
