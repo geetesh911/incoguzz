@@ -8,6 +8,7 @@ import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
 import AddClipPostArgs from "./args/add-clip-post.args";
 import AddMediaPostArgs from "./args/add-media-post.args";
 import GetPostsOutput from "./outputs/get-posts.output";
+import PaginationInput from "@/common/inputs/pagination.input";
 
 @Service()
 @Resolver(() => Post)
@@ -15,15 +16,22 @@ export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
   @Authorized()
-  @Query(() => [GetPostsOutput])
-  async getUserPosts(@Ctx() { user }: Context): Promise<GetPostsOutput[]> {
-    return this.postService.getUserPosts(user.userId);
+  @Query(() => GetPostsOutput)
+  async getUserPosts(
+    @Ctx() { user }: Context,
+    @Arg("paginationInput", () => PaginationInput)
+    paginationInput: PaginationInput,
+  ): Promise<GetPostsOutput> {
+    return this.postService.getUserPosts(user.userId, paginationInput);
   }
 
   @Authorized()
-  @Query(() => [GetPostsOutput])
-  async getAllPosts(): Promise<GetPostsOutput[]> {
-    return this.postService.getAllPosts();
+  @Query(() => GetPostsOutput)
+  async getAllPosts(
+    @Arg("paginationInput", () => PaginationInput)
+    paginationInput: PaginationInput,
+  ): Promise<GetPostsOutput> {
+    return this.postService.getAllPosts(paginationInput);
   }
 
   @Authorized()

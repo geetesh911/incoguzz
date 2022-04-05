@@ -1,5 +1,7 @@
 import { MediaLimits } from "@/common/enums/media.enum";
 import MediaHelper from "@/common/helpers/media.helper";
+import PaginationHelper from "@/common/helpers/pagination.helper";
+import PaginationInput from "@/common/inputs/pagination.input";
 import { IGetVideoThumbnail } from "@/common/interfaces/media.interface";
 import {
   optimizeVideoExtensions,
@@ -22,6 +24,7 @@ import {
   AddPollPostInput,
   AddTextualPostInput,
 } from "./inputs/add-post.input";
+import GetPostsOutput from "./outputs/get-posts.output";
 import PostRepository from "./repositories/post.repository";
 
 @Service()
@@ -31,14 +34,41 @@ class PostService {
     private readonly storageService: StorageService,
     private readonly mediaService: MediaService,
     private readonly mediaHelper: MediaHelper,
+    private readonly paginationHelper: PaginationHelper,
   ) {}
 
-  public async getUserPosts(userId: string): Promise<Post[]> {
-    return this.postRepository.getUserPosts(userId);
+  public async getUserPosts(
+    userId: string,
+    paginationInput: PaginationInput,
+  ): Promise<GetPostsOutput> {
+    const posts = await this.postRepository.getUserPosts(
+      userId,
+      paginationInput,
+    );
+    return {
+      posts,
+      pagination: {
+        cursor: this.paginationHelper.getCursor<Post>({
+          results: posts,
+          key: "id",
+        }),
+      },
+    };
   }
 
-  public async getAllPosts(): Promise<Post[]> {
-    return this.postRepository.getAllPosts();
+  public async getAllPosts(
+    paginationInput: PaginationInput,
+  ): Promise<GetPostsOutput> {
+    const posts = await this.postRepository.getAllPosts(paginationInput);
+    return {
+      posts,
+      pagination: {
+        cursor: this.paginationHelper.getCursor<Post>({
+          results: posts,
+          key: "id",
+        }),
+      },
+    };
   }
 
   public async addTextualPost(

@@ -1,114 +1,125 @@
-query GetUserPosts {
-  getUserPosts {
-    id
-    caption
-    type
-    createdAt
-    updatedAt
-    tags {
+query GetUserPosts($paginationInput: PaginationInput!) {
+  getUserPosts(paginationInput: $paginationInput) {
+    posts {
       id
-      name
-    }
-    place {
-      id
-      name
-    }
-    poll {
-      id
-      question
-      pollOptions {
-        id
-        option
-      }
-    }
-    photos {
-      id
-      url
-    }
-    video {
-      id
-      url
-      thumbnailUrl
-    }
-    clip {
-      id
-      url
-      thumbnailUrl
-      clipAudio {
+      caption
+      type
+      createdAt
+      updatedAt
+      tags {
         id
         name
-        audioUrl
+      }
+      place {
+        id
+        name
+      }
+      poll {
+        id
+        question
+        pollOptions {
+          id
+          option
+        }
+      }
+      photos {
+        id
+        url
+      }
+      video {
+        id
+        url
+        thumbnailUrl
+      }
+      clip {
+        id
+        url
+        thumbnailUrl
+        clipAudio {
+          id
+          name
+          audioUrl
+        }
+      }
+      textual {
+        id
+        text
+      }
+      audio {
+        id
+        url
+        thumbnailUrl
+      }
+      _count {
+        likes
+        comments
       }
     }
-    textual {
-      id
-      text
-    }
-    audio {
-      id
-      url
-    }
-    _count {
-      likes
-      comments
+    pagination {
+      cursor
     }
   }
 }
 
-query GetAllPosts {
-  getAllPosts {
-    id
-    caption
-    type
-    createdAt
-    updatedAt
-    tags {
+query GetAllPosts($paginationInput: PaginationInput!) {
+  getAllPosts(paginationInput: $paginationInput) {
+    posts {
       id
-      name
-    }
-    place {
-      id
-      name
-    }
-    poll {
-      id
-      question
-      pollOptions {
-        id
-        option
-      }
-    }
-    photos {
-      id
-      url
-    }
-    video {
-      id
-      url
-      thumbnailUrl
-    }
-    clip {
-      id
-      url
-      thumbnailUrl
-      clipAudio {
+      caption
+      type
+      createdAt
+      updatedAt
+      tags {
         id
         name
-        audioUrl
+      }
+      place {
+        id
+        name
+      }
+      poll {
+        id
+        question
+        pollOptions {
+          id
+          option
+        }
+      }
+      photos {
+        id
+        url
+      }
+      video {
+        id
+        url
+        thumbnailUrl
+      }
+      clip {
+        id
+        url
+        thumbnailUrl
+        clipAudio {
+          id
+          name
+          audioUrl
+        }
+      }
+      textual {
+        id
+        text
+      }
+      audio {
+        id
+        url
+        thumbnailUrl
+      }
+      _count {
+        likes
+        comments
       }
     }
-    textual {
-      id
-      text
-    }
-    audio {
-      id
-      url
-      thumbnailUrl
-    }
-    _count {
-      likes
-      comments
+    pagination {
+      cursor
     }
   }
 }

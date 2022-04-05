@@ -14,10 +14,14 @@ import {
 } from "../interfaces/add-post.interface";
 import { Prisma } from "@prisma/client";
 import CreateBasicPostInputHelper from "../helpers/create-input.helper";
+import PaginationInput from "@/common/inputs/pagination.input";
 
 interface IReader {
-  getUserPosts: (userId: string) => Promise<Post[]>;
-  getAllPosts: () => Promise<Post[]>;
+  getUserPosts: (
+    userId: string,
+    paginationInput: PaginationInput,
+  ) => Promise<Post[]>;
+  getAllPosts: (paginationInput: PaginationInput) => Promise<Post[]>;
 }
 interface IWriter {
   addMediaPost: (
@@ -38,8 +42,16 @@ class PostRepository extends BaseRepository implements TUserRepository {
     super("post");
   }
 
-  public async getUserPosts(userId: string): Promise<Post[]> {
+  public async getUserPosts(
+    userId: string,
+    paginationInput: PaginationInput,
+  ): Promise<Post[]> {
+    const { take, firstQueryResult, cursor } = paginationInput;
+
     return this.prisma.post.findMany({
+      take,
+      skip: firstQueryResult ? 0 : 1,
+      cursor: cursor && { id: cursor },
       where: { userId, archive: false },
       include: {
         photos: true,
@@ -59,8 +71,12 @@ class PostRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async getAllPosts(): Promise<Post[]> {
+  public async getAllPosts(paginationInput: PaginationInput): Promise<Post[]> {
+    const { take, firstQueryResult, cursor } = paginationInput;
     return this.prisma.post.findMany({
+      take,
+      skip: firstQueryResult ? 0 : 1,
+      cursor: cursor && { id: cursor },
       where: {},
       include: {
         photos: true,

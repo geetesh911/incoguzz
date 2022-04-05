@@ -111,21 +111,8 @@ export enum Gender {
 
 export type GetPostsOutput = {
   __typename?: 'GetPostsOutput';
-  _count?: Maybe<PostCount>;
-  audio?: Maybe<Audio>;
-  caption?: Maybe<Scalars['String']>;
-  clip?: Maybe<ClipOutput>;
-  createdAt: Scalars['DateTime'];
-  id: Scalars['String'];
-  photos?: Maybe<Array<Photo>>;
-  place?: Maybe<Place>;
-  poll?: Maybe<PollOutput>;
-  tags?: Maybe<Array<Tag>>;
-  textual?: Maybe<Textual>;
-  type: PostType;
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  video?: Maybe<Video>;
+  pagination: PaginationOutput;
+  posts: Array<PostOutput>;
 };
 
 export type GoogleAuthInput = {
@@ -276,6 +263,17 @@ export type MutationVerifyUserEmailArgs = {
   verificationToken: Scalars['String'];
 };
 
+export type PaginationInput = {
+  cursor?: InputMaybe<Scalars['String']>;
+  firstQueryResult: Scalars['Boolean'];
+  take: Scalars['Float'];
+};
+
+export type PaginationOutput = {
+  __typename?: 'PaginationOutput';
+  cursor: Scalars['String'];
+};
+
 export type Photo = {
   __typename?: 'Photo';
   id: Scalars['String'];
@@ -351,6 +349,25 @@ export type PostCount = {
   tags: Scalars['Int'];
 };
 
+export type PostOutput = {
+  __typename?: 'PostOutput';
+  _count?: Maybe<PostCount>;
+  audio?: Maybe<Audio>;
+  caption?: Maybe<Scalars['String']>;
+  clip?: Maybe<ClipOutput>;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  photos?: Maybe<Array<Photo>>;
+  place?: Maybe<Place>;
+  poll?: Maybe<PollOutput>;
+  tags?: Maybe<Array<Tag>>;
+  textual?: Maybe<Textual>;
+  type: PostType;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+  video?: Maybe<Video>;
+};
+
 export enum PostType {
   Audio = 'AUDIO',
   Clip = 'CLIP',
@@ -405,13 +422,23 @@ export type ProfileOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllPosts: Array<GetPostsOutput>;
+  getAllPosts: GetPostsOutput;
   getMediaAccessToken: Scalars['String'];
   getUser?: Maybe<UserOutput>;
-  getUserPosts: Array<GetPostsOutput>;
+  getUserPosts: GetPostsOutput;
   isUsernameAvailable?: Maybe<Scalars['Boolean']>;
   test: Scalars['String'];
   verifyAccessToken?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type QueryGetAllPostsArgs = {
+  paginationInput: PaginationInput;
+};
+
+
+export type QueryGetUserPostsArgs = {
+  paginationInput: PaginationInput;
 };
 
 
@@ -588,15 +615,19 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileOutput', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } };
 
-export type GetUserPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetUserPostsQueryVariables = Exact<{
+  paginationInput: PaginationInput;
+}>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: Array<{ __typename?: 'GetPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: { __typename?: 'GetPostsOutput', posts: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
-export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllPostsQueryVariables = Exact<{
+  paginationInput: PaginationInput;
+}>;
 
 
-export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: Array<{ __typename?: 'GetPostsOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }> };
+export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: { __typename?: 'GetPostsOutput', posts: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
 export type AddVideoPostMutationVariables = Exact<{
   addMediaPostInput: AddMediaPostInput;
@@ -1072,59 +1103,65 @@ export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfile
 export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const GetUserPostsDocument = gql`
-    query GetUserPosts {
-  getUserPosts {
-    id
-    caption
-    type
-    createdAt
-    updatedAt
-    tags {
+    query GetUserPosts($paginationInput: PaginationInput!) {
+  getUserPosts(paginationInput: $paginationInput) {
+    posts {
       id
-      name
-    }
-    place {
-      id
-      name
-    }
-    poll {
-      id
-      question
-      pollOptions {
-        id
-        option
-      }
-    }
-    photos {
-      id
-      url
-    }
-    video {
-      id
-      url
-      thumbnailUrl
-    }
-    clip {
-      id
-      url
-      thumbnailUrl
-      clipAudio {
+      caption
+      type
+      createdAt
+      updatedAt
+      tags {
         id
         name
-        audioUrl
+      }
+      place {
+        id
+        name
+      }
+      poll {
+        id
+        question
+        pollOptions {
+          id
+          option
+        }
+      }
+      photos {
+        id
+        url
+      }
+      video {
+        id
+        url
+        thumbnailUrl
+      }
+      clip {
+        id
+        url
+        thumbnailUrl
+        clipAudio {
+          id
+          name
+          audioUrl
+        }
+      }
+      textual {
+        id
+        text
+      }
+      audio {
+        id
+        url
+        thumbnailUrl
+      }
+      _count {
+        likes
+        comments
       }
     }
-    textual {
-      id
-      text
-    }
-    audio {
-      id
-      url
-    }
-    _count {
-      likes
-      comments
+    pagination {
+      cursor
     }
   }
 }
@@ -1142,10 +1179,11 @@ export const GetUserPostsDocument = gql`
  * @example
  * const { data, loading, error } = useGetUserPostsQuery({
  *   variables: {
+ *      paginationInput: // value for 'paginationInput'
  *   },
  * });
  */
-export function useGetUserPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
+export function useGetUserPostsQuery(baseOptions: Apollo.QueryHookOptions<GetUserPostsQuery, GetUserPostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(GetUserPostsDocument, options);
       }
@@ -1157,60 +1195,65 @@ export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery
 export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
 export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
 export const GetAllPostsDocument = gql`
-    query GetAllPosts {
-  getAllPosts {
-    id
-    caption
-    type
-    createdAt
-    updatedAt
-    tags {
+    query GetAllPosts($paginationInput: PaginationInput!) {
+  getAllPosts(paginationInput: $paginationInput) {
+    posts {
       id
-      name
-    }
-    place {
-      id
-      name
-    }
-    poll {
-      id
-      question
-      pollOptions {
-        id
-        option
-      }
-    }
-    photos {
-      id
-      url
-    }
-    video {
-      id
-      url
-      thumbnailUrl
-    }
-    clip {
-      id
-      url
-      thumbnailUrl
-      clipAudio {
+      caption
+      type
+      createdAt
+      updatedAt
+      tags {
         id
         name
-        audioUrl
+      }
+      place {
+        id
+        name
+      }
+      poll {
+        id
+        question
+        pollOptions {
+          id
+          option
+        }
+      }
+      photos {
+        id
+        url
+      }
+      video {
+        id
+        url
+        thumbnailUrl
+      }
+      clip {
+        id
+        url
+        thumbnailUrl
+        clipAudio {
+          id
+          name
+          audioUrl
+        }
+      }
+      textual {
+        id
+        text
+      }
+      audio {
+        id
+        url
+        thumbnailUrl
+      }
+      _count {
+        likes
+        comments
       }
     }
-    textual {
-      id
-      text
-    }
-    audio {
-      id
-      url
-      thumbnailUrl
-    }
-    _count {
-      likes
-      comments
+    pagination {
+      cursor
     }
   }
 }
@@ -1228,10 +1271,11 @@ export const GetAllPostsDocument = gql`
  * @example
  * const { data, loading, error } = useGetAllPostsQuery({
  *   variables: {
+ *      paginationInput: // value for 'paginationInput'
  *   },
  * });
  */
-export function useGetAllPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
+export function useGetAllPostsQuery(baseOptions: Apollo.QueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(GetAllPostsDocument, options);
       }

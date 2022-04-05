@@ -32,23 +32,10 @@ export type ForgotPasswordOutputFieldPolicy = {
 	verificationTokenId?: FieldPolicy<any> | FieldReadFunction<any>,
 	verificationUuid?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type GetPostsOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | GetPostsOutputKeySpecifier)[];
+export type GetPostsOutputKeySpecifier = ('pagination' | 'posts' | GetPostsOutputKeySpecifier)[];
 export type GetPostsOutputFieldPolicy = {
-	_count?: FieldPolicy<any> | FieldReadFunction<any>,
-	audio?: FieldPolicy<any> | FieldReadFunction<any>,
-	caption?: FieldPolicy<any> | FieldReadFunction<any>,
-	clip?: FieldPolicy<any> | FieldReadFunction<any>,
-	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
-	id?: FieldPolicy<any> | FieldReadFunction<any>,
-	photos?: FieldPolicy<any> | FieldReadFunction<any>,
-	place?: FieldPolicy<any> | FieldReadFunction<any>,
-	poll?: FieldPolicy<any> | FieldReadFunction<any>,
-	tags?: FieldPolicy<any> | FieldReadFunction<any>,
-	textual?: FieldPolicy<any> | FieldReadFunction<any>,
-	type?: FieldPolicy<any> | FieldReadFunction<any>,
-	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
-	userId?: FieldPolicy<any> | FieldReadFunction<any>,
-	video?: FieldPolicy<any> | FieldReadFunction<any>
+	pagination?: FieldPolicy<any> | FieldReadFunction<any>,
+	posts?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type GoogleAuthOutputKeySpecifier = ('accessToken' | 'email' | 'id' | 'isVerified' | 'refreshToken' | 'username' | GoogleAuthOutputKeySpecifier)[];
 export type GoogleAuthOutputFieldPolicy = {
@@ -90,6 +77,10 @@ export type MutationFieldPolicy = {
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyForgotPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyUserEmail?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PaginationOutputKeySpecifier = ('cursor' | PaginationOutputKeySpecifier)[];
+export type PaginationOutputFieldPolicy = {
+	cursor?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type PhotoKeySpecifier = ('id' | 'postId' | 'url' | PhotoKeySpecifier)[];
 export type PhotoFieldPolicy = {
@@ -148,6 +139,24 @@ export type PostCountFieldPolicy = {
 	message?: FieldPolicy<any> | FieldReadFunction<any>,
 	photos?: FieldPolicy<any> | FieldReadFunction<any>,
 	tags?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type PostOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | PostOutputKeySpecifier)[];
+export type PostOutputFieldPolicy = {
+	_count?: FieldPolicy<any> | FieldReadFunction<any>,
+	audio?: FieldPolicy<any> | FieldReadFunction<any>,
+	caption?: FieldPolicy<any> | FieldReadFunction<any>,
+	clip?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	photos?: FieldPolicy<any> | FieldReadFunction<any>,
+	place?: FieldPolicy<any> | FieldReadFunction<any>,
+	poll?: FieldPolicy<any> | FieldReadFunction<any>,
+	tags?: FieldPolicy<any> | FieldReadFunction<any>,
+	textual?: FieldPolicy<any> | FieldReadFunction<any>,
+	type?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>,
+	video?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type ProfileKeySpecifier = ('bio' | 'country' | 'dob' | 'dpUrl' | 'gender' | 'id' | 'interestedIn' | 'mobileNo' | 'nickname' | 'relationshipStatus' | 'userId' | 'website' | ProfileKeySpecifier)[];
 export type ProfileFieldPolicy = {
@@ -274,6 +283,10 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),
 		fields?: MutationFieldPolicy,
 	},
+	PaginationOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PaginationOutputKeySpecifier | (() => undefined | PaginationOutputKeySpecifier),
+		fields?: PaginationOutputFieldPolicy,
+	},
 	Photo?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | PhotoKeySpecifier | (() => undefined | PhotoKeySpecifier),
 		fields?: PhotoFieldPolicy,
@@ -305,6 +318,10 @@ export type StrictTypedTypePolicies = {
 	PostCount?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | PostCountKeySpecifier | (() => undefined | PostCountKeySpecifier),
 		fields?: PostCountFieldPolicy,
+	},
+	PostOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | PostOutputKeySpecifier | (() => undefined | PostOutputKeySpecifier),
+		fields?: PostOutputFieldPolicy,
 	},
 	Profile?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ProfileKeySpecifier | (() => undefined | ProfileKeySpecifier),

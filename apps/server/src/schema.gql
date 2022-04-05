@@ -94,21 +94,8 @@ enum Gender {
 }
 
 type GetPostsOutput {
-  _count: PostCount
-  audio: Audio
-  caption: String
-  clip: ClipOutput
-  createdAt: DateTime!
-  id: String!
-  photos: [Photo!]
-  place: Place
-  poll: PollOutput
-  tags: [Tag!]
-  textual: Textual
-  type: PostType!
-  updatedAt: DateTime!
-  userId: String!
-  video: Video
+  pagination: PaginationOutput!
+  posts: [PostOutput!]!
 }
 
 input GoogleAuthInput {
@@ -165,6 +152,16 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!): UpdateUserOutput!
   verifyForgotPassword(verificationToken: String!): ForgotPasswordOutput
   verifyUserEmail(verificationToken: String!): Boolean
+}
+
+input PaginationInput {
+  cursor: String
+  firstQueryResult: Boolean!
+  take: Float!
+}
+
+type PaginationOutput {
+  cursor: String!
 }
 
 type Photo {
@@ -234,6 +231,24 @@ type PostCount {
   tags: Int!
 }
 
+type PostOutput {
+  _count: PostCount
+  audio: Audio
+  caption: String
+  clip: ClipOutput
+  createdAt: DateTime!
+  id: String!
+  photos: [Photo!]
+  place: Place
+  poll: PollOutput
+  tags: [Tag!]
+  textual: Textual
+  type: PostType!
+  updatedAt: DateTime!
+  userId: String!
+  video: Video
+}
+
 enum PostType {
   AUDIO
   CLIP
@@ -285,10 +300,10 @@ type ProfileOutput {
 }
 
 type Query {
-  getAllPosts: [GetPostsOutput!]!
+  getAllPosts(paginationInput: PaginationInput!): GetPostsOutput!
   getMediaAccessToken: String!
   getUser: UserOutput
-  getUserPosts: [GetPostsOutput!]!
+  getUserPosts(paginationInput: PaginationInput!): GetPostsOutput!
   isUsernameAvailable(username: String!): Boolean
   test: String!
   verifyAccessToken(accessToken: String!): Boolean
