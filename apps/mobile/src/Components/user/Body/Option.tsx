@@ -31,7 +31,7 @@ export const Option: FC<IOptionProps> = ({
   const navigation = useNavigation<UserPostsScreenNavigationProp>();
 
   const handleOptionPress = () => {
-    onPress && onPress();
+    onPress?.();
     navigateTo && navigation.navigate(navigateTo);
   };
 

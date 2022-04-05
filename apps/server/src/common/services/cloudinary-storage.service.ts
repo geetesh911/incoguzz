@@ -50,14 +50,13 @@ class CloudinaryStorageService {
 
       console.log(uploadResponse);
 
-      onSuccess && onSuccess(uploadResponse, uploadResponse.secure_url);
+      onSuccess?.(uploadResponse, uploadResponse.secure_url);
 
-      onCompletion &&
-        onCompletion([uploadResponse] as UploadApiResponse[], [
-          uploadResponse.secure_url,
-        ]);
+      onCompletion?.([uploadResponse] as UploadApiResponse[], [
+        uploadResponse.secure_url,
+      ]);
     } catch (error) {
-      onError && onError(error);
+      onError?.(error);
     }
   }
   public async uploadFiles(
@@ -76,13 +75,13 @@ class CloudinaryStorageService {
         uploadResponses.push(uploadResponse);
         fileUrls.push(uploadResponse.secure_url);
 
-        onSuccess && onSuccess(uploadResponse, uploadResponse.secure_url);
+        onSuccess?.(uploadResponse, uploadResponse.secure_url);
 
         if (fileUrls.length === files.length) {
-          onCompletion && onCompletion(uploadResponses, fileUrls);
+          onCompletion?.(uploadResponses, fileUrls);
         }
       } catch (error) {
-        onError && onError(error);
+        onError?.(error);
       }
     });
   }

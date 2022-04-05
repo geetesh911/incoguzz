@@ -27,13 +27,13 @@ export const TapAndLongPressGesture: FC<ITapAndLongPressGesture> = ({
 }) => {
   return (
     <LongPressGestureHandler
-      onActivated={() => onLongPress && onLongPress()}
+      onActivated={() => onLongPress?.()}
       onHandlerStateChange={event => {
         if (
           event?.nativeEvent?.state === State.END ||
           event?.nativeEvent?.state === State.CANCELLED
         )
-          onLongPressOver && onLongPressOver();
+          onLongPressOver?.();
       }}
       minDurationMs={minLongPressDurationMs || 200}
       maxDist={maxLongPressFingerTravelDist || 10000}

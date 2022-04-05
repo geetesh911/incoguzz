@@ -20,7 +20,6 @@ export const TapGesture: FC<ITapGestureProps> = ({
     <LongPressGestureHandler
       onHandlerStateChange={event => {
         if (event.nativeEvent.state === State.ACTIVE) {
-          console.log("long press 1");
         }
       }}
       minDurationMs={800}
@@ -28,7 +27,7 @@ export const TapGesture: FC<ITapGestureProps> = ({
       <TapGestureHandler
         onHandlerStateChange={event => {
           if (event.nativeEvent.state === State.ACTIVE) {
-            singleTap && singleTap();
+            singleTap?.();
           }
         }}
         waitFor={doubleTapRef}
@@ -37,7 +36,7 @@ export const TapGesture: FC<ITapGestureProps> = ({
           ref={doubleTapRef}
           onHandlerStateChange={event => {
             if (event?.nativeEvent?.state === State.ACTIVE) {
-              doubleTap && doubleTap();
+              doubleTap?.();
             }
           }}
           numberOfTaps={2}

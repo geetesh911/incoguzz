@@ -133,10 +133,10 @@ class AzureStorageService {
           uploadResponse.filename,
         );
 
-        onSuccess && onSuccess(uploadResponse, fileUrl);
-        onCompletion && onCompletion([uploadResponse], [fileUrl]);
+        onSuccess?.(uploadResponse, fileUrl);
+        onCompletion?.([uploadResponse], [fileUrl]);
       })
-      .on("error", (err: Error) => onError && onError(err));
+      .on("error", (err: Error) => onError?.(err));
   }
 
   public async uploadFiles(
@@ -169,16 +169,16 @@ class AzureStorageService {
               uploadResponse.filename,
             );
 
-            onSuccess && onSuccess(uploadResponse, fileUrl);
+            onSuccess?.(uploadResponse, fileUrl);
 
             uploadResponses.push(uploadResponse);
             fileUrls.push(fileUrl);
 
             if (fileUrls.length === files.length) {
-              onCompletion && onCompletion(uploadResponses, fileUrls);
+              onCompletion?.(uploadResponses, fileUrls);
             }
           })
-          .on("error", (err: Error) => onError && onError(err));
+          .on("error", (err: Error) => onError?.(err));
       },
     );
   }

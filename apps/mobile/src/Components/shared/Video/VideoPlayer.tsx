@@ -77,7 +77,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   const [showControls, setShowControls] = useState<boolean>(false);
 
   const onLoadEnd = (data: OnLoadData) => {
-    props?.onLoad && props.onLoad(data);
+    props?.onLoad?.(data);
     if (props.defaultState) {
       videoPlayerRef?.current?.seek(props?.defaultState?.currentTime);
     }

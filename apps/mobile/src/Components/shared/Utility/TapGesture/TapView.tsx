@@ -80,7 +80,7 @@ export const TapView: FC<ITapViewProps> = ({
   return (
     <TapGestureHandler
       onGestureEvent={eventHandler}
-      onActivated={() => onPress && onPress()}
+      onActivated={() => onPress?.()}
       {...tapGestureHandlerProps}
     >
       <StyledTapContainer style={[style, animatedStyle]}>

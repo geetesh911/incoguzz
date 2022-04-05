@@ -39,7 +39,7 @@ export const DoubleTap: FC<IDoubleTapProps> = ({
       //start a timer --> if a second tap doesnt come in by the delay, trigger singleTap event handler
       timer = setTimeout(() => {
         //check if user passed in prop
-        singleTap && singleTap();
+        singleTap?.();
 
         // reset back to initial state
         firstPress = true;
@@ -55,7 +55,7 @@ export const DoubleTap: FC<IDoubleTapProps> = ({
         timer && clearTimeout(timer as NodeJS.Timeout);
 
         //check if user passed in prop for double click
-        doubleTap && doubleTap();
+        doubleTap?.();
 
         // reset back to initial state
         firstPress = true;
