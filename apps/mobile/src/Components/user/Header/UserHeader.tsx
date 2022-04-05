@@ -13,15 +13,24 @@ import {
   GetUserQuery,
   GetUserQueryVariables,
   GetUserDocument,
+  UserOutput,
 } from "@incoguzz/graphql";
+import { setUserData } from "@incoguzz/redux";
 import { useQuery } from "@apollo/client";
 import { UserHeaderContentLoader } from "./UserHeaderContentLoader";
+import { useNavigation } from "@react-navigation/native";
+import { RouteNames, UserEditScreenNavigationProp } from "../../../Navigation";
+import { useAppDispatch } from "../../../redux/hooks";
+import { defaultUserImage } from "../../../constants/defaultImages";
 
 export const UserHeader: FC = () => {
-  const { data: userData, loading: userDataLoading } = useQuery<
-    GetUserQuery,
-    GetUserQueryVariables
-  >(GetUserDocument);
+  const { data, loading } = useQuery<GetUserQuery, GetUserQueryVariables>(
+    GetUserDocument,
+  );
+
+  const dispatch = useAppDispatch();
+
+  const navigation = useNavigation<UserEditScreenNavigationProp>();
 
   const [isDpFullScreen, setIsDpFullScreen] = useState<boolean>(false);
 
@@ -32,21 +41,24 @@ export const UserHeader: FC = () => {
     setIsDpFullScreen(false);
   };
 
-  const dpUrl =
-    userData?.getUser?.profile?.dpUrl ||
-    "https://res.cloudinary.com/geeteshpp/image/upload/v1640068319/sample.jpg";
+  const dpUrl = data?.getUser?.profile?.dpUrl || defaultUserImage;
+
+  const onPress = () => {
+    dispatch(setUserData(data?.getUser as UserOutput));
+    navigation.navigate(RouteNames.UserEdit);
+  };
 
   return (
     <>
-      {userDataLoading ? (
+      {loading ? (
         <UserHeaderContentLoader />
       ) : (
         <StyledUserHeaderContainer>
           <StyledUserDetailsContainer>
             <StyledUserName numberOfLines={1} ellipsizeMode="tail">
-              {userData?.getUser?.profile?.nickname}
+              {data?.getUser?.profile?.nickname}
             </StyledUserName>
-            <StyledUserTextButton>
+            <StyledUserTextButton onPress={onPress}>
               <StyledUserTextButtonText>
                 View and edit profile
               </StyledUserTextButtonText>

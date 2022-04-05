@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import Svg, { G, Path, Defs } from "react-native-svg";
 import { IIconInterface } from "./interfaces";
 
-export const ShareIcon: FC<IIconInterface> = ({ color, height, width }) => {
+export const LogoutIcon: FC<IIconInterface> = ({ color, height, width }) => {
   return (
     <Svg
       width={width || 720}
@@ -12,11 +12,11 @@ export const ShareIcon: FC<IIconInterface> = ({ color, height, width }) => {
     >
       <G>
         <Path
-          d="M480 180L360 60L240 180H480ZM360 60V450Z"
+          d="M540 480L660 360L540 240L540 480ZM660 360L270 360Z"
           fill={color || "#fff"}
         />
         <Path
-          d="M120 360V600C120 633.12 146.88 660 180 660H540C573.12 660 600 633.12 600 600V360M360 60L480 180H240L360 60ZM360 60V450"
+          d="M360 120L120 120C86.88 120 60 146.88 60 180L60 540C60 573.12 86.88 600 120 600L360 600M660 360L540 480L540 240L660 360ZM660 360L270 360"
           stroke={color || "#fff"}
           strokeWidth={60}
           strokeLinecap="round"

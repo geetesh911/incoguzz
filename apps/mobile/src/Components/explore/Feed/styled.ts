@@ -25,6 +25,7 @@ export const StyledFeedImageContainer = styled(
   margin: 5px;
   border-radius: 15px;
   overflow: hidden;
+  background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
 `;
 
 export const StyledFeedImage = styled.Image<IStyledFeedImageProps>`

@@ -18,12 +18,12 @@ export const FeedContentLoader: FC = () => {
       backgroundColor={theme?.objectBackgrounds?.primary}
       foregroundColor={theme?.objectBackgrounds?.contentLoader}
     >
-      <Rect x="0" y="0" rx="15" width={rectWidth} height="150" />
-      <Rect x="0" y="160" rx="15" width={rectWidth} height="150" />
-      <Rect x="0" y="320" rx="15" width={rectWidth} height="280" />
-      <Rect x={rectWidth + 10} y="0" rx="15" width={rectWidth} height="280" />
-      <Rect x={rectWidth + 10} y="290" rx="15" width={rectWidth} height="150" />
-      <Rect x={rectWidth + 10} y="450" rx="15" width={rectWidth} height="150" />
+      <Rect x="0" y="0" rx="15" width={rectWidth} height="140" />
+      <Rect x="0" y="150" rx="15" width={rectWidth} height="140" />
+      <Rect x="0" y="300" rx="15" width={rectWidth} height="260" />
+      <Rect x={rectWidth + 10} y="0" rx="15" width={rectWidth} height="260" />
+      <Rect x={rectWidth + 10} y="270" rx="15" width={rectWidth} height="140" />
+      <Rect x={rectWidth + 10} y="420" rx="15" width={rectWidth} height="140" />
     </ContentLoader>
   );
 };

@@ -6,11 +6,13 @@ import {
   Pressable,
   StyleSheet,
 } from "react-native";
-import { PinchableImage } from "../../shared";
+import { useTheme } from "../../../styles/theme";
+import { LoadingIcon, PinchableImage } from "../../shared";
 import {
   StyledPotraitMedia,
   StyledImageContainer,
   StyledLandscapeMedia,
+  StyledLoadingContainer,
 } from "./styled";
 
 interface IPostImageProps {
@@ -21,11 +23,22 @@ interface IPostImageProps {
 const windowWidth = Dimensions.get("window").width;
 
 export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
+  const theme = useTheme();
   const [aspectRatio, setAspectRatio] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
     const { height, width } = event?.nativeEvent?.source;
     setAspectRatio(height / width);
+    setLoading(false);
+  };
+
+  const onImageLoadStart = () => {
+    setLoading(true);
+  };
+
+  const onError = () => {
+    setLoading(false);
   };
 
   return (
@@ -38,6 +51,8 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
                 aspectRatio={aspectRatio}
                 source={{ uri: imgUrl }}
                 onLoad={onImageLoad}
+                onLoadStart={onImageLoadStart}
+                onError={onError}
               />
             </Pressable>
           ) : (
@@ -55,6 +70,12 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
           )
         }
       />
+
+      {loading && (
+        <StyledLoadingContainer>
+          <LoadingIcon color={theme.textColors?.primary} />
+        </StyledLoadingContainer>
+      )}
     </StyledImageContainer>
   );
 };

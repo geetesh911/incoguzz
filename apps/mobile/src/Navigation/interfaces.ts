@@ -20,6 +20,8 @@ export type TabParamList = {
   [RouteNames.BookmarksPost]: IPostProps;
   [RouteNames.UserPost]: IPostProps;
   [RouteNames.UserPosts]: undefined;
+  [RouteNames.UserEdit]: undefined;
+  [RouteNames.UserInfo]: undefined;
   [RouteNames.Bookmarks]: undefined;
   [RouteNames.AuthHome]: undefined;
   [RouteNames.Login]: undefined;
@@ -52,6 +54,16 @@ export type PostScreenNavigationProp = BottomTabNavigationProp<
 export type UserPostsScreenNavigationProp = BottomTabNavigationProp<
   TabParamList,
   RouteNames.UserPosts
+>;
+
+export type UserEditScreenNavigationProp = BottomTabNavigationProp<
+  TabParamList,
+  RouteNames.UserEdit
+>;
+
+export type UserInfoScreenNavigationProp = BottomTabNavigationProp<
+  TabParamList,
+  RouteNames.UserInfo
 >;
 
 export type PostScreenRouteProp = RouteProp<

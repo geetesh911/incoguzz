@@ -15,6 +15,7 @@ export interface IOptionProps {
   body?: JSX.Element;
   style?: StyleProp<ViewStyle>;
   navigateTo?: keyof TabParamList;
+  onPress?: () => void;
 }
 
 export const Option: FC<IOptionProps> = ({
@@ -23,18 +24,20 @@ export const Option: FC<IOptionProps> = ({
   body,
   style,
   navigateTo,
+  onPress,
 }) => {
   const theme = useTheme();
 
   const navigation = useNavigation<UserPostsScreenNavigationProp>();
 
-  const onPress = () => {
+  const handleOptionPress = () => {
+    onPress && onPress();
     navigateTo && navigation.navigate(navigateTo);
   };
 
   return (
     <>
-      <StyledOptionContainer style={style} onPress={onPress}>
+      <StyledOptionContainer style={style} onPress={handleOptionPress}>
         <StyledOptionText>{label}</StyledOptionText>
         <Icon color={theme?.colors?.primary} height={20} width={20} />
       </StyledOptionContainer>

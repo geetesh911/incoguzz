@@ -62,7 +62,9 @@ export const StyledPasswordInput = styled.TextInput`
   width: 88%;
 `;
 
-export const StyledPasswordInputUpperContainer = styled.View``;
+export const StyledPasswordInputUpperContainer = styled.View`
+  width: 100%;
+`;
 
 export const StyledPasswordInputInnerContainer = styled.View<StyledInputProps>`
   background-color: ${({ theme }) => theme?.objectBackgrounds?.primary};
@@ -73,13 +75,15 @@ export const StyledPasswordInputInnerContainer = styled.View<StyledInputProps>`
   flex-direction: row;
   align-items: center;
   align-self: stretch;
+  width: 100%;
 `;
 
 export const StyledInputWithIconIconContainer = styled.View`
   margin: 0 0px 0 0px;
   padding: 13px;
   border-radius: ${({ theme }) => theme?.commonConstants?.borderRadius};
-
+  position: absolute;
+  right: 5px;
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
 `;
 

@@ -14,6 +14,7 @@ import { FeedContentLoader } from "./FeedContentLoader";
 import { RouteNames } from "../../../Navigation/constants";
 import Animated from "react-native-reanimated";
 import ExploreSearch from "../ExploreSearch";
+import { IRenderItemType } from "../../user/Body/BookmarksBody";
 
 export const Feed: FC = () => {
   const { data, loading } = useQuery<
@@ -23,15 +24,15 @@ export const Feed: FC = () => {
 
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
 
-  const renderItem = ({ item: post }: { item: GetPostsOutput }) => {
+  const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
       <FeedCard
         innerRef={scrollHandler}
         key={post.id}
         post={post}
         postSection="Explore"
-        posts={[post]}
-        initialIndex={0}
+        posts={(data?.getAllPosts as GetPostsOutput[]) || []}
+        initialIndex={i}
         navigateTo={RouteNames.ExplorePost}
       />
     );

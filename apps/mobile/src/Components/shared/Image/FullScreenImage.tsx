@@ -30,6 +30,7 @@ export const FullScreenImage: FC<IFullScreenImageProps> = ({
         onSwipeDown={onClose}
         onCancel={onClose}
         enableSwipeDown
+        saveToLocalByLongPress={false}
         renderHeader={() => (
           <StyledFullScreenImageHeader>
             <StyledFullScreenImageCloseButton onPress={onClose}>

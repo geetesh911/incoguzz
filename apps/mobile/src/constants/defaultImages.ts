@@ -10,3 +10,6 @@ export const defalutPostImages: Record<PostType, string> = {
   [PostType.Clip]: "",
   [PostType.Poll]: "",
 };
+
+export const defaultUserImage =
+  "https://res.cloudinary.com/geeteshpp/image/upload/v1649143396/user-icon_ybc0uo.png";

@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { FormikProps } from "formik";
 import { IFormComponents, IFormField, IFormFields } from "./interfaces";
 import { Input, PasswordInput } from "./Input";
+import _ from "lodash";
 
 interface IFormProps<Values> {
   formFields: IFormFields<Values>;
@@ -21,20 +22,20 @@ export const Form = <Values,>({ formFields, formik }: IFormProps<Values>) => {
         <Input
           key={name as string}
           name={name as string}
-          value={values[name]}
+          value={_.get(values, name)}
           onChange={onChange || handleChange(name)}
           placeholder={placeholder}
-          error={touched[name] && (errors[name] as string)}
+          error={_.get(touched, name) && (_.get(errors, name) as string)}
         />
       ),
       PasswordInput: (
         <PasswordInput
           key={name as string}
           name={name as string}
-          value={values[name]}
+          value={_.get(values, name)}
           onChange={onChange || handleChange(name)}
           placeholder={placeholder}
-          error={touched[name] && (errors[name] as string)}
+          error={_.get(touched, name) && (_.get(errors, name) as string)}
         />
       ),
     };

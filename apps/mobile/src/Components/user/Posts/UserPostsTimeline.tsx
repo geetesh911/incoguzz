@@ -62,6 +62,8 @@ export const UserPostsTimeline: FC = () => {
         ListHeaderComponent={<ScreenHeader heading="Timeline" />}
         data={(data?.getUserPosts as GetPostsOutput[]) || []}
         renderItem={renderItem}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
       />
     </StyledUserPostsTimelineContainer>
   );

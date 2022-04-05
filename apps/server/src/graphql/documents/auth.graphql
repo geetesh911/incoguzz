@@ -44,6 +44,10 @@ mutation Login($loginInput: LoginInput!) {
   }
 }
 
+mutation Logout {
+  logout
+}
+
 mutation VerifyUserEmail($verificationToken: String!) {
   verifyUserEmail(verificationToken: $verificationToken)
 }

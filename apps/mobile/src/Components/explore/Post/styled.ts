@@ -57,6 +57,10 @@ export const StyledImageContainer = styled.Pressable<Partial<IMediaProperties>>`
   align-items: center;
 `;
 
+export const StyledLoadingContainer = styled.View`
+  position: absolute;
+`;
+
 export const StyledReactionsContainer = styled.View`
   background-color: ${({ theme }) => theme?.backgrounds?.primary};
   width: ${windowWidth}px;

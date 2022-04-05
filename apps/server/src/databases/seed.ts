@@ -12,67 +12,67 @@ const videoList = [
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
   {
     sources:
       "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
-    thumb: faker.image.imageUrl(1920, 1280),
+    thumb: `https://picsum.photos/seed/${faker.word.verb()}/1920/1280`,
   },
 ];
 
@@ -92,9 +92,9 @@ async function main() {
 
   const PostType = {
     TEXTUAL: "TEXTUAL",
-    AUDIO: "AUDIO",
     VIDEO: "VIDEO",
     PHOTO: "PHOTO",
+    AUDIO: "AUDIO",
   };
 
   [...Array(userSize).keys()].forEach(async (num: number) => {
@@ -116,7 +116,7 @@ async function main() {
 
         const imageHeights = [1920, 1280, 760];
         const imageWidths = [1920, 1280, 760];
-        const type = types[faker.random.number({ min: 0, max: 3 })];
+        const type = types[faker.datatype.number({ min: 0, max: 3 })];
 
         const caption =
           type === PostType.TEXTUAL ? null : faker.random.words(10);
@@ -133,18 +133,24 @@ async function main() {
             ? {
                 createMany: {
                   data: [...Array(3).keys()]
-                    .map(() =>
-                      faker.image.imageUrl(
-                        imageHeights[faker.random.number({ min: 0, max: 2 })],
-                        imageWidths[faker.random.number({ min: 0, max: 2 })],
-                      ),
+                    .map(
+                      () =>
+                        `https://picsum.photos/seed/${faker.word.verb()}/${
+                          imageWidths[faker.datatype.number({ min: 0, max: 2 })]
+                        }/${
+                          imageHeights[
+                            faker.datatype.number({ min: 0, max: 2 })
+                          ]
+                        }`,
                     )
                     .map(url => ({ url })),
                 },
               }
             : undefined;
         const videoData =
-          videoList[faker.random.number({ min: 0, max: videoList.length - 1 })];
+          videoList[
+            faker.datatype.number({ min: 0, max: videoList.length - 1 })
+          ];
 
         const video =
           type === PostType.VIDEO

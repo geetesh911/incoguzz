@@ -42,6 +42,7 @@ export class UserResolver {
   @Query(() => String)
   async test() {
     await this.prisma.user.deleteMany({});
+    await this.prisma.tag.deleteMany({});
     return "tested";
   }
 
