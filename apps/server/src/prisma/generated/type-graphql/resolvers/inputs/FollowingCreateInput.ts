@@ -13,6 +13,11 @@ export class FollowingCreateInput {
   })
   id?: string | undefined;
 
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutFollowingsInput, {
+    nullable: false,
+  })
+  user!: UserCreateNestedOneWithoutFollowingsInput;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true,
   })
@@ -22,9 +27,4 @@ export class FollowingCreateInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutFollowingsInput, {
-    nullable: false,
-  })
-  user!: UserCreateNestedOneWithoutFollowingsInput;
 }

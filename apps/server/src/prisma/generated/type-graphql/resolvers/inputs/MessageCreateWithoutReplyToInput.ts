@@ -28,28 +28,6 @@ export class MessageCreateWithoutReplyToInput {
   })
   mediaUrl?: string | undefined;
 
-  @TypeGraphQL.Field(_type => MessageMediaType, {
-    nullable: false,
-  })
-  mediaType!:
-    | "TEXT"
-    | "IMAGE"
-    | "VIDEO"
-    | "AUDIO"
-    | "DOCUMENT"
-    | "POST"
-    | "STORY";
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true,
-  })
-  createdAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => Date, {
-    nullable: true,
-  })
-  updatedAt?: Date | undefined;
-
   @TypeGraphQL.Field(_type => PostCreateNestedOneWithoutMessageInput, {
     nullable: true,
   })
@@ -74,4 +52,26 @@ export class MessageCreateWithoutReplyToInput {
     nullable: true,
   })
   replyToMessage?: MessageCreateNestedManyWithoutReplyToInput | undefined;
+
+  @TypeGraphQL.Field(_type => MessageMediaType, {
+    nullable: false,
+  })
+  mediaType!:
+    | "TEXT"
+    | "IMAGE"
+    | "VIDEO"
+    | "AUDIO"
+    | "DOCUMENT"
+    | "POST"
+    | "STORY";
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  updatedAt?: Date | undefined;
 }

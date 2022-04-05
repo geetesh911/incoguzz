@@ -14,6 +14,11 @@ export class TokenCreateInput {
   })
   id?: string | undefined;
 
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutTokensInput, {
+    nullable: false,
+  })
+  user!: UserCreateNestedOneWithoutTokensInput;
+
   @TypeGraphQL.Field(_type => String, {
     nullable: false,
   })
@@ -63,9 +68,4 @@ export class TokenCreateInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutTokensInput, {
-    nullable: false,
-  })
-  user!: UserCreateNestedOneWithoutTokensInput;
 }

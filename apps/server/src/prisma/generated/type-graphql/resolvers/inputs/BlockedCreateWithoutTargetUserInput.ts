@@ -13,6 +13,11 @@ export class BlockedCreateWithoutTargetUserInput {
   })
   id?: string | undefined;
 
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutBlockedByInput, {
+    nullable: false,
+  })
+  sourceUser!: UserCreateNestedOneWithoutBlockedByInput;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true,
   })
@@ -22,9 +27,4 @@ export class BlockedCreateWithoutTargetUserInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutBlockedByInput, {
-    nullable: false,
-  })
-  sourceUser!: UserCreateNestedOneWithoutBlockedByInput;
 }

@@ -15,6 +15,11 @@ export class BlockedUpdateWithoutTargetUserInput {
   })
   id?: StringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutBlockedByInput, {
+    nullable: true,
+  })
+  sourceUser?: UserUpdateOneRequiredWithoutBlockedByInput | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -24,9 +29,4 @@ export class BlockedUpdateWithoutTargetUserInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutBlockedByInput, {
-    nullable: true,
-  })
-  sourceUser?: UserUpdateOneRequiredWithoutBlockedByInput | undefined;
 }

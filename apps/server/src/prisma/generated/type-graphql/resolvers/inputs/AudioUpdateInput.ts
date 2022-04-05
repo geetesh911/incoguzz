@@ -20,13 +20,13 @@ export class AudioUpdateInput {
   })
   url?: StringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  thumbnailUrl?: NullableStringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => PostUpdateOneRequiredWithoutAudioInput, {
     nullable: true,
   })
   post?: PostUpdateOneRequiredWithoutAudioInput | undefined;
+
+  @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  thumbnailUrl?: NullableStringFieldUpdateOperationsInput | undefined;
 }

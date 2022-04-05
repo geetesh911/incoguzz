@@ -18,13 +18,13 @@ export class AudioCreateInput {
   })
   url!: string;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: true,
-  })
-  thumbnailUrl?: string | undefined;
-
   @TypeGraphQL.Field(_type => PostCreateNestedOneWithoutAudioInput, {
     nullable: false,
   })
   post!: PostCreateNestedOneWithoutAudioInput;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  thumbnailUrl?: string | undefined;
 }

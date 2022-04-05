@@ -19,13 +19,13 @@ export class ClipUpdateWithoutClipAudioInput {
   })
   url?: StringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  thumbnailUrl?: StringFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => PostUpdateOneRequiredWithoutClipInput, {
     nullable: true,
   })
   post?: PostUpdateOneRequiredWithoutClipInput | undefined;
+
+  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  thumbnailUrl?: StringFieldUpdateOperationsInput | undefined;
 }

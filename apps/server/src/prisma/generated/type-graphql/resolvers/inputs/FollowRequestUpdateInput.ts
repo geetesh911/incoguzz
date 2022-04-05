@@ -22,16 +22,6 @@ export class FollowRequestUpdateInput {
   })
   message?: NullableStringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(
     _type => UserUpdateOneRequiredWithoutSentFollowRequestsInput,
     {
@@ -49,4 +39,14 @@ export class FollowRequestUpdateInput {
   targetUser?:
     | UserUpdateOneRequiredWithoutReceivedFollowRequestsInput
     | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
 }

@@ -27,6 +27,11 @@ export class StoryUpdateInput {
   })
   link?: NullableStringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutStoriesInput, {
+    nullable: true,
+  })
+  user?: UserUpdateOneRequiredWithoutStoriesInput | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -36,11 +41,6 @@ export class StoryUpdateInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutStoriesInput, {
-    nullable: true,
-  })
-  user?: UserUpdateOneRequiredWithoutStoriesInput | undefined;
 
   @TypeGraphQL.Field(_type => MessageUpdateManyWithoutStoryInput, {
     nullable: true,

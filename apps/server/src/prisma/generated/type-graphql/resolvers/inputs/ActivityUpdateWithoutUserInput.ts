@@ -21,6 +21,11 @@ export class ActivityUpdateWithoutUserInput {
   })
   type?: EnumActivityTypeFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => PostUpdateOneRequiredWithoutActivitiesInput, {
+    nullable: true,
+  })
+  post?: PostUpdateOneRequiredWithoutActivitiesInput | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -30,9 +35,4 @@ export class ActivityUpdateWithoutUserInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => PostUpdateOneRequiredWithoutActivitiesInput, {
-    nullable: true,
-  })
-  post?: PostUpdateOneRequiredWithoutActivitiesInput | undefined;
 }

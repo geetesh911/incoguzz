@@ -18,6 +18,11 @@ export class TokenUpdateInput {
   })
   id?: StringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutTokensInput, {
+    nullable: true,
+  })
+  user?: UserUpdateOneRequiredWithoutTokensInput | undefined;
+
   @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -67,9 +72,4 @@ export class TokenUpdateInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutTokensInput, {
-    nullable: true,
-  })
-  user?: UserUpdateOneRequiredWithoutTokensInput | undefined;
 }

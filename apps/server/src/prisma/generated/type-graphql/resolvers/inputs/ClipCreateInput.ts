@@ -19,15 +19,15 @@ export class ClipCreateInput {
   })
   url!: string;
 
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false,
-  })
-  thumbnailUrl!: string;
-
   @TypeGraphQL.Field(_type => PostCreateNestedOneWithoutClipInput, {
     nullable: false,
   })
   post!: PostCreateNestedOneWithoutClipInput;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false,
+  })
+  thumbnailUrl!: string;
 
   @TypeGraphQL.Field(_type => ClipAudioCreateNestedOneWithoutClipsInput, {
     nullable: false,

@@ -15,6 +15,11 @@ export class FollowingUpdateInput {
   })
   id?: StringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutFollowingsInput, {
+    nullable: true,
+  })
+  user?: UserUpdateOneRequiredWithoutFollowingsInput | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -24,9 +29,4 @@ export class FollowingUpdateInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutFollowingsInput, {
-    nullable: true,
-  })
-  user?: UserUpdateOneRequiredWithoutFollowingsInput | undefined;
 }

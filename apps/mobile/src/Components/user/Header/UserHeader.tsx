@@ -44,8 +44,8 @@ export const UserHeader: FC = () => {
   const dpUrl = data?.getUser?.profile?.dpUrl || defaultUserImage;
 
   const onPress = () => {
-    dispatch(setUserData(data?.getUser as UserOutput));
     navigation.navigate(RouteNames.UserEdit);
+    dispatch(setUserData(data?.getUser as UserOutput));
   };
 
   return (

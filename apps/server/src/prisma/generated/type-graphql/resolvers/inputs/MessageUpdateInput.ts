@@ -32,21 +32,6 @@ export class MessageUpdateInput {
   })
   mediaUrl?: NullableStringFieldUpdateOperationsInput | undefined;
 
-  @TypeGraphQL.Field(_type => EnumMessageMediaTypeFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  mediaType?: EnumMessageMediaTypeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
   @TypeGraphQL.Field(_type => PostUpdateOneWithoutMessageInput, {
     nullable: true,
   })
@@ -79,4 +64,19 @@ export class MessageUpdateInput {
     nullable: true,
   })
   replyToMessage?: MessageUpdateManyWithoutReplyToInput | undefined;
+
+  @TypeGraphQL.Field(_type => EnumMessageMediaTypeFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  mediaType?: EnumMessageMediaTypeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  createdAt?: DateTimeFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
 }

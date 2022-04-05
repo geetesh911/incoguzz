@@ -18,6 +18,14 @@ export class FollowRequestCreateWithoutSourceUserInput {
   })
   message?: string | undefined;
 
+  @TypeGraphQL.Field(
+    _type => UserCreateNestedOneWithoutReceivedFollowRequestsInput,
+    {
+      nullable: false,
+    },
+  )
+  targetUser!: UserCreateNestedOneWithoutReceivedFollowRequestsInput;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true,
   })
@@ -27,12 +35,4 @@ export class FollowRequestCreateWithoutSourceUserInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(
-    _type => UserCreateNestedOneWithoutReceivedFollowRequestsInput,
-    {
-      nullable: false,
-    },
-  )
-  targetUser!: UserCreateNestedOneWithoutReceivedFollowRequestsInput;
 }

@@ -19,6 +19,11 @@ export class ActivityCreateWithoutPostInput {
   })
   type!: "LIKED" | "COMMENTED" | "POSTED" | "SHARED";
 
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutActivitiesInput, {
+    nullable: false,
+  })
+  user!: UserCreateNestedOneWithoutActivitiesInput;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true,
   })
@@ -28,9 +33,4 @@ export class ActivityCreateWithoutPostInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutActivitiesInput, {
-    nullable: false,
-  })
-  user!: UserCreateNestedOneWithoutActivitiesInput;
 }

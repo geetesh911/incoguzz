@@ -45,21 +45,6 @@ export class PostCreateWithoutUserInput {
   })
   updatedAt?: Date | undefined;
 
-  @TypeGraphQL.Field(_type => Boolean, {
-    nullable: true,
-  })
-  archive?: boolean | undefined;
-
-  @TypeGraphQL.Field(_type => Boolean, {
-    nullable: true,
-  })
-  published?: boolean | undefined;
-
-  @TypeGraphQL.Field(_type => String, {
-    nullable: false,
-  })
-  slug!: string;
-
   @TypeGraphQL.Field(_type => TagCreateNestedManyWithoutPostsInput, {
     nullable: true,
   })
@@ -114,6 +99,21 @@ export class PostCreateWithoutUserInput {
     nullable: true,
   })
   activities?: ActivityCreateNestedManyWithoutPostInput | undefined;
+
+  @TypeGraphQL.Field(_type => Boolean, {
+    nullable: true,
+  })
+  archive?: boolean | undefined;
+
+  @TypeGraphQL.Field(_type => Boolean, {
+    nullable: true,
+  })
+  published?: boolean | undefined;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: false,
+  })
+  slug!: string;
 
   @TypeGraphQL.Field(_type => MessageCreateNestedManyWithoutPostInput, {
     nullable: true,

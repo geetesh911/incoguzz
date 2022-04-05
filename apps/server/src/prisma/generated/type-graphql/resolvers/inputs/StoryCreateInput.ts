@@ -24,6 +24,11 @@ export class StoryCreateInput {
   })
   link?: string | undefined;
 
+  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutStoriesInput, {
+    nullable: false,
+  })
+  user!: UserCreateNestedOneWithoutStoriesInput;
+
   @TypeGraphQL.Field(_type => Date, {
     nullable: true,
   })
@@ -33,11 +38,6 @@ export class StoryCreateInput {
     nullable: true,
   })
   updatedAt?: Date | undefined;
-
-  @TypeGraphQL.Field(_type => UserCreateNestedOneWithoutStoriesInput, {
-    nullable: false,
-  })
-  user!: UserCreateNestedOneWithoutStoriesInput;
 
   @TypeGraphQL.Field(_type => MessageCreateNestedManyWithoutStoryInput, {
     nullable: true,

@@ -29,6 +29,11 @@ export class PostUpdateWithoutTagsInput {
   })
   id?: StringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutPostsInput, {
+    nullable: true,
+  })
+  user?: UserUpdateOneRequiredWithoutPostsInput | undefined;
+
   @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -48,26 +53,6 @@ export class PostUpdateWithoutTagsInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  archive?: BoolFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  published?: BoolFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
-    nullable: true,
-  })
-  slug?: StringFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(_type => UserUpdateOneRequiredWithoutPostsInput, {
-    nullable: true,
-  })
-  user?: UserUpdateOneRequiredWithoutPostsInput | undefined;
 
   @TypeGraphQL.Field(_type => PlaceUpdateOneWithoutPostsInput, {
     nullable: true,
@@ -118,6 +103,21 @@ export class PostUpdateWithoutTagsInput {
     nullable: true,
   })
   activities?: ActivityUpdateManyWithoutPostInput | undefined;
+
+  @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  archive?: BoolFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => BoolFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  published?: BoolFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => StringFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  slug?: StringFieldUpdateOperationsInput | undefined;
 
   @TypeGraphQL.Field(_type => MessageUpdateManyWithoutPostInput, {
     nullable: true,

@@ -21,6 +21,14 @@ export class FollowRequestUpdateWithoutTargetUserInput {
   })
   message?: NullableStringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(
+    _type => UserUpdateOneRequiredWithoutSentFollowRequestsInput,
+    {
+      nullable: true,
+    },
+  )
+  sourceUser?: UserUpdateOneRequiredWithoutSentFollowRequestsInput | undefined;
+
   @TypeGraphQL.Field(_type => DateTimeFieldUpdateOperationsInput, {
     nullable: true,
   })
@@ -30,12 +38,4 @@ export class FollowRequestUpdateWithoutTargetUserInput {
     nullable: true,
   })
   updatedAt?: DateTimeFieldUpdateOperationsInput | undefined;
-
-  @TypeGraphQL.Field(
-    _type => UserUpdateOneRequiredWithoutSentFollowRequestsInput,
-    {
-      nullable: true,
-    },
-  )
-  sourceUser?: UserUpdateOneRequiredWithoutSentFollowRequestsInput | undefined;
 }
