@@ -1,14 +1,14 @@
 import React, { FC, useRef } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import MasonryList from "@react-native-seoul/masonry-list";
-import { GetPostsOutput, PostType } from "@incoguzz/graphql";
+import { PostOutput, PostType } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
 import { FeedCard } from "../../explore";
 
 export const postsData1 = {
   getAllPosts: [
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpeq11426otqbge5x4kh",
       caption:
         "Steel Computer Belarus Wooden Planner indexing navigating Designer Loan Tasty",
@@ -48,7 +48,7 @@ export const postsData1 = {
       _count: null,
     },
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpeq11296otq0efgchdk",
       caption: null,
       type: PostType.Textual,
@@ -80,7 +80,7 @@ export const postsData1 = {
       _count: null,
     },
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpeq11266otqppeuxcjr",
       caption: null,
       type: PostType.Textual,
@@ -117,7 +117,7 @@ export const postsData1 = {
       _count: null,
     },
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpbg10516otq412nni5q",
       caption:
         "overriding bandwidth CFA Ball open-source Rubber Small Supervisor flexibility Movies",
@@ -151,7 +151,7 @@ export const postsData1 = {
       _count: null,
     },
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpbg10466otqj04uiqom",
       caption:
         "Cliffs Orchestrator Infrastructure Card Chief disintermediate Soap Wooden CSS Kwacha",
@@ -196,7 +196,7 @@ export const postsData1 = {
       _count: null,
     },
     {
-      __typename: "GetPostsOutput",
+      __typename: "PostOutput",
       id: "ckzsgnpbg10406otqpacwqdx9",
       caption:
         "workforce Expanded Optimization moratorium Mobility calculate e-business HTTP networks Jamaican",
@@ -246,20 +246,14 @@ export const postsData1 = {
 export const UserPostsBody: FC = () => {
   const scrollHandler = useRef<ScrollView>();
 
-  const renderItem = ({
-    item: post,
-    i,
-  }: {
-    item: GetPostsOutput;
-    i: number;
-  }) => {
+  const renderItem = ({ item: post, i }: { item: PostOutput; i: number }) => {
     return (
       <FeedCard
         postSection="Bookmarks"
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        posts={(postsData1?.getAllPosts as GetPostsOutput[]) || []}
+        posts={(postsData1?.getAllPosts as PostOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />

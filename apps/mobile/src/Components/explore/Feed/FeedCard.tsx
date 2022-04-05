@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { GetPostsOutput } from "@incoguzz/graphql";
+import { PostOutput } from "@incoguzz/graphql";
 import { useNavigation } from "@react-navigation/native";
 import {
   ImageLoadEventData,
@@ -23,11 +23,11 @@ import {
 import { TapAndLongPressGesture } from "../../shared";
 
 interface IFeedCardProps {
-  post: GetPostsOutput;
+  post: PostOutput;
   style?: StyleProp<ViewStyle>;
   postSection: string;
   fixed?: boolean;
-  posts: GetPostsOutput[];
+  posts: PostOutput[];
   initialIndex: number;
   navigateTo: keyof TabParamList;
   innerRef:

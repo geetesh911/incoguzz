@@ -2,7 +2,7 @@ import { FlatList } from "react-native-gesture-handler";
 import React, { FC, useRef } from "react";
 import { useQuery } from "@apollo/client";
 import {
-  GetPostsOutput,
+  PostOutput,
   GetUserPostsDocument,
   GetUserPostsQuery,
   GetUserPostsQueryVariables,
@@ -25,6 +25,9 @@ import { RouteNames } from "../../../Navigation/constants";
 export const UserPostsTimeline: FC = () => {
   const { data } = useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(
     GetUserPostsDocument,
+    {
+      variables: { paginationInput: { take: 5, firstQueryResult: true } },
+    },
   );
 
   const scrollHandler = useRef<ScrollView>();
@@ -32,7 +35,7 @@ export const UserPostsTimeline: FC = () => {
   const renderItem = ({
     item: post,
     index,
-  }: ListRenderItemInfo<GetPostsOutput>) => {
+  }: ListRenderItemInfo<PostOutput>) => {
     return (
       <StyledTimlineItemContainer>
         <StyledTimlineRoadContainer>
@@ -48,7 +51,7 @@ export const UserPostsTimeline: FC = () => {
             innerRef={scrollHandler}
             key={post.id}
             post={post}
-            posts={(data?.getUserPosts as GetPostsOutput[]) || []}
+            posts={(data?.getUserPosts?.posts as PostOutput[]) || []}
             initialIndex={index}
             navigateTo={RouteNames.UserPost}
           />
@@ -60,7 +63,7 @@ export const UserPostsTimeline: FC = () => {
     <StyledUserPostsTimelineContainer>
       <FlatList
         ListHeaderComponent={<ScreenHeader heading="Timeline" />}
-        data={(data?.getUserPosts as GetPostsOutput[]) || []}
+        data={(data?.getUserPosts?.posts as PostOutput[]) || []}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

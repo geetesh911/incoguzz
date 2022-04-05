@@ -1,4 +1,4 @@
-import { GetPostsOutput } from "@incoguzz/graphql";
+import { PostOutput } from "@incoguzz/graphql";
 import { useRoute } from "@react-navigation/native";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
@@ -11,26 +11,26 @@ import { PageHeader } from "../../Components/shared";
 import { PostScreenRouteProp } from "../../Navigation";
 
 type IItemType = {
-  item: GetPostsOutput;
+  item: PostOutput;
   index: number;
 };
 
 export const PostScreen: FC = () => {
   const route = useRoute<PostScreenRouteProp>();
 
-  const pagerViewRef = useRef<LazyPagerView<GetPostsOutput>>(null);
+  const pagerViewRef = useRef<LazyPagerView<PostOutput>>(null);
 
   const [activeIndex, setActiveIndex] = useState<number>(
     route?.params?.initialIndex,
   );
-  const [posts, setPosts] = useState<GetPostsOutput[]>(
+  const [posts, setPosts] = useState<PostOutput[]>(
     route?.params?.posts
       ? [route?.params?.posts[route?.params?.initialIndex]]
       : [],
   );
 
   useEffect(() => {
-    setPosts(route?.params?.posts as GetPostsOutput[]);
+    setPosts(route?.params?.posts as PostOutput[]);
   }, []);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const PostScreen: FC = () => {
     }
   }, [posts]);
 
-  const keyExtractor = (item: GetPostsOutput, index: number) =>
+  const keyExtractor = (item: PostOutput, index: number) =>
     `${item?.id}${index}`;
 
   const renderItem = ({ item: post, index }: IItemType) => (

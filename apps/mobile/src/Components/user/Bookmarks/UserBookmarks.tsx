@@ -5,7 +5,7 @@ import {
   GetAllPostsQuery,
   GetAllPostsQueryVariables,
   GetAllPostsDocument,
-  GetPostsOutput,
+  PostOutput,
 } from "@incoguzz/graphql";
 import LocalMasonryList from "../../shared/List/MasonryList";
 import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
@@ -19,7 +19,9 @@ export const UserBookmarks: FC = () => {
   const { data, loading } = useQuery<
     GetAllPostsQuery,
     GetAllPostsQueryVariables
-  >(GetAllPostsDocument);
+  >(GetAllPostsDocument, {
+    variables: { paginationInput: { take: 5, firstQueryResult: true } },
+  });
 
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
 
@@ -30,7 +32,7 @@ export const UserBookmarks: FC = () => {
         key={post.id}
         post={post}
         postSection="Bookmarks"
-        posts={(data?.getAllPosts as GetPostsOutput[]) || []}
+        posts={(data?.getAllPosts?.posts as PostOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />
@@ -43,7 +45,7 @@ export const UserBookmarks: FC = () => {
       ListHeaderComponent={<ScreenHeader heading="Bookmarks" />}
       contentContainerStyle={styles.masonryList}
       numColumns={2}
-      data={(data?.getAllPosts as GetPostsOutput[]) || []}
+      data={(data?.getAllPosts?.posts as PostOutput[]) || []}
       loading={loading}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}

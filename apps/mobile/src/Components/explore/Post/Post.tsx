@@ -4,11 +4,11 @@ import { useAppSelector } from "../../../redux/hooks";
 import { Reactions } from "./Reactions";
 import { Caption } from "./Caption";
 import { PostComponent } from "./PostComponent";
-import { GetPostsOutput } from "@incoguzz/graphql";
+import { PostOutput } from "@incoguzz/graphql";
 import { getPostThumbnailUrl, getPostUrl } from "./helper";
 
 interface IPostProps {
-  post: GetPostsOutput;
+  post: PostOutput;
   unpauseVideo: boolean;
 }
 

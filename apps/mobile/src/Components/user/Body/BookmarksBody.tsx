@@ -3,18 +3,17 @@ import { ScrollView, StyleSheet } from "react-native";
 import { StyledBookmarksContainer, StyledFeedCard } from "./styled";
 import MasonryList from "@react-native-seoul/masonry-list";
 import {
-  GetPostsOutput,
   GetUserPostsDocument,
   GetUserPostsQuery,
   GetUserPostsQueryVariables,
-  PostType,
+  PostOutput,
 } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
 import { useQuery } from "@apollo/client";
 import { BookmarksBodyContentLoader } from "./BookmarksBodyContentLoader";
 
 export type IRenderItemType = {
-  item: GetPostsOutput;
+  item: PostOutput;
   i: number;
 };
 
@@ -22,7 +21,9 @@ export const BookmarksBody: FC = () => {
   const { data, loading } = useQuery<
     GetUserPostsQuery,
     GetUserPostsQueryVariables
-  >(GetUserPostsDocument);
+  >(GetUserPostsDocument, {
+    variables: { paginationInput: { take: 5, firstQueryResult: true } },
+  });
 
   const scrollHandler = useRef<ScrollView>();
 
@@ -35,7 +36,7 @@ export const BookmarksBody: FC = () => {
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        posts={(data?.getUserPosts as GetPostsOutput[]) || []}
+        posts={(data?.getUserPosts?.posts as PostOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />
@@ -48,7 +49,7 @@ export const BookmarksBody: FC = () => {
         innerRef={scrollHandler}
         contentContainerStyle={styles.masonryList}
         numColumns={1}
-        data={data?.getUserPosts || []}
+        data={data?.getUserPosts?.posts || []}
         loading={loading}
         renderItem={renderItem}
         onRefresh={() => console.log("refresh")}
