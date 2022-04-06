@@ -1,34 +1,33 @@
 import BaseRepository from "@/common/repositories/BaseRepository";
 import PrismaService from "@/common/services/prisma.service";
-import { Post, PostType } from "@/prisma/generated/type-graphql";
+import { Bookmark, Post, PostType } from "@/prisma/generated/type-graphql";
 import { Service } from "typedi";
 import {
-  AddClipPostInput,
-  AddMediaPostInput,
-  AddPollPostInput,
-  AddTextualPostInput,
-} from "../inputs/add-post.input";
-import {
-  IAddClipPostExtraOptions,
-  IAddMediaPostExtraOptions,
+  IAddClipPostParams,
+  IAddMediaPostParams,
+  IAddPollPostParams,
+  IAddTextualPostParams,
 } from "../interfaces/add-post.interface";
 import { Prisma } from "@prisma/client";
 import CreateBasicPostInputHelper from "../helpers/create-input.helper";
-import PaginationInput from "@/common/inputs/pagination.input";
+import { IBookmarkPostParams } from "../interfaces/bookmark.interface";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
+import { IAddPostReactionParams } from "../interfaces/reaction";
+import ReactionOutput from "../outputs/reaction.output";
+import { IGetPostParams } from "../interfaces/get-post.interface";
 
 interface IReader {
-  getUserPosts: (
-    userId: string,
-    paginationInput: PaginationInput,
-  ) => Promise<Post[]>;
-  getAllPosts: (paginationInput: PaginationInput) => Promise<Post[]>;
+  getUserPosts: (params: IGetPostParams) => Promise<Post[]>;
+  getExplorePosts: (params: IGetPostParams) => Promise<Post[]>;
+  getBookmarkedPosts: (params: IGetPostParams) => Promise<Bookmark[]>;
 }
 interface IWriter {
-  addMediaPost: (
-    userId: string,
-    addPostInput: AddMediaPostInput,
-    urls: string[],
-  ) => Promise<Post>;
+  addTextualPost: (params: IAddTextualPostParams) => Promise<Post>;
+  addPollPost: (params: IAddPollPostParams) => Promise<Post>;
+  addMediaPost: (params: IAddMediaPostParams) => Promise<Post>;
+  addClipPost: (params: IAddClipPostParams) => Promise<Post>;
+  postReaction: (params: IAddPostReactionParams) => Promise<ReactionOutput>;
+  bookmarkPost: (params: IBookmarkPostParams) => Promise<void>;
 }
 
 type TUserRepository = IReader & IWriter;
@@ -42,10 +41,10 @@ class PostRepository extends BaseRepository implements TUserRepository {
     super("post");
   }
 
-  public async getUserPosts(
-    userId: string,
-    paginationInput: PaginationInput,
-  ): Promise<Post[]> {
+  public async getUserPosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<Post[]> {
     const { take, firstQueryResult, cursor } = paginationInput;
 
     return this.prisma.post.findMany({
@@ -64,6 +63,8 @@ class PostRepository extends BaseRepository implements TUserRepository {
         textual: true,
         place: true,
         tags: true,
+        bookmarks: { where: { userId } },
+        reactions: { where: { userId } },
       },
       orderBy: {
         createdAt: "desc",
@@ -71,7 +72,10 @@ class PostRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async getAllPosts(paginationInput: PaginationInput): Promise<Post[]> {
+  public async getExplorePosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<Post[]> {
     const { take, firstQueryResult, cursor } = paginationInput;
     return this.prisma.post.findMany({
       take,
@@ -89,6 +93,8 @@ class PostRepository extends BaseRepository implements TUserRepository {
         textual: true,
         place: true,
         tags: true,
+        bookmarks: { where: { userId } },
+        reactions: { where: { userId } },
       },
       orderBy: {
         createdAt: "desc",
@@ -96,10 +102,121 @@ class PostRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public addTextualPost(
-    userId: string,
-    addTextualPostInput: AddTextualPostInput,
-  ): Promise<Post> {
+  public async getBookmarkedPosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<Bookmark[]> {
+    const { take, firstQueryResult, cursor } = paginationInput;
+    return this.prisma.bookmark.findMany({
+      where: { userId },
+      take,
+      skip: firstQueryResult ? 0 : 1,
+      cursor: cursor && { id: cursor },
+      include: {
+        post: {
+          include: {
+            photos: true,
+            video: true,
+            clip: {
+              include: { clipAudio: true },
+            },
+            audio: true,
+            poll: { include: { pollOptions: true } },
+            textual: true,
+            place: true,
+            tags: true,
+            bookmarks: { where: { userId } },
+            reactions: { where: { userId } },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
+  public async postReaction({
+    postId,
+    userId,
+    reactionType,
+  }: IAddPostReactionParams): Promise<ReactionOutput> {
+    const reaction = await this.prisma.reaction.findUnique({
+      where: {
+        postId_userId: {
+          postId,
+          userId,
+        },
+      },
+    });
+
+    if (reaction && reaction?.reaction === reactionType) {
+      const deletedReaction = await this.prisma.reaction.delete({
+        where: {
+          postId_userId: {
+            postId,
+            userId,
+          },
+        },
+      });
+      return {
+        ...deletedReaction,
+        deleted: true,
+      };
+    }
+
+    const createdOrUpdatedReaction = await this.prisma.reaction.upsert({
+      where: {
+        postId_userId: {
+          postId,
+          userId,
+        },
+      },
+      create: {
+        post: { connect: { id: postId } },
+        user: { connect: { id: userId } },
+        reaction: reactionType,
+      },
+      update: {
+        reaction: reactionType,
+      },
+    });
+
+    return {
+      ...createdOrUpdatedReaction,
+      deleted: false,
+    };
+  }
+
+  public async bookmarkPost({
+    postId,
+    userId,
+  }: IBookmarkPostParams): Promise<void> {
+    try {
+      await this.prisma.bookmark.create({
+        data: {
+          post: { connect: { id: postId } },
+          user: { connect: { id: userId } },
+        },
+      });
+    } catch (error) {
+      if ((error as PrismaClientKnownRequestError).code === "P2002") {
+        await this.prisma.bookmark.delete({
+          where: {
+            postId_userId: {
+              postId,
+              userId,
+            },
+          },
+        });
+      }
+    }
+  }
+
+  public addTextualPost({
+    userId,
+    addTextualPostInput,
+  }: IAddTextualPostParams): Promise<Post> {
     const { type, tags, published, text } = addTextualPostInput;
     const postCreateInput: Prisma.PostCreateInput = {
       ...this.createBasicPostInputHelper.createBasicPostInput({
@@ -115,10 +232,10 @@ class PostRepository extends BaseRepository implements TUserRepository {
     return this.prisma.post.create({ data: postCreateInput });
   }
 
-  public addPollPost(
-    userId: string,
-    addPollPostInput: AddPollPostInput,
-  ): Promise<Post> {
+  public addPollPost({
+    userId,
+    addPollPostInput,
+  }: IAddPollPostParams): Promise<Post> {
     const { type, tags, published, pollOptions, pollQuestion } =
       addPollPostInput;
 
@@ -144,12 +261,12 @@ class PostRepository extends BaseRepository implements TUserRepository {
     return this.prisma.post.create({ data: postCreateInput });
   }
 
-  public async addMediaPost(
-    userId: string,
-    addPostInput: AddMediaPostInput,
-    urls: string[],
-    extraOptions?: IAddMediaPostExtraOptions,
-  ): Promise<Post> {
+  public async addMediaPost({
+    userId,
+    addPostInput,
+    urls,
+    extraOptions,
+  }: IAddMediaPostParams): Promise<Post> {
     const { type, place, tags, published, caption } = addPostInput;
 
     let postCreateInput: Prisma.PostCreateInput =
@@ -200,12 +317,12 @@ class PostRepository extends BaseRepository implements TUserRepository {
 
     return this.prisma.post.create({ data: postCreateInput });
   }
-  public async addClipPost(
-    userId: string,
-    addPostInput: AddClipPostInput,
-    urls: string[],
-    extraOptions?: IAddClipPostExtraOptions,
-  ): Promise<Post> {
+  public async addClipPost({
+    userId,
+    addPostInput,
+    urls,
+    extraOptions,
+  }: IAddClipPostParams): Promise<Post> {
     const { type, place, tags, published, caption } = addPostInput;
 
     let postCreateInput: Prisma.PostCreateInput =

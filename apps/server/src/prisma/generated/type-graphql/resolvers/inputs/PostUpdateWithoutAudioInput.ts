@@ -3,17 +3,18 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { ActivityUpdateManyWithoutPostInput } from "../inputs/ActivityUpdateManyWithoutPostInput";
+import { BookmarkUpdateManyWithoutPostInput } from "../inputs/BookmarkUpdateManyWithoutPostInput";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
 import { ClipUpdateOneWithoutPostInput } from "../inputs/ClipUpdateOneWithoutPostInput";
 import { CommentUpdateManyWithoutPostInput } from "../inputs/CommentUpdateManyWithoutPostInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
 import { EnumPostTypeFieldUpdateOperationsInput } from "../inputs/EnumPostTypeFieldUpdateOperationsInput";
-import { LikeUpdateManyWithoutPostInput } from "../inputs/LikeUpdateManyWithoutPostInput";
 import { MessageUpdateManyWithoutPostInput } from "../inputs/MessageUpdateManyWithoutPostInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
 import { PhotoUpdateManyWithoutPostInput } from "../inputs/PhotoUpdateManyWithoutPostInput";
 import { PlaceUpdateOneWithoutPostsInput } from "../inputs/PlaceUpdateOneWithoutPostsInput";
 import { PollUpdateOneWithoutPostInput } from "../inputs/PollUpdateOneWithoutPostInput";
+import { ReactionUpdateManyWithoutPostInput } from "../inputs/ReactionUpdateManyWithoutPostInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
 import { TagUpdateManyWithoutPostsInput } from "../inputs/TagUpdateManyWithoutPostsInput";
 import { TextualUpdateOneWithoutPostInput } from "../inputs/TextualUpdateOneWithoutPostInput";
@@ -89,10 +90,15 @@ export class PostUpdateWithoutAudioInput {
   })
   textual?: TextualUpdateOneWithoutPostInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeUpdateManyWithoutPostInput, {
+  @TypeGraphQL.Field(_type => ReactionUpdateManyWithoutPostInput, {
     nullable: true,
   })
-  likes?: LikeUpdateManyWithoutPostInput | undefined;
+  reactions?: ReactionUpdateManyWithoutPostInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkUpdateManyWithoutPostInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkUpdateManyWithoutPostInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentUpdateManyWithoutPostInput, {
     nullable: true,

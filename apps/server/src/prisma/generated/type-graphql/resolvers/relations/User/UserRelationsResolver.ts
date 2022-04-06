@@ -1,16 +1,17 @@
 import * as TypeGraphQL from "type-graphql";
 import { Activity } from "../../../models/Activity";
 import { Blocked } from "../../../models/Blocked";
+import { Bookmark } from "../../../models/Bookmark";
 import { Comment } from "../../../models/Comment";
 import { CommentReplies } from "../../../models/CommentReplies";
 import { FollowRequest } from "../../../models/FollowRequest";
 import { Follower } from "../../../models/Follower";
 import { Following } from "../../../models/Following";
-import { Like } from "../../../models/Like";
 import { Message } from "../../../models/Message";
 import { PollAnswer } from "../../../models/PollAnswer";
 import { Post } from "../../../models/Post";
 import { Profile } from "../../../models/Profile";
+import { Reaction } from "../../../models/Reaction";
 import { Settings } from "../../../models/Settings";
 import { Story } from "../../../models/Story";
 import { Token } from "../../../models/Token";
@@ -18,13 +19,14 @@ import { User } from "../../../models/User";
 import { UserActivitiesArgs } from "./args/UserActivitiesArgs";
 import { UserBlockedArgs } from "./args/UserBlockedArgs";
 import { UserBlockedByArgs } from "./args/UserBlockedByArgs";
+import { UserBookmarksArgs } from "./args/UserBookmarksArgs";
 import { UserCommentRepliesArgs } from "./args/UserCommentRepliesArgs";
 import { UserCommentsArgs } from "./args/UserCommentsArgs";
 import { UserFollowersArgs } from "./args/UserFollowersArgs";
 import { UserFollowingsArgs } from "./args/UserFollowingsArgs";
-import { UserLikesArgs } from "./args/UserLikesArgs";
 import { UserPollAnswersArgs } from "./args/UserPollAnswersArgs";
 import { UserPostsArgs } from "./args/UserPostsArgs";
+import { UserReactionsArgs } from "./args/UserReactionsArgs";
 import { UserReceivedFollowRequestsArgs } from "./args/UserReceivedFollowRequestsArgs";
 import { UserReceivedMessagesArgs } from "./args/UserReceivedMessagesArgs";
 import { UserSentFollowRequestsArgs } from "./args/UserSentFollowRequestsArgs";
@@ -89,21 +91,38 @@ export class UserRelationsResolver {
       .posts(args);
   }
 
-  @TypeGraphQL.FieldResolver(_type => [Like], {
+  @TypeGraphQL.FieldResolver(_type => [Reaction], {
     nullable: false,
   })
-  async likes(
+  async reactions(
     @TypeGraphQL.Root() user: User,
     @TypeGraphQL.Ctx() ctx: any,
-    @TypeGraphQL.Args() args: UserLikesArgs,
-  ): Promise<Like[]> {
+    @TypeGraphQL.Args() args: UserReactionsArgs,
+  ): Promise<Reaction[]> {
     return getPrismaFromContext(ctx)
       .user.findUnique({
         where: {
           id: user.id,
         },
       })
-      .likes(args);
+      .reactions(args);
+  }
+
+  @TypeGraphQL.FieldResolver(_type => [Bookmark], {
+    nullable: false,
+  })
+  async bookmarks(
+    @TypeGraphQL.Root() user: User,
+    @TypeGraphQL.Ctx() ctx: any,
+    @TypeGraphQL.Args() args: UserBookmarksArgs,
+  ): Promise<Bookmark[]> {
+    return getPrismaFromContext(ctx)
+      .user.findUnique({
+        where: {
+          id: user.id,
+        },
+      })
+      .bookmarks(args);
   }
 
   @TypeGraphQL.FieldResolver(_type => [Comment], {

@@ -9,6 +9,9 @@ import AddClipPostArgs from "./args/add-clip-post.args";
 import AddMediaPostArgs from "./args/add-media-post.args";
 import GetPostsOutput from "./outputs/get-posts.output";
 import PaginationInput from "@/common/inputs/pagination.input";
+import PostReactionInput from "./inputs/post-reaction.input";
+import ReactionOutput from "./outputs/reaction.output";
+import BookmarksOutput from "./outputs/bookmark.output";
 
 @Service()
 @Resolver(() => Post)
@@ -22,16 +25,59 @@ export class PostResolver {
     @Arg("paginationInput", () => PaginationInput)
     paginationInput: PaginationInput,
   ): Promise<GetPostsOutput> {
-    return this.postService.getUserPosts(user.userId, paginationInput);
+    return this.postService.getUserPosts({
+      userId: user.userId,
+      paginationInput,
+    });
   }
 
   @Authorized()
   @Query(() => GetPostsOutput)
-  async getAllPosts(
+  async getExplorePosts(
+    @Ctx() { user }: Context,
     @Arg("paginationInput", () => PaginationInput)
     paginationInput: PaginationInput,
   ): Promise<GetPostsOutput> {
-    return this.postService.getAllPosts(paginationInput);
+    return this.postService.getExplorePosts({
+      userId: user.userId,
+      paginationInput,
+    });
+  }
+
+  @Authorized()
+  @Query(() => BookmarksOutput)
+  async getBookmarkedPosts(
+    @Ctx() { user }: Context,
+    @Arg("paginationInput", () => PaginationInput)
+    paginationInput: PaginationInput,
+  ): Promise<BookmarksOutput> {
+    return this.postService.getBookmarkedPosts({
+      userId: user.userId,
+      paginationInput,
+    });
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async bookmarkPost(
+    @Ctx() { user }: Context,
+    @Arg("postId", () => String) postId: string,
+  ): Promise<boolean> {
+    return this.postService.bookmarPost({ postId, userId: user.userId });
+  }
+
+  @Authorized()
+  @Mutation(() => ReactionOutput)
+  async postReaction(
+    @Ctx() { user }: Context,
+    @Arg("postReactionInput", () => PostReactionInput)
+    { postId, reactionType }: PostReactionInput,
+  ): Promise<ReactionOutput> {
+    return this.postService.postReaction({
+      postId,
+      userId: user.userId,
+      reactionType,
+    });
   }
 
   @Authorized()
@@ -70,7 +116,10 @@ export class PostResolver {
     @Arg("addTextualPostInput", () => AddTextualPostInput)
     addTextualPostInput: AddTextualPostInput,
   ): Promise<Post> {
-    return this.postService.addTextualPost(user.userId, addTextualPostInput);
+    return this.postService.addTextualPost({
+      userId: user.userId,
+      addTextualPostInput,
+    });
   }
 
   @Authorized()
@@ -80,6 +129,9 @@ export class PostResolver {
     @Arg("addPollPostInput", () => AddPollPostInput)
     addPollPostInput: AddPollPostInput,
   ): Promise<Post> {
-    return this.postService.addPollPost(user.userId, addPollPostInput);
+    return this.postService.addPollPost({
+      userId: user.userId,
+      addPollPostInput,
+    });
   }
 }

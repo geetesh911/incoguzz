@@ -57,6 +57,14 @@ enum Role {
   ADMIN
 }
 
+enum ReactionType {
+  LIKE
+  LAUGH
+  COOL
+  FIRE
+  CELEBRATE
+}
+
 enum PostType {
   POLL
   PHOTO
@@ -115,7 +123,8 @@ model User {
   profile                Profile?
   tokens                 Token[]
   posts                  Post[]
-  likes                  Like[]
+  reactions              Reaction[]
+  bookmarks              Bookmark[]
   comments               Comment[]
   followers              Follower[]
   followings             Following[]
@@ -197,7 +206,8 @@ model Post {
   clip       Clip?
   textual    Textual?
   audio      Audio?
-  likes      Like[]
+  reactions  Reaction[]
+  bookmarks  Bookmark[]
   comments   Comment[]
   activities Activity[]
   archive    Boolean    @default(false)
@@ -295,12 +305,29 @@ model Place {
   posts   Post[]
 }
 
-model Like {
-  id     String @id @unique @default(cuid())
-  post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  postId String
-  user   User   @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  userId String
+model Bookmark {
+  id        String   @id @unique @default(cuid())
+  post      Post     @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+
+  @@unique([postId, userId])
+}
+
+model Reaction {
+  id        String       @id @unique @default(cuid())
+  post      Post         @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  postId    String
+  user      User         @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String
+  reaction  ReactionType
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @default(now()) @updatedAt
+
+  @@unique([postId, userId])
 }
 
 model Comment {
@@ -311,15 +338,19 @@ model Comment {
   user           User             @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId         String
   commentReplies CommentReplies[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now()) @updatedAt
 }
 
 model CommentReplies {
-  id          String  @id @unique @default(cuid())
-  comment     String  @db.Text
-  repliedTo   Comment @relation(fields: [repliedToId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  id          String   @id @unique @default(cuid())
+  comment     String   @db.Text
+  repliedTo   Comment  @relation(fields: [repliedToId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   repliedToId String
-  user        User    @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 }
 
 model Follower {

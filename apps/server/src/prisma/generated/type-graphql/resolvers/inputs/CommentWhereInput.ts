@@ -3,6 +3,7 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { CommentRepliesListRelationFilter } from "../inputs/CommentRepliesListRelationFilter";
+import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { PostRelationFilter } from "../inputs/PostRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { UserRelationFilter } from "../inputs/UserRelationFilter";
@@ -60,4 +61,14 @@ export class CommentWhereInput {
     nullable: true,
   })
   commentReplies?: CommentRepliesListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFilter, {
+    nullable: true,
+  })
+  createdAt?: DateTimeFilter | undefined;
+
+  @TypeGraphQL.Field(_type => DateTimeFilter, {
+    nullable: true,
+  })
+  updatedAt?: DateTimeFilter | undefined;
 }

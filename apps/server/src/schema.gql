@@ -48,6 +48,28 @@ type Audio {
   url: String!
 }
 
+type Bookmark {
+  createdAt: DateTime!
+  id: String!
+  postId: String!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type BookmarkOutput {
+  createdAt: DateTime!
+  id: String!
+  post: PostOutput!
+  postId: String!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type BookmarksOutput {
+  bookmarks: [BookmarkOutput!]!
+  pagination: PaginationOutput!
+}
+
 input ChangePasswordInput {
   newPassword: String!
   oldPassword: String!
@@ -136,6 +158,7 @@ type Mutation {
   addMediaPost(addMediaPostInput: AddMediaPostInput!, media: [Upload!]!, mediaThumbnail: Upload): Post!
   addPollPost(addPollPostInput: AddPollPostInput!): Post!
   addTextualPost(addTextualPostInput: AddTextualPostInput!): Post!
+  bookmarkPost(postId: String!): Boolean!
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
   changeProfilePicture(picture: Upload!): Boolean!
   deactivateUser: Boolean!
@@ -144,6 +167,7 @@ type Mutation {
   login(loginInput: LoginInput!): LoginOutput!
   logout: Boolean!
   multipleUploadFile(picture: [Upload!]!): Boolean!
+  postReaction(postReactionInput: PostReactionInput!): ReactionOutput!
   removeProfilePicture: Boolean!
   resetPassword(resetPasswordInput: ResetPasswordInput!): ForgotPasswordOutput!
   signUp(signUpInput: SignUpInput!): SignUpOutput!
@@ -224,16 +248,18 @@ type Post {
 
 type PostCount {
   activities: Int!
+  bookmarks: Int!
   comments: Int!
-  likes: Int!
   message: Int!
   photos: Int!
+  reactions: Int!
   tags: Int!
 }
 
 type PostOutput {
   _count: PostCount
   audio: Audio
+  bookmarks: [Bookmark!]
   caption: String
   clip: ClipOutput
   createdAt: DateTime!
@@ -241,12 +267,18 @@ type PostOutput {
   photos: [Photo!]
   place: Place
   poll: PollOutput
+  reactions: [Reaction!]
   tags: [Tag!]
   textual: Textual
   type: PostType!
   updatedAt: DateTime!
   userId: String!
   video: Video
+}
+
+input PostReactionInput {
+  postId: String!
+  reactionType: ReactionType!
 }
 
 enum PostType {
@@ -300,13 +332,41 @@ type ProfileOutput {
 }
 
 type Query {
-  getAllPosts(paginationInput: PaginationInput!): GetPostsOutput!
+  getBookmarkedPosts(paginationInput: PaginationInput!): BookmarksOutput!
+  getExplorePosts(paginationInput: PaginationInput!): GetPostsOutput!
   getMediaAccessToken: String!
   getUser: UserOutput
   getUserPosts(paginationInput: PaginationInput!): GetPostsOutput!
   isUsernameAvailable(username: String!): Boolean
   test: String!
   verifyAccessToken(accessToken: String!): Boolean
+}
+
+type Reaction {
+  createdAt: DateTime!
+  id: String!
+  postId: String!
+  reaction: ReactionType!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type ReactionOutput {
+  createdAt: DateTime!
+  deleted: Boolean!
+  id: String!
+  postId: String!
+  reaction: ReactionType!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+enum ReactionType {
+  CELEBRATE
+  COOL
+  FIRE
+  LAUGH
+  LIKE
 }
 
 enum RelationshipStatus {

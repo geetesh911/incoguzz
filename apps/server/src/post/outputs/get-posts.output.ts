@@ -1,10 +1,12 @@
 import PaginationOutput from "@/common/outputs/pagination.output";
 import {
   Audio,
+  Bookmark,
   Photo,
   Place,
   PostCount,
   PostType,
+  Reaction,
   Tag,
   Textual,
   Video,
@@ -14,7 +16,7 @@ import ClipOutput from "./clip.output";
 import PollOutput from "./poll.output";
 
 @ObjectType()
-class PostOutput {
+export class PostOutput {
   @Field(() => String, { nullable: false })
   id!: string;
 
@@ -56,6 +58,12 @@ class PostOutput {
 
   @Field(() => Audio, { nullable: true })
   audio?: Audio | null;
+
+  @Field(() => [Bookmark], { nullable: true })
+  bookmarks?: Bookmark[] | null;
+
+  @Field(() => [Reaction], { nullable: true })
+  reactions?: Reaction[] | null;
 
   @Field(() => PostCount, { nullable: true })
   _count?: PostCount | null;

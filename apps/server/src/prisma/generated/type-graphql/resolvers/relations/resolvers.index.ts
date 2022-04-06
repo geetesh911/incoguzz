@@ -1,6 +1,7 @@
 export { ActivityRelationsResolver } from "./Activity/ActivityRelationsResolver";
 export { AudioRelationsResolver } from "./Audio/AudioRelationsResolver";
 export { BlockedRelationsResolver } from "./Blocked/BlockedRelationsResolver";
+export { BookmarkRelationsResolver } from "./Bookmark/BookmarkRelationsResolver";
 export { ClipRelationsResolver } from "./Clip/ClipRelationsResolver";
 export { ClipAudioRelationsResolver } from "./ClipAudio/ClipAudioRelationsResolver";
 export { CommentRelationsResolver } from "./Comment/CommentRelationsResolver";
@@ -8,7 +9,6 @@ export { CommentRepliesRelationsResolver } from "./CommentReplies/CommentReplies
 export { FollowRequestRelationsResolver } from "./FollowRequest/FollowRequestRelationsResolver";
 export { FollowerRelationsResolver } from "./Follower/FollowerRelationsResolver";
 export { FollowingRelationsResolver } from "./Following/FollowingRelationsResolver";
-export { LikeRelationsResolver } from "./Like/LikeRelationsResolver";
 export { MessageRelationsResolver } from "./Message/MessageRelationsResolver";
 export { PhotoRelationsResolver } from "./Photo/PhotoRelationsResolver";
 export { PlaceRelationsResolver } from "./Place/PlaceRelationsResolver";
@@ -17,6 +17,7 @@ export { PollAnswerRelationsResolver } from "./PollAnswer/PollAnswerRelationsRes
 export { PollOptionRelationsResolver } from "./PollOption/PollOptionRelationsResolver";
 export { PostRelationsResolver } from "./Post/PostRelationsResolver";
 export { ProfileRelationsResolver } from "./Profile/ProfileRelationsResolver";
+export { ReactionRelationsResolver } from "./Reaction/ReactionRelationsResolver";
 export { SettingsRelationsResolver } from "./Settings/SettingsRelationsResolver";
 export { StoryRelationsResolver } from "./Story/StoryRelationsResolver";
 export { TagRelationsResolver } from "./Tag/TagRelationsResolver";

@@ -3,13 +3,14 @@ import * as GraphQLScalars from "graphql-scalars";
 import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { AudioCreateNestedOneWithoutPostInput } from "../inputs/AudioCreateNestedOneWithoutPostInput";
+import { BookmarkCreateNestedManyWithoutPostInput } from "../inputs/BookmarkCreateNestedManyWithoutPostInput";
 import { ClipCreateNestedOneWithoutPostInput } from "../inputs/ClipCreateNestedOneWithoutPostInput";
 import { CommentCreateNestedManyWithoutPostInput } from "../inputs/CommentCreateNestedManyWithoutPostInput";
-import { LikeCreateNestedManyWithoutPostInput } from "../inputs/LikeCreateNestedManyWithoutPostInput";
 import { MessageCreateNestedManyWithoutPostInput } from "../inputs/MessageCreateNestedManyWithoutPostInput";
 import { PhotoCreateNestedManyWithoutPostInput } from "../inputs/PhotoCreateNestedManyWithoutPostInput";
 import { PlaceCreateNestedOneWithoutPostsInput } from "../inputs/PlaceCreateNestedOneWithoutPostsInput";
 import { PollCreateNestedOneWithoutPostInput } from "../inputs/PollCreateNestedOneWithoutPostInput";
+import { ReactionCreateNestedManyWithoutPostInput } from "../inputs/ReactionCreateNestedManyWithoutPostInput";
 import { TagCreateNestedManyWithoutPostsInput } from "../inputs/TagCreateNestedManyWithoutPostsInput";
 import { TextualCreateNestedOneWithoutPostInput } from "../inputs/TextualCreateNestedOneWithoutPostInput";
 import { UserCreateNestedOneWithoutPostsInput } from "../inputs/UserCreateNestedOneWithoutPostsInput";
@@ -90,10 +91,15 @@ export class PostCreateWithoutActivitiesInput {
   })
   audio?: AudioCreateNestedOneWithoutPostInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeCreateNestedManyWithoutPostInput, {
+  @TypeGraphQL.Field(_type => ReactionCreateNestedManyWithoutPostInput, {
     nullable: true,
   })
-  likes?: LikeCreateNestedManyWithoutPostInput | undefined;
+  reactions?: ReactionCreateNestedManyWithoutPostInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutPostInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkCreateNestedManyWithoutPostInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentCreateNestedManyWithoutPostInput, {
     nullable: true,

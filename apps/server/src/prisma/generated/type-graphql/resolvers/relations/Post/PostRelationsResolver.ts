@@ -1,23 +1,25 @@
 import * as TypeGraphQL from "type-graphql";
 import { Activity } from "../../../models/Activity";
 import { Audio } from "../../../models/Audio";
+import { Bookmark } from "../../../models/Bookmark";
 import { Clip } from "../../../models/Clip";
 import { Comment } from "../../../models/Comment";
-import { Like } from "../../../models/Like";
 import { Message } from "../../../models/Message";
 import { Photo } from "../../../models/Photo";
 import { Place } from "../../../models/Place";
 import { Poll } from "../../../models/Poll";
 import { Post } from "../../../models/Post";
+import { Reaction } from "../../../models/Reaction";
 import { Tag } from "../../../models/Tag";
 import { Textual } from "../../../models/Textual";
 import { User } from "../../../models/User";
 import { Video } from "../../../models/Video";
 import { PostActivitiesArgs } from "./args/PostActivitiesArgs";
+import { PostBookmarksArgs } from "./args/PostBookmarksArgs";
 import { PostCommentsArgs } from "./args/PostCommentsArgs";
-import { PostLikesArgs } from "./args/PostLikesArgs";
 import { PostMessageArgs } from "./args/PostMessageArgs";
 import { PostPhotosArgs } from "./args/PostPhotosArgs";
+import { PostReactionsArgs } from "./args/PostReactionsArgs";
 import { PostTagsArgs } from "./args/PostTagsArgs";
 import {
   transformFields,
@@ -173,21 +175,38 @@ export class PostRelationsResolver {
       .audio({});
   }
 
-  @TypeGraphQL.FieldResolver(_type => [Like], {
+  @TypeGraphQL.FieldResolver(_type => [Reaction], {
     nullable: false,
   })
-  async likes(
+  async reactions(
     @TypeGraphQL.Root() post: Post,
     @TypeGraphQL.Ctx() ctx: any,
-    @TypeGraphQL.Args() args: PostLikesArgs,
-  ): Promise<Like[]> {
+    @TypeGraphQL.Args() args: PostReactionsArgs,
+  ): Promise<Reaction[]> {
     return getPrismaFromContext(ctx)
       .post.findUnique({
         where: {
           id: post.id,
         },
       })
-      .likes(args);
+      .reactions(args);
+  }
+
+  @TypeGraphQL.FieldResolver(_type => [Bookmark], {
+    nullable: false,
+  })
+  async bookmarks(
+    @TypeGraphQL.Root() post: Post,
+    @TypeGraphQL.Ctx() ctx: any,
+    @TypeGraphQL.Args() args: PostBookmarksArgs,
+  ): Promise<Bookmark[]> {
+    return getPrismaFromContext(ctx)
+      .post.findUnique({
+        where: {
+          id: post.id,
+        },
+      })
+      .bookmarks(args);
   }
 
   @TypeGraphQL.FieldResolver(_type => [Comment], {

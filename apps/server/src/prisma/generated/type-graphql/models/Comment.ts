@@ -37,6 +37,16 @@ export class Comment {
 
   commentReplies?: CommentReplies[];
 
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false,
+  })
+  createdAt!: Date;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: false,
+  })
+  updatedAt!: Date;
+
   @TypeGraphQL.Field(_type => CommentCount, {
     nullable: true,
   })

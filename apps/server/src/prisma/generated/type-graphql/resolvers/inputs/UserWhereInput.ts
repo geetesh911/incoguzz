@@ -4,6 +4,7 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { ActivityListRelationFilter } from "../inputs/ActivityListRelationFilter";
 import { BlockedListRelationFilter } from "../inputs/BlockedListRelationFilter";
+import { BookmarkListRelationFilter } from "../inputs/BookmarkListRelationFilter";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { CommentListRelationFilter } from "../inputs/CommentListRelationFilter";
 import { CommentRepliesListRelationFilter } from "../inputs/CommentRepliesListRelationFilter";
@@ -14,11 +15,11 @@ import { FollowRequestListRelationFilter } from "../inputs/FollowRequestListRela
 import { FollowerListRelationFilter } from "../inputs/FollowerListRelationFilter";
 import { FollowingListRelationFilter } from "../inputs/FollowingListRelationFilter";
 import { IntFilter } from "../inputs/IntFilter";
-import { LikeListRelationFilter } from "../inputs/LikeListRelationFilter";
 import { MessageListRelationFilter } from "../inputs/MessageListRelationFilter";
 import { PollAnswerListRelationFilter } from "../inputs/PollAnswerListRelationFilter";
 import { PostListRelationFilter } from "../inputs/PostListRelationFilter";
 import { ProfileRelationFilter } from "../inputs/ProfileRelationFilter";
+import { ReactionListRelationFilter } from "../inputs/ReactionListRelationFilter";
 import { SettingsRelationFilter } from "../inputs/SettingsRelationFilter";
 import { StoryListRelationFilter } from "../inputs/StoryListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
@@ -134,10 +135,15 @@ export class UserWhereInput {
   })
   posts?: PostListRelationFilter | undefined;
 
-  @TypeGraphQL.Field(_type => LikeListRelationFilter, {
+  @TypeGraphQL.Field(_type => ReactionListRelationFilter, {
     nullable: true,
   })
-  likes?: LikeListRelationFilter | undefined;
+  reactions?: ReactionListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkListRelationFilter, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => CommentListRelationFilter, {
     nullable: true,

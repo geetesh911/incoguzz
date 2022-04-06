@@ -39,4 +39,14 @@ export class CommentCreateInput {
   commentReplies?:
     | CommentRepliesCreateNestedManyWithoutRepliedToInput
     | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  updatedAt?: Date | undefined;
 }

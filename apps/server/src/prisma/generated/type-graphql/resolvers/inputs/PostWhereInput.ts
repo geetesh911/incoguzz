@@ -4,16 +4,17 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { ActivityListRelationFilter } from "../inputs/ActivityListRelationFilter";
 import { AudioRelationFilter } from "../inputs/AudioRelationFilter";
+import { BookmarkListRelationFilter } from "../inputs/BookmarkListRelationFilter";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { ClipRelationFilter } from "../inputs/ClipRelationFilter";
 import { CommentListRelationFilter } from "../inputs/CommentListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { EnumPostTypeFilter } from "../inputs/EnumPostTypeFilter";
-import { LikeListRelationFilter } from "../inputs/LikeListRelationFilter";
 import { MessageListRelationFilter } from "../inputs/MessageListRelationFilter";
 import { PhotoListRelationFilter } from "../inputs/PhotoListRelationFilter";
 import { PlaceRelationFilter } from "../inputs/PlaceRelationFilter";
 import { PollRelationFilter } from "../inputs/PollRelationFilter";
+import { ReactionListRelationFilter } from "../inputs/ReactionListRelationFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 import { TagListRelationFilter } from "../inputs/TagListRelationFilter";
@@ -120,10 +121,15 @@ export class PostWhereInput {
   })
   audio?: AudioRelationFilter | undefined;
 
-  @TypeGraphQL.Field(_type => LikeListRelationFilter, {
+  @TypeGraphQL.Field(_type => ReactionListRelationFilter, {
     nullable: true,
   })
-  likes?: LikeListRelationFilter | undefined;
+  reactions?: ReactionListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkListRelationFilter, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkListRelationFilter | undefined;
 
   @TypeGraphQL.Field(_type => CommentListRelationFilter, {
     nullable: true,

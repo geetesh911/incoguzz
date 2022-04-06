@@ -5,18 +5,19 @@ import { DecimalJSScalar } from "../../scalars";
 import { ActivityCreateNestedManyWithoutUserInput } from "../inputs/ActivityCreateNestedManyWithoutUserInput";
 import { BlockedCreateNestedManyWithoutSourceUserInput } from "../inputs/BlockedCreateNestedManyWithoutSourceUserInput";
 import { BlockedCreateNestedManyWithoutTargetUserInput } from "../inputs/BlockedCreateNestedManyWithoutTargetUserInput";
+import { BookmarkCreateNestedManyWithoutUserInput } from "../inputs/BookmarkCreateNestedManyWithoutUserInput";
 import { CommentCreateNestedManyWithoutUserInput } from "../inputs/CommentCreateNestedManyWithoutUserInput";
 import { CommentRepliesCreateNestedManyWithoutUserInput } from "../inputs/CommentRepliesCreateNestedManyWithoutUserInput";
 import { FollowRequestCreateNestedManyWithoutSourceUserInput } from "../inputs/FollowRequestCreateNestedManyWithoutSourceUserInput";
 import { FollowRequestCreateNestedManyWithoutTargetUserInput } from "../inputs/FollowRequestCreateNestedManyWithoutTargetUserInput";
 import { FollowerCreateNestedManyWithoutUserInput } from "../inputs/FollowerCreateNestedManyWithoutUserInput";
 import { FollowingCreateNestedManyWithoutUserInput } from "../inputs/FollowingCreateNestedManyWithoutUserInput";
-import { LikeCreateNestedManyWithoutUserInput } from "../inputs/LikeCreateNestedManyWithoutUserInput";
 import { MessageCreateNestedManyWithoutSourceUserInput } from "../inputs/MessageCreateNestedManyWithoutSourceUserInput";
 import { MessageCreateNestedManyWithoutTargetUserInput } from "../inputs/MessageCreateNestedManyWithoutTargetUserInput";
 import { PollAnswerCreateNestedManyWithoutUserInput } from "../inputs/PollAnswerCreateNestedManyWithoutUserInput";
 import { PostCreateNestedManyWithoutUserInput } from "../inputs/PostCreateNestedManyWithoutUserInput";
 import { ProfileCreateNestedOneWithoutUserInput } from "../inputs/ProfileCreateNestedOneWithoutUserInput";
+import { ReactionCreateNestedManyWithoutUserInput } from "../inputs/ReactionCreateNestedManyWithoutUserInput";
 import { SettingsCreateNestedOneWithoutUserInput } from "../inputs/SettingsCreateNestedOneWithoutUserInput";
 import { TokenCreateNestedManyWithoutUserInput } from "../inputs/TokenCreateNestedManyWithoutUserInput";
 import { AccountType } from "../../enums/AccountType";
@@ -116,10 +117,15 @@ export class UserCreateWithoutStoriesInput {
   })
   posts?: PostCreateNestedManyWithoutUserInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeCreateNestedManyWithoutUserInput, {
+  @TypeGraphQL.Field(_type => ReactionCreateNestedManyWithoutUserInput, {
     nullable: true,
   })
-  likes?: LikeCreateNestedManyWithoutUserInput | undefined;
+  reactions?: ReactionCreateNestedManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkCreateNestedManyWithoutUserInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkCreateNestedManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentCreateNestedManyWithoutUserInput, {
     nullable: true,

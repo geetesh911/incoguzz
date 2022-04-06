@@ -20,7 +20,12 @@ export class UserCount {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false,
   })
-  likes!: number;
+  reactions!: number;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false,
+  })
+  bookmarks!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false,

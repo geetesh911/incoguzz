@@ -4,16 +4,17 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
 import { Activity } from "../models/Activity";
 import { Blocked } from "../models/Blocked";
+import { Bookmark } from "../models/Bookmark";
 import { Comment } from "../models/Comment";
 import { CommentReplies } from "../models/CommentReplies";
 import { FollowRequest } from "../models/FollowRequest";
 import { Follower } from "../models/Follower";
 import { Following } from "../models/Following";
-import { Like } from "../models/Like";
 import { Message } from "../models/Message";
 import { PollAnswer } from "../models/PollAnswer";
 import { Post } from "../models/Post";
 import { Profile } from "../models/Profile";
+import { Reaction } from "../models/Reaction";
 import { Settings } from "../models/Settings";
 import { Story } from "../models/Story";
 import { Token } from "../models/Token";
@@ -106,7 +107,9 @@ export class User {
 
   posts?: Post[];
 
-  likes?: Like[];
+  reactions?: Reaction[];
+
+  bookmarks?: Bookmark[];
 
   comments?: Comment[];
 

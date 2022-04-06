@@ -5,6 +5,8 @@ export enum CommentRepliesScalarFieldEnum {
   comment = "comment",
   repliedToId = "repliedToId",
   userId = "userId",
+  createdAt = "createdAt",
+  updatedAt = "updatedAt",
 }
 TypeGraphQL.registerEnumType(CommentRepliesScalarFieldEnum, {
   name: "CommentRepliesScalarFieldEnum",

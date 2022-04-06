@@ -4,13 +4,14 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { ActivityOrderByRelationAggregateInput } from "../inputs/ActivityOrderByRelationAggregateInput";
 import { AudioOrderByWithRelationInput } from "../inputs/AudioOrderByWithRelationInput";
+import { BookmarkOrderByRelationAggregateInput } from "../inputs/BookmarkOrderByRelationAggregateInput";
 import { ClipOrderByWithRelationInput } from "../inputs/ClipOrderByWithRelationInput";
 import { CommentOrderByRelationAggregateInput } from "../inputs/CommentOrderByRelationAggregateInput";
-import { LikeOrderByRelationAggregateInput } from "../inputs/LikeOrderByRelationAggregateInput";
 import { MessageOrderByRelationAggregateInput } from "../inputs/MessageOrderByRelationAggregateInput";
 import { PhotoOrderByRelationAggregateInput } from "../inputs/PhotoOrderByRelationAggregateInput";
 import { PlaceOrderByWithRelationInput } from "../inputs/PlaceOrderByWithRelationInput";
 import { PollOrderByWithRelationInput } from "../inputs/PollOrderByWithRelationInput";
+import { ReactionOrderByRelationAggregateInput } from "../inputs/ReactionOrderByRelationAggregateInput";
 import { TagOrderByRelationAggregateInput } from "../inputs/TagOrderByRelationAggregateInput";
 import { TextualOrderByWithRelationInput } from "../inputs/TextualOrderByWithRelationInput";
 import { UserOrderByWithRelationInput } from "../inputs/UserOrderByWithRelationInput";
@@ -101,10 +102,15 @@ export class PostOrderByWithRelationInput {
   })
   audio?: AudioOrderByWithRelationInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeOrderByRelationAggregateInput, {
+  @TypeGraphQL.Field(_type => ReactionOrderByRelationAggregateInput, {
     nullable: true,
   })
-  likes?: LikeOrderByRelationAggregateInput | undefined;
+  reactions?: ReactionOrderByRelationAggregateInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkOrderByRelationAggregateInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkOrderByRelationAggregateInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentOrderByRelationAggregateInput, {
     nullable: true,

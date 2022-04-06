@@ -4,13 +4,14 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../scalars";
 import { Activity } from "../models/Activity";
 import { Audio } from "../models/Audio";
+import { Bookmark } from "../models/Bookmark";
 import { Clip } from "../models/Clip";
 import { Comment } from "../models/Comment";
-import { Like } from "../models/Like";
 import { Message } from "../models/Message";
 import { Photo } from "../models/Photo";
 import { Place } from "../models/Place";
 import { Poll } from "../models/Poll";
+import { Reaction } from "../models/Reaction";
 import { Tag } from "../models/Tag";
 import { Textual } from "../models/Textual";
 import { User } from "../models/User";
@@ -75,7 +76,9 @@ export class Post {
 
   audio?: Audio | null;
 
-  likes?: Like[];
+  reactions?: Reaction[];
+
+  bookmarks?: Bookmark[];
 
   comments?: Comment[];
 

@@ -5,6 +5,7 @@ import { DecimalJSScalar } from "../../scalars";
 import { ActivityUpdateManyWithoutUserInput } from "../inputs/ActivityUpdateManyWithoutUserInput";
 import { BlockedUpdateManyWithoutSourceUserInput } from "../inputs/BlockedUpdateManyWithoutSourceUserInput";
 import { BlockedUpdateManyWithoutTargetUserInput } from "../inputs/BlockedUpdateManyWithoutTargetUserInput";
+import { BookmarkUpdateManyWithoutUserInput } from "../inputs/BookmarkUpdateManyWithoutUserInput";
 import { BoolFieldUpdateOperationsInput } from "../inputs/BoolFieldUpdateOperationsInput";
 import { CommentRepliesUpdateManyWithoutUserInput } from "../inputs/CommentRepliesUpdateManyWithoutUserInput";
 import { CommentUpdateManyWithoutUserInput } from "../inputs/CommentUpdateManyWithoutUserInput";
@@ -15,13 +16,13 @@ import { FollowRequestUpdateManyWithoutSourceUserInput } from "../inputs/FollowR
 import { FollowerUpdateManyWithoutUserInput } from "../inputs/FollowerUpdateManyWithoutUserInput";
 import { FollowingUpdateManyWithoutUserInput } from "../inputs/FollowingUpdateManyWithoutUserInput";
 import { IntFieldUpdateOperationsInput } from "../inputs/IntFieldUpdateOperationsInput";
-import { LikeUpdateManyWithoutUserInput } from "../inputs/LikeUpdateManyWithoutUserInput";
 import { MessageUpdateManyWithoutSourceUserInput } from "../inputs/MessageUpdateManyWithoutSourceUserInput";
 import { MessageUpdateManyWithoutTargetUserInput } from "../inputs/MessageUpdateManyWithoutTargetUserInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
 import { PollAnswerUpdateManyWithoutUserInput } from "../inputs/PollAnswerUpdateManyWithoutUserInput";
 import { PostUpdateManyWithoutUserInput } from "../inputs/PostUpdateManyWithoutUserInput";
 import { ProfileUpdateOneWithoutUserInput } from "../inputs/ProfileUpdateOneWithoutUserInput";
+import { ReactionUpdateManyWithoutUserInput } from "../inputs/ReactionUpdateManyWithoutUserInput";
 import { SettingsUpdateOneWithoutUserInput } from "../inputs/SettingsUpdateOneWithoutUserInput";
 import { StoryUpdateManyWithoutUserInput } from "../inputs/StoryUpdateManyWithoutUserInput";
 import { StringFieldUpdateOperationsInput } from "../inputs/StringFieldUpdateOperationsInput";
@@ -121,10 +122,15 @@ export class UserUpdateWithoutReceivedFollowRequestsInput {
   })
   posts?: PostUpdateManyWithoutUserInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeUpdateManyWithoutUserInput, {
+  @TypeGraphQL.Field(_type => ReactionUpdateManyWithoutUserInput, {
     nullable: true,
   })
-  likes?: LikeUpdateManyWithoutUserInput | undefined;
+  reactions?: ReactionUpdateManyWithoutUserInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkUpdateManyWithoutUserInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkUpdateManyWithoutUserInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentUpdateManyWithoutUserInput, {
     nullable: true,

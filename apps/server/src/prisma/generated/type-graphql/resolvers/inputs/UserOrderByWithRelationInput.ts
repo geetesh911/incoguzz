@@ -4,16 +4,17 @@ import { Prisma } from "@prisma/client";
 import { DecimalJSScalar } from "../../scalars";
 import { ActivityOrderByRelationAggregateInput } from "../inputs/ActivityOrderByRelationAggregateInput";
 import { BlockedOrderByRelationAggregateInput } from "../inputs/BlockedOrderByRelationAggregateInput";
+import { BookmarkOrderByRelationAggregateInput } from "../inputs/BookmarkOrderByRelationAggregateInput";
 import { CommentOrderByRelationAggregateInput } from "../inputs/CommentOrderByRelationAggregateInput";
 import { CommentRepliesOrderByRelationAggregateInput } from "../inputs/CommentRepliesOrderByRelationAggregateInput";
 import { FollowRequestOrderByRelationAggregateInput } from "../inputs/FollowRequestOrderByRelationAggregateInput";
 import { FollowerOrderByRelationAggregateInput } from "../inputs/FollowerOrderByRelationAggregateInput";
 import { FollowingOrderByRelationAggregateInput } from "../inputs/FollowingOrderByRelationAggregateInput";
-import { LikeOrderByRelationAggregateInput } from "../inputs/LikeOrderByRelationAggregateInput";
 import { MessageOrderByRelationAggregateInput } from "../inputs/MessageOrderByRelationAggregateInput";
 import { PollAnswerOrderByRelationAggregateInput } from "../inputs/PollAnswerOrderByRelationAggregateInput";
 import { PostOrderByRelationAggregateInput } from "../inputs/PostOrderByRelationAggregateInput";
 import { ProfileOrderByWithRelationInput } from "../inputs/ProfileOrderByWithRelationInput";
+import { ReactionOrderByRelationAggregateInput } from "../inputs/ReactionOrderByRelationAggregateInput";
 import { SettingsOrderByWithRelationInput } from "../inputs/SettingsOrderByWithRelationInput";
 import { StoryOrderByRelationAggregateInput } from "../inputs/StoryOrderByRelationAggregateInput";
 import { TokenOrderByRelationAggregateInput } from "../inputs/TokenOrderByRelationAggregateInput";
@@ -113,10 +114,15 @@ export class UserOrderByWithRelationInput {
   })
   posts?: PostOrderByRelationAggregateInput | undefined;
 
-  @TypeGraphQL.Field(_type => LikeOrderByRelationAggregateInput, {
+  @TypeGraphQL.Field(_type => ReactionOrderByRelationAggregateInput, {
     nullable: true,
   })
-  likes?: LikeOrderByRelationAggregateInput | undefined;
+  reactions?: ReactionOrderByRelationAggregateInput | undefined;
+
+  @TypeGraphQL.Field(_type => BookmarkOrderByRelationAggregateInput, {
+    nullable: true,
+  })
+  bookmarks?: BookmarkOrderByRelationAggregateInput | undefined;
 
   @TypeGraphQL.Field(_type => CommentOrderByRelationAggregateInput, {
     nullable: true,

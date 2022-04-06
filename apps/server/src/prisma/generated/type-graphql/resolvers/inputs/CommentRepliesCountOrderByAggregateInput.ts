@@ -27,4 +27,14 @@ export class CommentRepliesCountOrderByAggregateInput {
     nullable: true,
   })
   userId?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  createdAt?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  updatedAt?: "asc" | "desc" | undefined;
 }

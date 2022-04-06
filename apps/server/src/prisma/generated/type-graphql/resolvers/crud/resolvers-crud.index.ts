@@ -1,6 +1,7 @@
 export { ActivityCrudResolver } from "./Activity/ActivityCrudResolver";
 export { AudioCrudResolver } from "./Audio/AudioCrudResolver";
 export { BlockedCrudResolver } from "./Blocked/BlockedCrudResolver";
+export { BookmarkCrudResolver } from "./Bookmark/BookmarkCrudResolver";
 export { ClipCrudResolver } from "./Clip/ClipCrudResolver";
 export { ClipAudioCrudResolver } from "./ClipAudio/ClipAudioCrudResolver";
 export { CommentCrudResolver } from "./Comment/CommentCrudResolver";
@@ -8,7 +9,6 @@ export { CommentRepliesCrudResolver } from "./CommentReplies/CommentRepliesCrudR
 export { FollowRequestCrudResolver } from "./FollowRequest/FollowRequestCrudResolver";
 export { FollowerCrudResolver } from "./Follower/FollowerCrudResolver";
 export { FollowingCrudResolver } from "./Following/FollowingCrudResolver";
-export { LikeCrudResolver } from "./Like/LikeCrudResolver";
 export { MessageCrudResolver } from "./Message/MessageCrudResolver";
 export { PhotoCrudResolver } from "./Photo/PhotoCrudResolver";
 export { PlaceCrudResolver } from "./Place/PlaceCrudResolver";
@@ -17,6 +17,7 @@ export { PollAnswerCrudResolver } from "./PollAnswer/PollAnswerCrudResolver";
 export { PollOptionCrudResolver } from "./PollOption/PollOptionCrudResolver";
 export { PostCrudResolver } from "./Post/PostCrudResolver";
 export { ProfileCrudResolver } from "./Profile/ProfileCrudResolver";
+export { ReactionCrudResolver } from "./Reaction/ReactionCrudResolver";
 export { SettingsCrudResolver } from "./Settings/SettingsCrudResolver";
 export { StoryCrudResolver } from "./Story/StoryCrudResolver";
 export { TagCrudResolver } from "./Tag/TagCrudResolver";

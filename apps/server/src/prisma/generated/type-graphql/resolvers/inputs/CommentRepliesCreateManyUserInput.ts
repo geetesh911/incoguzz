@@ -21,4 +21,14 @@ export class CommentRepliesCreateManyUserInput {
     nullable: false,
   })
   repliedToId!: string;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  updatedAt?: Date | undefined;
 }

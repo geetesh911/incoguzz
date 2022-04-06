@@ -26,4 +26,14 @@ export class CommentRepliesMinAggregate {
     nullable: true,
   })
   userId!: string | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  createdAt!: Date | null;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  updatedAt!: Date | null;
 }

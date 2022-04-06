@@ -1,7 +1,6 @@
 import { MediaLimits } from "@/common/enums/media.enum";
 import MediaHelper from "@/common/helpers/media.helper";
 import PaginationHelper from "@/common/helpers/pagination.helper";
-import PaginationInput from "@/common/inputs/pagination.input";
 import { IGetVideoThumbnail } from "@/common/interfaces/media.interface";
 import {
   optimizeVideoExtensions,
@@ -11,7 +10,7 @@ import {
 } from "@/common/lists/media.list";
 import MediaService from "@/common/services/media.service";
 import StorageService from "@/common/services/storage.service";
-import { Post, PostType } from "@/prisma/generated/type-graphql";
+import { Bookmark, Post, PostType } from "@/prisma/generated/type-graphql";
 import { AzureContainersEnum, SubFoldersEnum } from "@/user/enums/file.enum";
 import { logger } from "@azure/storage-blob";
 import { UserInputError } from "apollo-server-errors";
@@ -24,7 +23,16 @@ import {
   AddPollPostInput,
   AddTextualPostInput,
 } from "./inputs/add-post.input";
+import {
+  IAddPollPostParams,
+  IAddTextualPostParams,
+} from "./interfaces/add-post.interface";
+import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
+import { IGetPostParams } from "./interfaces/get-post.interface";
+import { IAddPostReactionParams } from "./interfaces/reaction";
+import BookmarksOutput from "./outputs/bookmark.output";
 import GetPostsOutput from "./outputs/get-posts.output";
+import ReactionOutput from "./outputs/reaction.output";
 import PostRepository from "./repositories/post.repository";
 
 @Service()
@@ -37,14 +45,14 @@ class PostService {
     private readonly paginationHelper: PaginationHelper,
   ) {}
 
-  public async getUserPosts(
-    userId: string,
-    paginationInput: PaginationInput,
-  ): Promise<GetPostsOutput> {
-    const posts = await this.postRepository.getUserPosts(
+  public async getUserPosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<GetPostsOutput> {
+    const posts = await this.postRepository.getUserPosts({
       userId,
       paginationInput,
-    );
+    });
     return {
       posts,
       pagination: {
@@ -56,10 +64,33 @@ class PostService {
     };
   }
 
-  public async getAllPosts(
-    paginationInput: PaginationInput,
-  ): Promise<GetPostsOutput> {
-    const posts = await this.postRepository.getAllPosts(paginationInput);
+  public async getBookmarkedPosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<BookmarksOutput> {
+    const bookmarks = await this.postRepository.getBookmarkedPosts({
+      paginationInput,
+      userId,
+    });
+    return {
+      bookmarks,
+      pagination: {
+        cursor: this.paginationHelper.getCursor<Bookmark>({
+          results: bookmarks,
+          key: "id",
+        }),
+      },
+    };
+  }
+
+  public async getExplorePosts({
+    userId,
+    paginationInput,
+  }: IGetPostParams): Promise<GetPostsOutput> {
+    const posts = await this.postRepository.getExplorePosts({
+      paginationInput,
+      userId,
+    });
     return {
       posts,
       pagination: {
@@ -71,22 +102,38 @@ class PostService {
     };
   }
 
-  public async addTextualPost(
-    userId: string,
-    addTextualPostInput: AddTextualPostInput,
-  ): Promise<Post> {
+  public async bookmarPost({
+    postId,
+    userId,
+  }: IBookmarkPostParams): Promise<boolean> {
+    await this.postRepository.bookmarkPost({ postId, userId });
+    return true;
+  }
+
+  public async postReaction({
+    postId,
+    userId,
+    reactionType,
+  }: IAddPostReactionParams): Promise<ReactionOutput> {
+    return this.postRepository.postReaction({ postId, userId, reactionType });
+  }
+
+  public async addTextualPost({
+    userId,
+    addTextualPostInput,
+  }: IAddTextualPostParams): Promise<Post> {
     this.validateAddTextualPostInput(addTextualPostInput);
 
-    return this.postRepository.addTextualPost(userId, addTextualPostInput);
+    return this.postRepository.addTextualPost({ userId, addTextualPostInput });
   }
 
-  public async addPollPost(
-    userId: string,
-    addPollPostInput: AddPollPostInput,
-  ): Promise<Post> {
+  public async addPollPost({
+    userId,
+    addPollPostInput,
+  }: IAddPollPostParams): Promise<Post> {
     this.validateAddPollPostInput(addPollPostInput);
 
-    return this.postRepository.addPollPost(userId, addPollPostInput);
+    return this.postRepository.addPollPost({ userId, addPollPostInput });
   }
 
   public async addClipPost(
@@ -121,7 +168,7 @@ class PostService {
         { filename: audioFilename, createReadStream: audioReadStream },
         {
           containerName: AzureContainersEnum.audio,
-          onSuccess: async (uploadResponse, fileUrl) => {
+          onSuccess: async (_uploadResponse, fileUrl) => {
             resolve(fileUrl);
           },
           onError: async error => {
@@ -143,17 +190,17 @@ class PostService {
         this.compressVideoMedia([clipMedia], mediaFiles),
         {
           containerName: AzureContainersEnum[addClipPostInput.type],
-          onCompletion: async (uploadResponse, fileUrls) => {
-            const post = await this.postRepository.addClipPost(
+          onCompletion: async (_uploadResponse, fileUrls) => {
+            const post = await this.postRepository.addClipPost({
               userId,
-              addClipPostInput,
-              fileUrls,
-              {
+              addPostInput: addClipPostInput,
+              urls: fileUrls,
+              extraOptions: {
                 audioUrl: audioFileUrl,
                 thumbnailUrl: thumbnailFileUrl,
                 audioName,
               },
-            );
+            });
             resolve(post);
           },
           onError: async error => {
@@ -214,15 +261,15 @@ class PostService {
         this.compressVideoMedia(media, mediaFiles),
         {
           containerName: AzureContainersEnum[addPostInput.type],
-          onCompletion: async (uploadResponse, fileUrls) => {
-            const post = await this.postRepository.addMediaPost(
+          onCompletion: async (_uploadResponse, fileUrls) => {
+            const post = await this.postRepository.addMediaPost({
               userId,
               addPostInput,
-              fileUrls,
-              {
+              urls: fileUrls,
+              extraOptions: {
                 thumbnailUrl: thumbnailFileUrl,
               },
-            );
+            });
             resolve(post);
           },
           onError: async error => {
@@ -261,7 +308,7 @@ class PostService {
         {
           containerName,
           folder: SubFoldersEnum.thumbnail,
-          onSuccess: async (uploadResponse, fileUrl) => {
+          onSuccess: async (_uploadResponse, fileUrl) => {
             resolve(fileUrl);
           },
           onError: async error => {

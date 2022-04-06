@@ -22,4 +22,14 @@ export class CommentRepliesCreateWithoutRepliedToInput {
     nullable: false,
   })
   user!: UserCreateNestedOneWithoutCommentRepliesInput;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  createdAt?: Date | undefined;
+
+  @TypeGraphQL.Field(_type => Date, {
+    nullable: true,
+  })
+  updatedAt?: Date | undefined;
 }

@@ -21,7 +21,8 @@ Table User {
   profile Profile
   tokens Token [not null]
   posts Post [not null]
-  likes Like [not null]
+  reactions Reaction [not null]
+  bookmarks Bookmark [not null]
   comments Comment [not null]
   followers Follower [not null]
   followings Following [not null]
@@ -103,7 +104,8 @@ Table Post {
   clip Clip
   textual Textual
   audio Audio
-  likes Like [not null]
+  reactions Reaction [not null]
+  bookmarks Bookmark [not null]
   comments Comment [not null]
   activities Activity [not null]
   archive Boolean [not null, default: false]
@@ -199,12 +201,33 @@ Table Place {
   posts Post [not null]
 }
 
-Table Like {
+Table Bookmark {
   id String [pk, unique]
   post Post [not null]
   postId String [not null]
   user User [not null]
   userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (postId, userId) [unique]
+  }
+}
+
+Table Reaction {
+  id String [pk, unique]
+  post Post [not null]
+  postId String [not null]
+  user User [not null]
+  userId String [not null]
+  reaction ReactionType [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
+
+  indexes {
+    (postId, userId) [unique]
+  }
 }
 
 Table Comment {
@@ -215,6 +238,8 @@ Table Comment {
   user User [not null]
   userId String [not null]
   commentReplies CommentReplies [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
 }
 
 Table CommentReplies {
@@ -224,6 +249,8 @@ Table CommentReplies {
   repliedToId String [not null]
   user User [not null]
   userId String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [default: `now()`, not null]
 }
 
 Table Follower {
@@ -326,6 +353,14 @@ Enum Role {
   ADMIN
 }
 
+Enum ReactionType {
+  LIKE
+  LAUGH
+  COOL
+  FIRE
+  CELEBRATE
+}
+
 Enum PostType {
   POLL
   PHOTO
@@ -401,9 +436,13 @@ Ref: Textual.postId - Post.id [delete: Cascade]
 
 Ref: Audio.postId - Post.id [delete: Cascade]
 
-Ref: Like.postId > Post.id [delete: Cascade]
+Ref: Bookmark.postId > Post.id [delete: Cascade]
 
-Ref: Like.userId > User.id [delete: Cascade]
+Ref: Bookmark.userId > User.id [delete: Cascade]
+
+Ref: Reaction.postId > Post.id [delete: Cascade]
+
+Ref: Reaction.userId > User.id [delete: Cascade]
 
 Ref: Comment.postId > Post.id [delete: Cascade]
 

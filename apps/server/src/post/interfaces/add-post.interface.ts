@@ -1,4 +1,10 @@
 import { PostType } from "@/prisma/generated/type-graphql";
+import {
+  AddClipPostInput,
+  AddMediaPostInput,
+  AddPollPostInput,
+  AddTextualPostInput,
+} from "../inputs/add-post.input";
 import PlaceInput from "../inputs/place.input";
 
 export interface IAddMediaPostExtraOptions {
@@ -20,4 +26,28 @@ export interface BasicPostCreateInput {
 export interface BasicMediaPostCreateInput extends BasicPostCreateInput {
   place: PlaceInput;
   caption: string;
+}
+
+export interface IAddTextualPostParams {
+  userId: string;
+  addTextualPostInput: AddTextualPostInput;
+}
+
+export interface IAddPollPostParams {
+  userId: string;
+  addPollPostInput: AddPollPostInput;
+}
+
+export interface IAddMediaPostParams {
+  userId: string;
+  addPostInput: AddMediaPostInput;
+  urls: string[];
+  extraOptions?: IAddMediaPostExtraOptions;
+}
+
+export interface IAddClipPostParams {
+  userId: string;
+  addPostInput: AddClipPostInput;
+  urls: string[];
+  extraOptions?: IAddClipPostExtraOptions;
 }
