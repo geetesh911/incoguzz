@@ -5,6 +5,7 @@ import { IFileOptions } from "../interfaces/storage.interface";
 import cloudinary, { UploadApiResponse } from "cloudinary";
 import config from "@/configs";
 import { nanoid } from "nanoid";
+import { logger } from "@/utils/logger";
 @Service()
 class CloudinaryStorageService {
   cloudinaryv2 = cloudinary.v2;
@@ -48,14 +49,13 @@ class CloudinaryStorageService {
     try {
       const uploadResponse = await this.uploadFileToCloudinary(file, options);
 
-      console.log(uploadResponse);
-
       onSuccess?.(uploadResponse, uploadResponse.secure_url);
 
       onCompletion?.([uploadResponse] as UploadApiResponse[], [
         uploadResponse.secure_url,
       ]);
     } catch (error) {
+      logger.error(error);
       onError?.(error);
     }
   }

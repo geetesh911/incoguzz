@@ -17,19 +17,17 @@ import { UserInputError } from "apollo-server-errors";
 import { FfprobeData } from "fluent-ffmpeg";
 import { FileUpload } from "graphql-upload";
 import { Service } from "typedi";
+import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
 import {
-  AddClipPostInput,
-  AddMediaPostInput,
-  AddPollPostInput,
-  AddTextualPostInput,
-} from "./inputs/add-post.input";
-import {
+  IAddClipPostServiceParams,
+  IAddMediaPostServiceParams,
   IAddPollPostParams,
   IAddTextualPostParams,
+  IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
 import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
 import { IGetPostParams } from "./interfaces/get-post.interface";
-import { IAddPostReactionParams } from "./interfaces/reaction";
+import { IAddPostReactionParams } from "./interfaces/reaction.interface";
 import BookmarksOutput from "./outputs/bookmark.output";
 import GetPostsOutput from "./outputs/get-posts.output";
 import ReactionOutput from "./outputs/reaction.output";
@@ -115,7 +113,30 @@ class PostService {
     userId,
     reactionType,
   }: IAddPostReactionParams): Promise<ReactionOutput> {
-    return this.postRepository.postReaction({ postId, userId, reactionType });
+    const reaction = await this.postRepository.getPostReaction({
+      postId,
+      userId,
+    });
+
+    if (reaction && reaction?.reaction === reactionType) {
+      const deletedReaction = await this.postRepository.deletePostReaction({
+        userId,
+        postId,
+      });
+      return {
+        ...deletedReaction,
+        deleted: true,
+      };
+    }
+    const createdOrUpdatedReaction = await this.postRepository.addPostReaction({
+      postId,
+      userId,
+      reactionType,
+    });
+    return {
+      ...createdOrUpdatedReaction,
+      deleted: false,
+    };
   }
 
   public async addTextualPost({
@@ -136,13 +157,11 @@ class PostService {
     return this.postRepository.addPollPost({ userId, addPollPostInput });
   }
 
-  public async addClipPost(
-    userId: string,
-    addClipPostInput: AddClipPostInput,
-    clipMedia: Promise<FileUpload>,
-    clipAudioMedia: Promise<FileUpload>,
-  ): Promise<Post> {
-    console.log(userId, addClipPostInput, clipMedia, clipAudioMedia);
+  public async addClipPost({
+    userId,
+    addClipPostInput,
+    clipMedia,
+  }: IAddClipPostServiceParams): Promise<Post> {
     let audioFileUrl = "";
     let audioName = "";
     let thumbnailFileUrl = "";
@@ -159,7 +178,11 @@ class PostService {
       metadata: true,
     });
 
-    this.validateAddMediaPostInput(addClipPostInput, [clipMedia], metadata);
+    this.validateAddMediaPostInput({
+      addPostInput: addClipPostInput,
+      media: [clipMedia],
+      metadata,
+    });
 
     audioName = audioFilename;
 
@@ -172,7 +195,7 @@ class PostService {
             resolve(fileUrl);
           },
           onError: async error => {
-            logger.info(error);
+            logger.error(error);
             throw new Error("Something went wrong");
           },
         },
@@ -204,7 +227,7 @@ class PostService {
             resolve(post);
           },
           onError: async error => {
-            logger.info(error);
+            logger.error(error);
             throw new Error("Something went wrong");
           },
         },
@@ -212,20 +235,20 @@ class PostService {
     });
   }
 
-  public async addMediaPost(
-    userId: string,
-    addPostInput: AddMediaPostInput,
-    media: Promise<FileUpload>[],
-    mediaThumbnail: Promise<FileUpload>,
-  ): Promise<Post> {
+  public async addMediaPost({
+    userId,
+    addMediaPostInput,
+    media,
+    mediaThumbnail,
+  }: IAddMediaPostServiceParams): Promise<Post> {
     let thumbnailFileUrl: string;
     let metaData: FfprobeData;
 
     const mediaFiles = await Promise.all(media);
 
-    this.validateMediaType(mediaFiles, addPostInput.type);
+    this.validateMediaType(mediaFiles, addMediaPostInput.type);
 
-    switch (addPostInput.type) {
+    switch (addMediaPostInput.type) {
       case PostType.VIDEO:
         const videoThumbnailInput = await this.mediaService.getVideoThumbnail(
           mediaFiles[0],
@@ -241,7 +264,6 @@ class PostService {
 
       case PostType.AUDIO:
         const thumbnail = await mediaThumbnail;
-        console.log(thumbnail, mediaThumbnail);
         const audioThumbnailInput: IGetVideoThumbnail = {
           thumbnailFilename: thumbnail.filename,
           thumbnailReadStream: thumbnail.createReadStream,
@@ -254,17 +276,21 @@ class PostService {
         break;
     }
 
-    this.validateAddMediaPostInput(addPostInput, media, metaData);
+    this.validateAddMediaPostInput({
+      addPostInput: addMediaPostInput,
+      media,
+      metadata: metaData,
+    });
 
     return new Promise<Post>(async resolve => {
       await this.storageService.uploadFiles(
         this.compressVideoMedia(media, mediaFiles),
         {
-          containerName: AzureContainersEnum[addPostInput.type],
+          containerName: AzureContainersEnum[addMediaPostInput.type],
           onCompletion: async (_uploadResponse, fileUrls) => {
             const post = await this.postRepository.addMediaPost({
               userId,
-              addPostInput,
+              addPostInput: addMediaPostInput,
               urls: fileUrls,
               extraOptions: {
                 thumbnailUrl: thumbnailFileUrl,
@@ -273,7 +299,7 @@ class PostService {
             resolve(post);
           },
           onError: async error => {
-            logger.info(error);
+            logger.error(error);
             throw new Error("Something went wrong");
           },
         },
@@ -312,8 +338,7 @@ class PostService {
             resolve(fileUrl);
           },
           onError: async error => {
-            logger.info(error);
-            console.log(error);
+            logger.error(error);
             throw new Error("Something went wrong");
           },
         },
@@ -321,11 +346,11 @@ class PostService {
     });
   }
 
-  private validateAddMediaPostInput(
-    addPostInput: AddMediaPostInput,
-    media: Promise<FileUpload>[],
-    metadata: FfprobeData,
-  ): void {
+  private validateAddMediaPostInput({
+    addPostInput,
+    media,
+    metadata,
+  }: IValidateAddMediaPostInputParams): void {
     const { type } = addPostInput;
 
     if (!media) throw new UserInputError("Media is required");

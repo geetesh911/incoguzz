@@ -1,4 +1,6 @@
 import { PostType } from "@/prisma/generated/type-graphql";
+import { FfprobeData } from "fluent-ffmpeg";
+import { FileUpload } from "graphql-upload";
 import {
   AddClipPostInput,
   AddMediaPostInput,
@@ -50,4 +52,24 @@ export interface IAddClipPostParams {
   addPostInput: AddClipPostInput;
   urls: string[];
   extraOptions?: IAddClipPostExtraOptions;
+}
+
+export interface IAddClipPostServiceParams {
+  userId: string;
+  addClipPostInput: AddClipPostInput;
+  clipMedia: Promise<FileUpload>;
+  clipAudioMedia: Promise<FileUpload>;
+}
+
+export interface IAddMediaPostServiceParams {
+  userId: string;
+  addMediaPostInput: AddMediaPostInput;
+  media: Promise<FileUpload>[];
+  mediaThumbnail: Promise<FileUpload>;
+}
+
+export interface IValidateAddMediaPostInputParams {
+  addPostInput: AddMediaPostInput;
+  media: Promise<FileUpload>[];
+  metadata: FfprobeData;
 }

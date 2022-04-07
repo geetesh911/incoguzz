@@ -36,7 +36,7 @@ class MediaService {
         .createReadStream()
         .pipe(createWriteStream(`./${video}`))
         .on("error", error => {
-          logger.info("Some error occurred in download:" + error);
+          logger.error("Some error occurred in download:" + error);
           reject(error);
         })
         .on("finish", async () => {
@@ -55,10 +55,10 @@ class MediaService {
 
           ffmpeg(`${video}`)
             .on("end", function () {
-              console.log("Screenshots taken");
+              logger.debug("Screenshots taken");
             })
             .on("progress", function (info) {
-              console.log("progress " + info.percent + "%");
+              logger.debug("progress " + info.percent + "%");
             })
             .outputOptions([`-vf fps=1/${frameIntervalInSeconds}`])
             .output(thumbanilPath)
@@ -113,7 +113,7 @@ class MediaService {
         .createReadStream()
         .pipe(createWriteStream(`./${video}`))
         .on("error", error => {
-          logger.info("Some error occurred in download:" + error);
+          logger.error("Some error occurred in download:" + error);
           reject(error);
         })
         .on("finish", async () => {
@@ -130,7 +130,7 @@ class MediaService {
 
           ffmpeg(`${video}`)
             .on("end", function () {
-              console.log("Screenshots taken");
+              logger.debug("Screenshots taken");
             })
             .outputOptions([`-vf fps=1/${frameIntervalInSeconds}`])
             .output(thumbanilPath)
@@ -190,7 +190,7 @@ class MediaService {
         .createReadStream()
         .pipe(createWriteStream(`./${video}`))
         .on("error", error => {
-          logger.info("Some error occurred in download:" + error);
+          logger.error("Some error occurred in download:" + error);
           reject(error);
         })
         .on("finish", async () => {
@@ -203,7 +203,7 @@ class MediaService {
   }
 
   public async compressImage(buffer: Buffer): Promise<Buffer> {
-    logger.info("compressing Image");
+    logger.info("Compressing Image");
     try {
       return await imagemin.buffer(buffer, {
         plugins: [
@@ -228,7 +228,7 @@ class MediaService {
         .createReadStream()
         .pipe(createWriteStream(`./${video}`))
         .on("error", error => {
-          logger.info("Some error occurred in download:" + error);
+          logger.error("Some error occurred in download:" + error);
           reject(error);
         })
         .on("finish", async () => {
@@ -248,7 +248,7 @@ class MediaService {
             ])
             .output(compressedVideoPath)
             .on("start", command => {
-              console.log("TCL: command -> command", command);
+              logger.debug("TCL: command -> command", command);
             })
             .on("end", async () => {
               const compressedVideoReadStream =

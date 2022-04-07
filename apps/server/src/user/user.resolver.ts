@@ -2,7 +2,7 @@ import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
 import { Service } from "typedi";
 import { SignUpInput } from "@/user/inputs/signup.input";
 import GoogleStrategy from "@/auth/strategies/google.strategy";
-import UserService from "@/user/users.service";
+import UserService from "@/user/user.service";
 import { Context } from "@/common/interfaces/context.interface";
 import { ForgotPasswordInput } from "@/user/inputs/forgot-password.input";
 import { ForgotPasswordOutput } from "@/user/outputs/forgot-password.output";
@@ -117,11 +117,8 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  async verifyUserEmail(
-    @Arg("verificationToken") verificationToken: string,
-    @Ctx() { req }: Context,
-  ) {
-    return this.userService.verifyUserEmail(req, verificationToken);
+  async verifyUserEmail(@Arg("verificationToken") verificationToken: string) {
+    return this.userService.verifyUserEmail(verificationToken);
   }
 
   @Mutation(() => SignUpOutput)
@@ -164,12 +161,8 @@ export class UserResolver {
   @Mutation(() => ForgotPasswordOutput, { nullable: true })
   async verifyForgotPassword(
     @Arg("verificationToken") verificationToken: string,
-    @Ctx() context: Context,
   ) {
-    return this.userService.forgotPasswordVerify(
-      context.req,
-      verificationToken,
-    );
+    return this.userService.forgotPasswordVerify(verificationToken);
   }
 
   @Mutation(() => ForgotPasswordOutput)

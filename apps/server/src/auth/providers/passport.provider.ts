@@ -26,7 +26,7 @@ class Passport {
   public initializePassport(_express: Application): Application {
     _express = _express.use(passport.initialize());
 
-    passport.serializeUser<any, any>((req, user, done) => {
+    passport.serializeUser<any, any>((_req, user, done) => {
       done(null, user);
     });
 

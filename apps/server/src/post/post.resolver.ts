@@ -86,12 +86,12 @@ export class PostResolver {
     @Ctx() { user }: Context,
     @Args() { addMediaPostInput, media, mediaThumbnail }: AddMediaPostArgs,
   ): Promise<Post> {
-    return this.postService.addMediaPost(
-      user.userId,
+    return this.postService.addMediaPost({
+      userId: user.userId,
       addMediaPostInput,
       media,
       mediaThumbnail,
-    );
+    });
   }
 
   @Authorized()
@@ -100,12 +100,12 @@ export class PostResolver {
     @Ctx() { user }: Context,
     @Args() { addClipPostInput, clipMedia, clipAudioMedia }: AddClipPostArgs,
   ): Promise<boolean> {
-    this.postService.addClipPost(
-      user.userId,
+    this.postService.addClipPost({
+      userId: user.userId,
       addClipPostInput,
       clipMedia,
       clipAudioMedia,
-    );
+    });
     return true;
   }
 

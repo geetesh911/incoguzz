@@ -1,6 +1,11 @@
 import BaseRepository from "@/common/repositories/BaseRepository";
 import PrismaService from "@/common/services/prisma.service";
-import { Bookmark, Post, PostType } from "@/prisma/generated/type-graphql";
+import {
+  Bookmark,
+  Post,
+  PostType,
+  Reaction,
+} from "@/prisma/generated/type-graphql";
 import { Service } from "typedi";
 import {
   IAddClipPostParams,
@@ -12,21 +17,26 @@ import { Prisma } from "@prisma/client";
 import CreateBasicPostInputHelper from "../helpers/create-input.helper";
 import { IBookmarkPostParams } from "../interfaces/bookmark.interface";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
-import { IAddPostReactionParams } from "../interfaces/reaction";
-import ReactionOutput from "../outputs/reaction.output";
+import {
+  IAddPostReactionParams,
+  IDeletePostReactionParams,
+  IGetPostReactionParams,
+} from "../interfaces/reaction.interface";
 import { IGetPostParams } from "../interfaces/get-post.interface";
 
 interface IReader {
   getUserPosts: (params: IGetPostParams) => Promise<Post[]>;
   getExplorePosts: (params: IGetPostParams) => Promise<Post[]>;
   getBookmarkedPosts: (params: IGetPostParams) => Promise<Bookmark[]>;
+  getPostReaction: (params: IGetPostReactionParams) => Promise<Reaction>;
 }
 interface IWriter {
   addTextualPost: (params: IAddTextualPostParams) => Promise<Post>;
   addPollPost: (params: IAddPollPostParams) => Promise<Post>;
   addMediaPost: (params: IAddMediaPostParams) => Promise<Post>;
   addClipPost: (params: IAddClipPostParams) => Promise<Post>;
-  postReaction: (params: IAddPostReactionParams) => Promise<ReactionOutput>;
+  addPostReaction: (params: IAddPostReactionParams) => Promise<Reaction>;
+  deletePostReaction: (params: IDeletePostReactionParams) => Promise<Reaction>;
   bookmarkPost: (params: IBookmarkPostParams) => Promise<void>;
 }
 
@@ -41,6 +51,23 @@ class PostRepository extends BaseRepository implements TUserRepository {
     super("post");
   }
 
+  private getPostsIncludeArgs(
+    userId: string,
+  ): Prisma.PostFindManyArgs["include"] {
+    return {
+      photos: true,
+      video: true,
+      clip: { include: { clipAudio: true } },
+      audio: true,
+      poll: { include: { pollOptions: true } },
+      textual: true,
+      place: true,
+      tags: true,
+      bookmarks: { where: { userId } },
+      reactions: { where: { userId } },
+    };
+  }
+
   public async getUserPosts({
     userId,
     paginationInput,
@@ -52,23 +79,8 @@ class PostRepository extends BaseRepository implements TUserRepository {
       skip: firstQueryResult ? 0 : 1,
       cursor: cursor && { id: cursor },
       where: { userId, archive: false },
-      include: {
-        photos: true,
-        video: true,
-        clip: {
-          include: { clipAudio: true },
-        },
-        audio: true,
-        poll: { include: { pollOptions: true } },
-        textual: true,
-        place: true,
-        tags: true,
-        bookmarks: { where: { userId } },
-        reactions: { where: { userId } },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+      include: this.getPostsIncludeArgs(userId),
+      orderBy: { createdAt: "desc" },
     });
   }
 
@@ -82,23 +94,8 @@ class PostRepository extends BaseRepository implements TUserRepository {
       skip: firstQueryResult ? 0 : 1,
       cursor: cursor && { id: cursor },
       where: {},
-      include: {
-        photos: true,
-        video: true,
-        clip: {
-          include: { clipAudio: true },
-        },
-        audio: true,
-        poll: { include: { pollOptions: true } },
-        textual: true,
-        place: true,
-        tags: true,
-        bookmarks: { where: { userId } },
-        reactions: { where: { userId } },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
+      include: this.getPostsIncludeArgs(userId),
+      orderBy: { createdAt: "desc" },
     });
   }
 
@@ -113,64 +110,42 @@ class PostRepository extends BaseRepository implements TUserRepository {
       skip: firstQueryResult ? 0 : 1,
       cursor: cursor && { id: cursor },
       include: {
-        post: {
-          include: {
-            photos: true,
-            video: true,
-            clip: {
-              include: { clipAudio: true },
-            },
-            audio: true,
-            poll: { include: { pollOptions: true } },
-            textual: true,
-            place: true,
-            tags: true,
-            bookmarks: { where: { userId } },
-            reactions: { where: { userId } },
-          },
-        },
+        post: { include: this.getPostsIncludeArgs(userId) },
       },
-      orderBy: {
-        createdAt: "desc",
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
+  public async getPostReaction({
+    postId,
+    userId,
+  }: IGetPostReactionParams): Promise<Reaction> {
+    return this.prisma.reaction.findUnique({
+      where: {
+        postId_userId: { postId, userId },
       },
     });
   }
 
-  public async postReaction({
+  public async deletePostReaction({
+    postId,
+    userId,
+  }: IDeletePostReactionParams): Promise<Reaction> {
+    return this.prisma.reaction.delete({
+      where: {
+        postId_userId: { postId, userId },
+      },
+    });
+  }
+
+  public async addPostReaction({
     postId,
     userId,
     reactionType,
-  }: IAddPostReactionParams): Promise<ReactionOutput> {
-    const reaction = await this.prisma.reaction.findUnique({
+  }: IAddPostReactionParams): Promise<Reaction> {
+    return this.prisma.reaction.upsert({
       where: {
-        postId_userId: {
-          postId,
-          userId,
-        },
-      },
-    });
-
-    if (reaction && reaction?.reaction === reactionType) {
-      const deletedReaction = await this.prisma.reaction.delete({
-        where: {
-          postId_userId: {
-            postId,
-            userId,
-          },
-        },
-      });
-      return {
-        ...deletedReaction,
-        deleted: true,
-      };
-    }
-
-    const createdOrUpdatedReaction = await this.prisma.reaction.upsert({
-      where: {
-        postId_userId: {
-          postId,
-          userId,
-        },
+        postId_userId: { postId, userId },
       },
       create: {
         post: { connect: { id: postId } },
@@ -181,11 +156,6 @@ class PostRepository extends BaseRepository implements TUserRepository {
         reaction: reactionType,
       },
     });
-
-    return {
-      ...createdOrUpdatedReaction,
-      deleted: false,
-    };
   }
 
   public async bookmarkPost({
@@ -203,10 +173,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
       if ((error as PrismaClientKnownRequestError).code === "P2002") {
         await this.prisma.bookmark.delete({
           where: {
-            postId_userId: {
-              postId,
-              userId,
-            },
+            postId_userId: { postId, userId },
           },
         });
       }
@@ -317,6 +284,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
 
     return this.prisma.post.create({ data: postCreateInput });
   }
+
   public async addClipPost({
     userId,
     addPostInput,

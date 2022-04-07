@@ -52,6 +52,7 @@ import { AzureContainersEnum } from "./enums/file.enum";
 import AzureStorageHelper from "@/common/helpers/azure-storage.helper";
 import StorageService from "@/common/services/storage.service";
 import { Prisma } from "@prisma/client";
+
 @Service()
 class UserService {
   constructor(
@@ -164,10 +165,7 @@ class UserService {
    * - Verify received token
    * - Verify user in db if user is eligible
    */
-  public async verifyUserEmail(
-    req: Request,
-    verificationToken: string,
-  ): Promise<boolean> {
+  public async verifyUserEmail(verificationToken: string): Promise<boolean> {
     const { userId } =
       this.jwtHelper.verifyJwtToken<IUserVerificationJwtPayload>(
         verificationToken,
@@ -278,13 +276,13 @@ class UserService {
         token => token.token === refreshAccessTokenInput.refreshToken,
       ).id || "";
 
-    this.userRepository.upsertToken(
+    this.userRepository.upsertToken({
       req,
-      previousAccessTokenId,
-      accessToken,
-      TokenType.ACCESS,
-      user.id,
-    );
+      previousTokenId: previousAccessTokenId,
+      token: accessToken,
+      tokenType: TokenType.ACCESS,
+      userId: user.id,
+    });
 
     return {
       accessToken,
@@ -370,7 +368,6 @@ class UserService {
   }
 
   public async forgotPasswordVerify(
-    req: Request,
     resetPasswordToken: string,
   ): Promise<ForgotPasswordOutput> {
     const { verificationUuid, verificationTokenId, email } =
@@ -498,7 +495,7 @@ class UserService {
     return new Promise<boolean>(async (resolve, reject) => {
       await this.storageService.uploadFile(file, {
         containerName: AzureContainersEnum.profile,
-        onSuccess: async (uploadResponse, fileUrl) => {
+        onSuccess: async (_uploadResponse, fileUrl) => {
           const dpUrl = fileUrl;
 
           await this.handleProfilePictureDelete(userData);
@@ -559,13 +556,13 @@ class UserService {
       refreshToken,
     };
 
-    await this.userRepository.updateUserLoginInfo(
+    await this.userRepository.updateUserLoginInfo({
       req,
-      user.id,
-      currentTokens,
+      userId: user.id,
+      tokens: currentTokens,
       previousTokensIds,
       googleUserId,
-    );
+    });
 
     return {
       id: user.id,

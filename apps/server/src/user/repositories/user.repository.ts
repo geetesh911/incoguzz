@@ -17,20 +17,23 @@ import UserHelper from "../helpers/user.helper";
 import { ProfileInput } from "../inputs/profile.input";
 import { ResetPasswordInput } from "../inputs/reset-password.input";
 import { UpdateUserInput } from "../inputs/update-user.input";
-import { ILoginTokens } from "../interfaces/login.interface";
-import { IUserInclude } from "../interfaces/user-include.interface";
+import { IUpdateUserLoginInfoPramas } from "../interfaces/login.interface";
 import { Prisma } from "@prisma/client";
+import { IUpsertTokenParams } from "../interfaces/token.interface";
 
 interface IReader {
   findAll: () => Promise<User[]>;
-  findByEmail: (email: string, include?: IUserInclude) => Promise<User | null>;
+  findByEmail: (
+    email: string,
+    include?: Prisma.UserFindUniqueArgs["include"],
+  ) => Promise<User | null>;
   findByUsername: (
     username: string,
-    include?: IUserInclude,
+    include?: Prisma.UserFindUniqueArgs["include"],
   ) => Promise<User | null>;
   findByEmailOrUsername: (
     emailOrUsername: string,
-    include?: IUserInclude,
+    include?: Prisma.UserFindUniqueArgs["include"],
   ) => Promise<User | null>;
   findByEmailWithProfile: (email: string) => Promise<User | null>;
   findByEmailWithProfileAndTokens: (email: string) => Promise<User | null>;
@@ -52,20 +55,20 @@ interface IWriter {
   createForgotPasswordToken: (req: Request, user: User) => Promise<Token>;
   incrementLoginAttempts: (email: string) => Promise<User>;
   blockUser: (email: string) => Promise<void>;
-  updateUserLoginInfo: (
-    req: Request,
-    userId: string,
-    tokens: ILoginTokens,
-    previousTokens: ILoginTokens,
-    googleUserId: string,
-  ) => Promise<void>;
-  upsertToken: (
-    req: Request,
-    previousToken: string,
-    token: string,
-    tokenType: TokenType,
-    userId: string,
-  ) => Promise<void>;
+  updateUserLoginInfo: ({
+    req,
+    userId,
+    tokens,
+    previousTokensIds,
+    googleUserId,
+  }: IUpdateUserLoginInfoPramas) => Promise<void>;
+  upsertToken: ({
+    req,
+    previousTokenId,
+    token,
+    tokenType,
+    userId,
+  }: IUpsertTokenParams) => Promise<void>;
   setForgotPasswordFirstUsed: (token: string) => Promise<Token>;
   setUserAsVerified: (userId: string) => Promise<void>;
   deactivateUser: (userId: string) => Promise<User | null>;
@@ -109,7 +112,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
 
   public async findByUsername(
     username: string,
-    include?: IUserInclude,
+    include?: Prisma.UserFindUniqueArgs["include"],
   ): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { username },
@@ -123,7 +126,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
 
   public async findByEmailOrUsername(
     emailOrUsername: string,
-    include?: IUserInclude,
+    include?: Prisma.UserFindUniqueArgs["include"],
   ): Promise<User | null> {
     let user: User;
     if (this.validationHelper.validateEmail(emailOrUsername)) {
@@ -145,7 +148,7 @@ class UserRepository extends BaseRepository implements TUserRepository {
 
   public async findByEmail(
     email: string,
-    include?: IUserInclude,
+    include?: Prisma.UserFindUniqueArgs["include"],
   ): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },
@@ -280,13 +283,13 @@ class UserRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async updateUserLoginInfo(
-    req: Request,
-    userId: string,
-    tokens: ILoginTokens,
-    previousTokensIds: ILoginTokens,
-    googleUserId?: string,
-  ): Promise<void> {
+  public async updateUserLoginInfo({
+    req,
+    userId,
+    tokens,
+    previousTokensIds,
+    googleUserId,
+  }: IUpdateUserLoginInfoPramas): Promise<void> {
     const refreshTokenData = await this.authService.createTokenData(
       req,
       tokens.refreshToken,
@@ -332,13 +335,13 @@ class UserRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async upsertToken(
-    req: Request,
-    previousTokenId: string,
-    token: string,
-    tokenType: TokenType,
-    userId: string,
-  ) {
+  public async upsertToken({
+    req,
+    previousTokenId,
+    token,
+    tokenType,
+    userId,
+  }: IUpsertTokenParams) {
     const tokenData = await this.authService.createTokenData(
       req,
       token,

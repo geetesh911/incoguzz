@@ -2,6 +2,7 @@ import { PrismaClient, Prisma } from "@prisma/client";
 import faker from "@faker-js/faker";
 import bcrypt from "bcrypt";
 import fs from "fs";
+import { logger } from "@/utils/logger";
 
 const prisma = new PrismaClient();
 
@@ -192,18 +193,18 @@ async function main() {
         try {
           await prisma.post.create({ data: postData });
         } catch (error) {
-          console.log(error);
+          logger.error(error);
         }
       });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
     }
   });
 }
 
 main()
   .catch(error => {
-    console.error(error);
+    logger.error(error);
     process.exit(1);
   })
   .finally(async () => {
