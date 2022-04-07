@@ -65,6 +65,31 @@ export type Audio = {
   url: Scalars['String'];
 };
 
+export type Bookmark = {
+  __typename?: 'Bookmark';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+};
+
+export type BookmarkOutput = {
+  __typename?: 'BookmarkOutput';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  post: PostOutput;
+  postId: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+};
+
+export type BookmarksOutput = {
+  __typename?: 'BookmarksOutput';
+  data: Array<BookmarkOutput>;
+  pagination: PaginationOutput;
+};
+
 export type ChangePasswordInput = {
   newPassword: Scalars['String'];
   oldPassword: Scalars['String'];
@@ -111,8 +136,8 @@ export enum Gender {
 
 export type GetPostsOutput = {
   __typename?: 'GetPostsOutput';
+  data: Array<PostOutput>;
   pagination: PaginationOutput;
-  posts: Array<PostOutput>;
 };
 
 export type GoogleAuthInput = {
@@ -156,6 +181,7 @@ export type Mutation = {
   addMediaPost: Post;
   addPollPost: Post;
   addTextualPost: Post;
+  bookmarkPost: Scalars['Boolean'];
   changePassword: Scalars['Boolean'];
   changeProfilePicture: Scalars['Boolean'];
   deactivateUser: Scalars['Boolean'];
@@ -164,6 +190,7 @@ export type Mutation = {
   login: LoginOutput;
   logout: Scalars['Boolean'];
   multipleUploadFile: Scalars['Boolean'];
+  postReaction: ReactionOutput;
   removeProfilePicture: Scalars['Boolean'];
   resetPassword: ForgotPasswordOutput;
   signUp: SignUpOutput;
@@ -199,6 +226,11 @@ export type MutationAddTextualPostArgs = {
 };
 
 
+export type MutationBookmarkPostArgs = {
+  postId: Scalars['String'];
+};
+
+
 export type MutationChangePasswordArgs = {
   changePasswordInput: ChangePasswordInput;
 };
@@ -226,6 +258,11 @@ export type MutationLoginArgs = {
 
 export type MutationMultipleUploadFileArgs = {
   picture: Array<Scalars['Upload']>;
+};
+
+
+export type MutationPostReactionArgs = {
+  postReactionInput: PostReactionInput;
 };
 
 
@@ -342,10 +379,11 @@ export type Post = {
 export type PostCount = {
   __typename?: 'PostCount';
   activities: Scalars['Int'];
+  bookmarks: Scalars['Int'];
   comments: Scalars['Int'];
-  likes: Scalars['Int'];
   message: Scalars['Int'];
   photos: Scalars['Int'];
+  reactions: Scalars['Int'];
   tags: Scalars['Int'];
 };
 
@@ -353,6 +391,7 @@ export type PostOutput = {
   __typename?: 'PostOutput';
   _count?: Maybe<PostCount>;
   audio?: Maybe<Audio>;
+  bookmarks?: Maybe<Array<Bookmark>>;
   caption?: Maybe<Scalars['String']>;
   clip?: Maybe<ClipOutput>;
   createdAt: Scalars['DateTime'];
@@ -360,12 +399,18 @@ export type PostOutput = {
   photos?: Maybe<Array<Photo>>;
   place?: Maybe<Place>;
   poll?: Maybe<PollOutput>;
+  reactions?: Maybe<Array<Reaction>>;
   tags?: Maybe<Array<Tag>>;
   textual?: Maybe<Textual>;
   type: PostType;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
   video?: Maybe<Video>;
+};
+
+export type PostReactionInput = {
+  postId: Scalars['String'];
+  reactionType: ReactionType;
 };
 
 export enum PostType {
@@ -422,7 +467,8 @@ export type ProfileOutput = {
 
 export type Query = {
   __typename?: 'Query';
-  getAllPosts: GetPostsOutput;
+  getBookmarkedPosts: BookmarksOutput;
+  getExplorePosts: GetPostsOutput;
   getMediaAccessToken: Scalars['String'];
   getUser?: Maybe<UserOutput>;
   getUserPosts: GetPostsOutput;
@@ -432,7 +478,12 @@ export type Query = {
 };
 
 
-export type QueryGetAllPostsArgs = {
+export type QueryGetBookmarkedPostsArgs = {
+  paginationInput: PaginationInput;
+};
+
+
+export type QueryGetExplorePostsArgs = {
   paginationInput: PaginationInput;
 };
 
@@ -450,6 +501,35 @@ export type QueryIsUsernameAvailableArgs = {
 export type QueryVerifyAccessTokenArgs = {
   accessToken: Scalars['String'];
 };
+
+export type Reaction = {
+  __typename?: 'Reaction';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  reaction: ReactionType;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+};
+
+export type ReactionOutput = {
+  __typename?: 'ReactionOutput';
+  createdAt: Scalars['DateTime'];
+  deleted: Scalars['Boolean'];
+  id: Scalars['String'];
+  postId: Scalars['String'];
+  reaction: ReactionType;
+  updatedAt: Scalars['DateTime'];
+  userId: Scalars['String'];
+};
+
+export enum ReactionType {
+  Celebrate = 'CELEBRATE',
+  Cool = 'COOL',
+  Fire = 'FIRE',
+  Laugh = 'LAUGH',
+  Like = 'LIKE'
+}
 
 export enum RelationshipStatus {
   Divorced = 'DIVORCED',
@@ -615,19 +695,42 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileOutput', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } };
 
+export type PostCommonFieldsFragment = { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null };
+
 export type GetUserPostsQueryVariables = Exact<{
   paginationInput: PaginationInput;
 }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: { __typename?: 'GetPostsOutput', posts: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
-export type GetAllPostsQueryVariables = Exact<{
+export type GetBookmarkedPostsQueryVariables = Exact<{
   paginationInput: PaginationInput;
 }>;
 
 
-export type GetAllPostsQuery = { __typename?: 'Query', getAllPosts: { __typename?: 'GetPostsOutput', posts: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+export type GetBookmarkedPostsQuery = { __typename?: 'Query', getBookmarkedPosts: { __typename?: 'BookmarksOutput', data: Array<{ __typename?: 'BookmarkOutput', post: { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+
+export type GetExplorePostsQueryVariables = Exact<{
+  paginationInput: PaginationInput;
+}>;
+
+
+export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+
+export type BookmarkPostMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type BookmarkPostMutation = { __typename?: 'Mutation', bookmarkPost: boolean };
+
+export type PostReactionMutationVariables = Exact<{
+  postReactionInput: PostReactionInput;
+}>;
+
+
+export type PostReactionMutation = { __typename?: 'Mutation', postReaction: { __typename?: 'ReactionOutput', id: string, reaction: ReactionType, deleted: boolean } };
 
 export type AddVideoPostMutationVariables = Exact<{
   addMediaPostInput: AddMediaPostInput;
@@ -635,7 +738,16 @@ export type AddVideoPostMutationVariables = Exact<{
 }>;
 
 
-export type AddVideoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+export type AddVideoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } };
+
+export type AddAudioPostMutationVariables = Exact<{
+  addMediaPostInput: AddMediaPostInput;
+  media: Array<Scalars['Upload']> | Scalars['Upload'];
+  mediaThumbnail: Scalars['Upload'];
+}>;
+
+
+export type AddAudioPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } };
 
 export type AddPhotoPostMutationVariables = Exact<{
   addMediaPostInput: AddMediaPostInput;
@@ -643,21 +755,21 @@ export type AddPhotoPostMutationVariables = Exact<{
 }>;
 
 
-export type AddPhotoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+export type AddPhotoPostMutation = { __typename?: 'Mutation', addMediaPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } };
 
 export type AddTextualPostMutationVariables = Exact<{
   addTextualPost: AddTextualPostInput;
 }>;
 
 
-export type AddTextualPostMutation = { __typename?: 'Mutation', addTextualPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+export type AddTextualPostMutation = { __typename?: 'Mutation', addTextualPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } };
 
 export type AddPollPostMutationVariables = Exact<{
   addPollPostInput: AddPollPostInput;
 }>;
 
 
-export type AddPollPostMutation = { __typename?: 'Mutation', addPollPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', likes: number, comments: number } | null } };
+export type AddPollPostMutation = { __typename?: 'Mutation', addPollPost: { __typename?: 'Post', id: string, type: PostType, createdAt: any, updatedAt: any, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } };
 
 export type GenerateMediaAccessTokenQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -702,7 +814,69 @@ export type RemoveProfilePictureMutationVariables = Exact<{ [key: string]: never
 
 export type RemoveProfilePictureMutation = { __typename?: 'Mutation', removeProfilePicture: boolean };
 
-
+export const PostCommonFieldsFragmentDoc = gql`
+    fragment PostCommonFields on PostOutput {
+  id
+  caption
+  type
+  createdAt
+  updatedAt
+  tags {
+    id
+    name
+  }
+  bookmarks {
+    id
+  }
+  reactions {
+    reaction
+  }
+  place {
+    id
+    name
+  }
+  poll {
+    id
+    question
+    pollOptions {
+      id
+      option
+    }
+  }
+  photos {
+    id
+    url
+  }
+  video {
+    id
+    url
+    thumbnailUrl
+  }
+  clip {
+    id
+    url
+    thumbnailUrl
+    clipAudio {
+      id
+      name
+      audioUrl
+    }
+  }
+  textual {
+    id
+    text
+  }
+  audio {
+    id
+    url
+    thumbnailUrl
+  }
+  _count {
+    reactions
+    comments
+  }
+}
+    `;
 export const VerifyAccessTokenDocument = gql`
     query VerifyAccessToken($accessToken: String!) {
   verifyAccessToken(accessToken: $accessToken)
@@ -1105,67 +1279,15 @@ export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProf
 export const GetUserPostsDocument = gql`
     query GetUserPosts($paginationInput: PaginationInput!) {
   getUserPosts(paginationInput: $paginationInput) {
-    posts {
-      id
-      caption
-      type
-      createdAt
-      updatedAt
-      tags {
-        id
-        name
-      }
-      place {
-        id
-        name
-      }
-      poll {
-        id
-        question
-        pollOptions {
-          id
-          option
-        }
-      }
-      photos {
-        id
-        url
-      }
-      video {
-        id
-        url
-        thumbnailUrl
-      }
-      clip {
-        id
-        url
-        thumbnailUrl
-        clipAudio {
-          id
-          name
-          audioUrl
-        }
-      }
-      textual {
-        id
-        text
-      }
-      audio {
-        id
-        url
-        thumbnailUrl
-      }
-      _count {
-        likes
-        comments
-      }
+    data {
+      ...PostCommonFields
     }
     pagination {
       cursor
     }
   }
 }
-    `;
+    ${PostCommonFieldsFragmentDoc}`;
 
 /**
  * __useGetUserPostsQuery__
@@ -1194,62 +1316,12 @@ export function useGetUserPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type GetUserPostsQueryHookResult = ReturnType<typeof useGetUserPostsQuery>;
 export type GetUserPostsLazyQueryHookResult = ReturnType<typeof useGetUserPostsLazyQuery>;
 export type GetUserPostsQueryResult = Apollo.QueryResult<GetUserPostsQuery, GetUserPostsQueryVariables>;
-export const GetAllPostsDocument = gql`
-    query GetAllPosts($paginationInput: PaginationInput!) {
-  getAllPosts(paginationInput: $paginationInput) {
-    posts {
-      id
-      caption
-      type
-      createdAt
-      updatedAt
-      tags {
-        id
-        name
-      }
-      place {
-        id
-        name
-      }
-      poll {
-        id
-        question
-        pollOptions {
-          id
-          option
-        }
-      }
-      photos {
-        id
-        url
-      }
-      video {
-        id
-        url
-        thumbnailUrl
-      }
-      clip {
-        id
-        url
-        thumbnailUrl
-        clipAudio {
-          id
-          name
-          audioUrl
-        }
-      }
-      textual {
-        id
-        text
-      }
-      audio {
-        id
-        url
-        thumbnailUrl
-      }
-      _count {
-        likes
-        comments
+export const GetBookmarkedPostsDocument = gql`
+    query GetBookmarkedPosts($paginationInput: PaginationInput!) {
+  getBookmarkedPosts(paginationInput: $paginationInput) {
+    data {
+      post {
+        ...PostCommonFields
       }
     }
     pagination {
@@ -1257,35 +1329,141 @@ export const GetAllPostsDocument = gql`
     }
   }
 }
-    `;
+    ${PostCommonFieldsFragmentDoc}`;
 
 /**
- * __useGetAllPostsQuery__
+ * __useGetBookmarkedPostsQuery__
  *
- * To run a query within a React component, call `useGetAllPostsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAllPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetBookmarkedPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetBookmarkedPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetAllPostsQuery({
+ * const { data, loading, error } = useGetBookmarkedPostsQuery({
  *   variables: {
  *      paginationInput: // value for 'paginationInput'
  *   },
  * });
  */
-export function useGetAllPostsQuery(baseOptions: Apollo.QueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
+export function useGetBookmarkedPostsQuery(baseOptions: Apollo.QueryHookOptions<GetBookmarkedPostsQuery, GetBookmarkedPostsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(GetAllPostsDocument, options);
+        return Apollo.useQuery<GetBookmarkedPostsQuery, GetBookmarkedPostsQueryVariables>(GetBookmarkedPostsDocument, options);
       }
-export function useGetAllPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAllPostsQuery, GetAllPostsQueryVariables>) {
+export function useGetBookmarkedPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetBookmarkedPostsQuery, GetBookmarkedPostsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAllPostsQuery, GetAllPostsQueryVariables>(GetAllPostsDocument, options);
+          return Apollo.useLazyQuery<GetBookmarkedPostsQuery, GetBookmarkedPostsQueryVariables>(GetBookmarkedPostsDocument, options);
         }
-export type GetAllPostsQueryHookResult = ReturnType<typeof useGetAllPostsQuery>;
-export type GetAllPostsLazyQueryHookResult = ReturnType<typeof useGetAllPostsLazyQuery>;
-export type GetAllPostsQueryResult = Apollo.QueryResult<GetAllPostsQuery, GetAllPostsQueryVariables>;
+export type GetBookmarkedPostsQueryHookResult = ReturnType<typeof useGetBookmarkedPostsQuery>;
+export type GetBookmarkedPostsLazyQueryHookResult = ReturnType<typeof useGetBookmarkedPostsLazyQuery>;
+export type GetBookmarkedPostsQueryResult = Apollo.QueryResult<GetBookmarkedPostsQuery, GetBookmarkedPostsQueryVariables>;
+export const GetExplorePostsDocument = gql`
+    query GetExplorePosts($paginationInput: PaginationInput!) {
+  getExplorePosts(paginationInput: $paginationInput) {
+    data {
+      ...PostCommonFields
+    }
+    pagination {
+      cursor
+    }
+  }
+}
+    ${PostCommonFieldsFragmentDoc}`;
+
+/**
+ * __useGetExplorePostsQuery__
+ *
+ * To run a query within a React component, call `useGetExplorePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExplorePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExplorePostsQuery({
+ *   variables: {
+ *      paginationInput: // value for 'paginationInput'
+ *   },
+ * });
+ */
+export function useGetExplorePostsQuery(baseOptions: Apollo.QueryHookOptions<GetExplorePostsQuery, GetExplorePostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExplorePostsQuery, GetExplorePostsQueryVariables>(GetExplorePostsDocument, options);
+      }
+export function useGetExplorePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExplorePostsQuery, GetExplorePostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExplorePostsQuery, GetExplorePostsQueryVariables>(GetExplorePostsDocument, options);
+        }
+export type GetExplorePostsQueryHookResult = ReturnType<typeof useGetExplorePostsQuery>;
+export type GetExplorePostsLazyQueryHookResult = ReturnType<typeof useGetExplorePostsLazyQuery>;
+export type GetExplorePostsQueryResult = Apollo.QueryResult<GetExplorePostsQuery, GetExplorePostsQueryVariables>;
+export const BookmarkPostDocument = gql`
+    mutation BookmarkPost($postId: String!) {
+  bookmarkPost(postId: $postId)
+}
+    `;
+export type BookmarkPostMutationFn = Apollo.MutationFunction<BookmarkPostMutation, BookmarkPostMutationVariables>;
+
+/**
+ * __useBookmarkPostMutation__
+ *
+ * To run a mutation, you first call `useBookmarkPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBookmarkPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [bookmarkPostMutation, { data, loading, error }] = useBookmarkPostMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useBookmarkPostMutation(baseOptions?: Apollo.MutationHookOptions<BookmarkPostMutation, BookmarkPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BookmarkPostMutation, BookmarkPostMutationVariables>(BookmarkPostDocument, options);
+      }
+export type BookmarkPostMutationHookResult = ReturnType<typeof useBookmarkPostMutation>;
+export type BookmarkPostMutationResult = Apollo.MutationResult<BookmarkPostMutation>;
+export type BookmarkPostMutationOptions = Apollo.BaseMutationOptions<BookmarkPostMutation, BookmarkPostMutationVariables>;
+export const PostReactionDocument = gql`
+    mutation PostReaction($postReactionInput: PostReactionInput!) {
+  postReaction(postReactionInput: $postReactionInput) {
+    id
+    reaction
+    deleted
+  }
+}
+    `;
+export type PostReactionMutationFn = Apollo.MutationFunction<PostReactionMutation, PostReactionMutationVariables>;
+
+/**
+ * __usePostReactionMutation__
+ *
+ * To run a mutation, you first call `usePostReactionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePostReactionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [postReactionMutation, { data, loading, error }] = usePostReactionMutation({
+ *   variables: {
+ *      postReactionInput: // value for 'postReactionInput'
+ *   },
+ * });
+ */
+export function usePostReactionMutation(baseOptions?: Apollo.MutationHookOptions<PostReactionMutation, PostReactionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<PostReactionMutation, PostReactionMutationVariables>(PostReactionDocument, options);
+      }
+export type PostReactionMutationHookResult = ReturnType<typeof usePostReactionMutation>;
+export type PostReactionMutationResult = Apollo.MutationResult<PostReactionMutation>;
+export type PostReactionMutationOptions = Apollo.BaseMutationOptions<PostReactionMutation, PostReactionMutationVariables>;
 export const AddVideoPostDocument = gql`
     mutation AddVideoPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!) {
   addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
@@ -1294,7 +1472,7 @@ export const AddVideoPostDocument = gql`
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }
@@ -1327,6 +1505,52 @@ export function useAddVideoPostMutation(baseOptions?: Apollo.MutationHookOptions
 export type AddVideoPostMutationHookResult = ReturnType<typeof useAddVideoPostMutation>;
 export type AddVideoPostMutationResult = Apollo.MutationResult<AddVideoPostMutation>;
 export type AddVideoPostMutationOptions = Apollo.BaseMutationOptions<AddVideoPostMutation, AddVideoPostMutationVariables>;
+export const AddAudioPostDocument = gql`
+    mutation AddAudioPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!, $mediaThumbnail: Upload!) {
+  addMediaPost(
+    addMediaPostInput: $addMediaPostInput
+    media: $media
+    mediaThumbnail: $mediaThumbnail
+  ) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      reactions
+      comments
+    }
+  }
+}
+    `;
+export type AddAudioPostMutationFn = Apollo.MutationFunction<AddAudioPostMutation, AddAudioPostMutationVariables>;
+
+/**
+ * __useAddAudioPostMutation__
+ *
+ * To run a mutation, you first call `useAddAudioPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddAudioPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addAudioPostMutation, { data, loading, error }] = useAddAudioPostMutation({
+ *   variables: {
+ *      addMediaPostInput: // value for 'addMediaPostInput'
+ *      media: // value for 'media'
+ *      mediaThumbnail: // value for 'mediaThumbnail'
+ *   },
+ * });
+ */
+export function useAddAudioPostMutation(baseOptions?: Apollo.MutationHookOptions<AddAudioPostMutation, AddAudioPostMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddAudioPostMutation, AddAudioPostMutationVariables>(AddAudioPostDocument, options);
+      }
+export type AddAudioPostMutationHookResult = ReturnType<typeof useAddAudioPostMutation>;
+export type AddAudioPostMutationResult = Apollo.MutationResult<AddAudioPostMutation>;
+export type AddAudioPostMutationOptions = Apollo.BaseMutationOptions<AddAudioPostMutation, AddAudioPostMutationVariables>;
 export const AddPhotoPostDocument = gql`
     mutation AddPhotoPost($addMediaPostInput: AddMediaPostInput!, $media: [Upload!]!) {
   addMediaPost(addMediaPostInput: $addMediaPostInput, media: $media) {
@@ -1335,7 +1559,7 @@ export const AddPhotoPostDocument = gql`
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }
@@ -1376,7 +1600,7 @@ export const AddTextualPostDocument = gql`
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }
@@ -1416,7 +1640,7 @@ export const AddPollPostDocument = gql`
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }

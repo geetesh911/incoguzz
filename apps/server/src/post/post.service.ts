@@ -52,7 +52,7 @@ class PostService {
       paginationInput,
     });
     return {
-      posts,
+      data: posts,
       pagination: {
         cursor: this.paginationHelper.getCursor<Post>({
           results: posts,
@@ -71,7 +71,7 @@ class PostService {
       userId,
     });
     return {
-      bookmarks,
+      data: bookmarks,
       pagination: {
         cursor: this.paginationHelper.getCursor<Bookmark>({
           results: bookmarks,
@@ -90,7 +90,7 @@ class PostService {
       userId,
     });
     return {
-      posts,
+      data: posts,
       pagination: {
         cursor: this.paginationHelper.getCursor<Post>({
           results: posts,

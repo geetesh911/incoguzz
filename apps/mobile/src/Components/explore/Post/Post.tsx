@@ -5,7 +5,7 @@ import { Reactions } from "./Reactions";
 import { Caption } from "./Caption";
 import { PostComponent } from "./PostComponent";
 import { PostOutput } from "@incoguzz/graphql";
-import { getPostThumbnailUrl, getPostUrl } from "./helper";
+import { PostHelper } from "./helper";
 
 interface IPostProps {
   post: PostOutput;
@@ -18,8 +18,8 @@ export const Post: FC<IPostProps> = ({ post, unpauseVideo }) => {
     <>
       <StyledPostContainer isFullScreen={videoPlayerState?.isFullScreen}>
         <PostComponent
-          url={getPostUrl(post)}
-          thumbnailUrl={getPostThumbnailUrl(post)}
+          url={PostHelper.getPostUrl(post)}
+          thumbnailUrl={PostHelper.getPostThumbnailUrl(post)}
           text={post?.textual?.text}
           type={post?.type}
           paused={!unpauseVideo}

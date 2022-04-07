@@ -11,3 +11,7 @@ export type DotNestedKeys<T> = (
 ) extends infer D
   ? Extract<D, string>
   : never;
+
+export type NestedFlags<T, I> = {
+  [K in keyof T]: T[K] extends object ? NestedFlags<T[K], I> : I;
+};

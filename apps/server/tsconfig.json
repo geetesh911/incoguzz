@@ -15,7 +15,7 @@
     "pretty": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,

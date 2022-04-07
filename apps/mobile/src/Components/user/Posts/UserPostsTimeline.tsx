@@ -51,7 +51,7 @@ export const UserPostsTimeline: FC = () => {
             innerRef={scrollHandler}
             key={post.id}
             post={post}
-            posts={(data?.getUserPosts?.posts as PostOutput[]) || []}
+            posts={(data?.getUserPosts?.data as PostOutput[]) || []}
             initialIndex={index}
             navigateTo={RouteNames.UserPost}
           />
@@ -63,7 +63,7 @@ export const UserPostsTimeline: FC = () => {
     <StyledUserPostsTimelineContainer>
       <FlatList
         ListHeaderComponent={<ScreenHeader heading="Timeline" />}
-        data={(data?.getUserPosts?.posts as PostOutput[]) || []}
+        data={(data?.getUserPosts?.data as PostOutput[]) || []}
         renderItem={renderItem}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}

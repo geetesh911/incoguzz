@@ -12,7 +12,7 @@ import {
   TabParamList,
   ExploreScreenNavigationProp,
 } from "../../../Navigation/interfaces";
-import { getPostThumbnailUrl, getPostUrl } from "../Post";
+import { PostHelper } from "../Post";
 import { PostIcon } from "../Post/PostIcon";
 import { PostModal } from "./PostModal";
 import {
@@ -84,7 +84,7 @@ export const FeedCard: FC<IFeedCardProps> = ({
           style={style}
         >
           <StyledFeedImage
-            source={{ uri: getPostThumbnailUrl(post) }}
+            source={{ uri: PostHelper.getPostThumbnailUrl(post) }}
             height={
               aspectRatio <= 1 ? LANDSCAPE_IMAGE_HEIGHT : POTRAIT_IMAGE_HEIGHT
             }
@@ -98,8 +98,8 @@ export const FeedCard: FC<IFeedCardProps> = ({
       </TapAndLongPressGesture>
       <PostModal
         open={open}
-        url={getPostUrl(post)}
-        thumbnailUrl={getPostThumbnailUrl(post)}
+        url={PostHelper.getPostUrl(post)}
+        thumbnailUrl={PostHelper.getPostThumbnailUrl(post)}
         type={post.type}
         text={post?.textual?.text}
       />

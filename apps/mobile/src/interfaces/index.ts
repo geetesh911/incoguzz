@@ -1,1 +1,1 @@
-export * from "./DotNestedKeys";
+export * from "./NestedKeys";

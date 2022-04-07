@@ -1,58 +1,81 @@
+fragment PostCommonFields on PostOutput {
+  id
+  caption
+  type
+  createdAt
+  updatedAt
+  tags {
+    id
+    name
+  }
+  bookmarks {
+    id
+  }
+  reactions {
+    reaction
+  }
+  place {
+    id
+    name
+  }
+  poll {
+    id
+    question
+    pollOptions {
+      id
+      option
+    }
+  }
+  photos {
+    id
+    url
+  }
+  video {
+    id
+    url
+    thumbnailUrl
+  }
+  clip {
+    id
+    url
+    thumbnailUrl
+    clipAudio {
+      id
+      name
+      audioUrl
+    }
+  }
+  textual {
+    id
+    text
+  }
+  audio {
+    id
+    url
+    thumbnailUrl
+  }
+  _count {
+    reactions
+    comments
+  }
+}
+
 query GetUserPosts($paginationInput: PaginationInput!) {
   getUserPosts(paginationInput: $paginationInput) {
-    posts {
-      id
-      caption
-      type
-      createdAt
-      updatedAt
-      tags {
-        id
-        name
-      }
-      place {
-        id
-        name
-      }
-      poll {
-        id
-        question
-        pollOptions {
-          id
-          option
-        }
-      }
-      photos {
-        id
-        url
-      }
-      video {
-        id
-        url
-        thumbnailUrl
-      }
-      clip {
-        id
-        url
-        thumbnailUrl
-        clipAudio {
-          id
-          name
-          audioUrl
-        }
-      }
-      textual {
-        id
-        text
-      }
-      audio {
-        id
-        url
-        thumbnailUrl
-      }
-      _count {
-        likes
-        comments
+    data {
+      ...PostCommonFields
+    }
+    pagination {
+      cursor
+    }
+  }
+}
+
+query GetBookmarkedPosts($paginationInput: PaginationInput!) {
+  getBookmarkedPosts(paginationInput: $paginationInput) {
+    data {
+      post {
+        ...PostCommonFields
       }
     }
     pagination {
@@ -61,62 +84,10 @@ query GetUserPosts($paginationInput: PaginationInput!) {
   }
 }
 
-query GetAllPosts($paginationInput: PaginationInput!) {
-  getAllPosts(paginationInput: $paginationInput) {
-    posts {
-      id
-      caption
-      type
-      createdAt
-      updatedAt
-      tags {
-        id
-        name
-      }
-      place {
-        id
-        name
-      }
-      poll {
-        id
-        question
-        pollOptions {
-          id
-          option
-        }
-      }
-      photos {
-        id
-        url
-      }
-      video {
-        id
-        url
-        thumbnailUrl
-      }
-      clip {
-        id
-        url
-        thumbnailUrl
-        clipAudio {
-          id
-          name
-          audioUrl
-        }
-      }
-      textual {
-        id
-        text
-      }
-      audio {
-        id
-        url
-        thumbnailUrl
-      }
-      _count {
-        likes
-        comments
-      }
+query GetExplorePosts($paginationInput: PaginationInput!) {
+  getExplorePosts(paginationInput: $paginationInput) {
+    data {
+      ...PostCommonFields
     }
     pagination {
       cursor
@@ -124,6 +95,17 @@ query GetAllPosts($paginationInput: PaginationInput!) {
   }
 }
 
+mutation BookmarkPost($postId: String!) {
+  bookmarkPost(postId: $postId)
+}
+
+mutation PostReaction($postReactionInput: PostReactionInput!) {
+  postReaction(postReactionInput: $postReactionInput) {
+    id
+    reaction
+    deleted
+  }
+}
 mutation AddVideoPost(
   $addMediaPostInput: AddMediaPostInput!
   $media: [Upload!]!
@@ -134,7 +116,28 @@ mutation AddVideoPost(
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
+      comments
+    }
+  }
+}
+
+mutation AddAudioPost(
+  $addMediaPostInput: AddMediaPostInput!
+  $media: [Upload!]!
+  $mediaThumbnail: Upload!
+) {
+  addMediaPost(
+    addMediaPostInput: $addMediaPostInput
+    media: $media
+    mediaThumbnail: $mediaThumbnail
+  ) {
+    id
+    type
+    createdAt
+    updatedAt
+    _count {
+      reactions
       comments
     }
   }
@@ -150,7 +153,7 @@ mutation AddPhotoPost(
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }
@@ -163,7 +166,7 @@ mutation AddTextualPost($addTextualPost: AddTextualPostInput!) {
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }
@@ -176,7 +179,7 @@ mutation AddPollPost($addPollPostInput: AddPollPostInput!) {
     createdAt
     updatedAt
     _count {
-      likes
+      reactions
       comments
     }
   }

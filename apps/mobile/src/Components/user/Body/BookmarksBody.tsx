@@ -36,7 +36,7 @@ export const BookmarksBody: FC = () => {
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        posts={(data?.getUserPosts?.posts as PostOutput[]) || []}
+        posts={(data?.getUserPosts?.data as PostOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />
@@ -49,7 +49,7 @@ export const BookmarksBody: FC = () => {
         innerRef={scrollHandler}
         contentContainerStyle={styles.masonryList}
         numColumns={1}
-        data={data?.getUserPosts?.posts || []}
+        data={data?.getUserPosts?.data || []}
         loading={loading}
         renderItem={renderItem}
         onRefresh={() => console.log("refresh")}

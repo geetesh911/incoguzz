@@ -1,4 +1,4 @@
-import PaginationOutput from "@/common/outputs/pagination.output";
+import PaginatedResponse from "@/common/generic-types/pagination-response.generic";
 import {
   Audio,
   Bookmark,
@@ -70,12 +70,6 @@ export class PostOutput {
 }
 
 @ObjectType()
-class GetPostsOutput {
-  @Field(() => [PostOutput])
-  posts: PostOutput[];
-
-  @Field(() => PaginationOutput)
-  pagination: PaginationOutput;
-}
+class GetPostsOutput extends PaginatedResponse(PostOutput) {}
 
 export default GetPostsOutput;

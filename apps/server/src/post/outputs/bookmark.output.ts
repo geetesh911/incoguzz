@@ -1,4 +1,4 @@
-import PaginationOutput from "@/common/outputs/pagination.output";
+import PaginatedResponse from "@/common/generic-types/pagination-response.generic";
 import { User } from "@/prisma/generated/type-graphql";
 import { Field, ObjectType } from "type-graphql";
 import { PostOutput } from "./get-posts.output";
@@ -27,12 +27,6 @@ class BookmarkOutput {
 }
 
 @ObjectType()
-class BookmarksOutput {
-  @Field(() => [BookmarkOutput])
-  bookmarks: BookmarkOutput[];
-
-  @Field(() => PaginationOutput)
-  pagination: PaginationOutput;
-}
+class BookmarksOutput extends PaginatedResponse(BookmarkOutput) {}
 
 export default BookmarksOutput;

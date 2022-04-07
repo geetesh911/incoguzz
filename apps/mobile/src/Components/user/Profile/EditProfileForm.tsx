@@ -41,16 +41,16 @@ export const EditProfileForm: FC = () => {
     },
   };
 
+  const { username, profile: profileErrorMessages } = updateUserErrorMessages;
+  const { nickname } = profileErrorMessages;
+
   const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required(updateUserErrorMessages?.username.required)
-      .min(5)
-      .max(255),
+    username: Yup.string().required(username?.required).min(5).max(255),
     profile: Yup.object().shape({
       nickname: Yup.string()
-        .required(updateUserErrorMessages["profile.nickname"]?.required)
-        .min(2, updateUserErrorMessages["profile.nickname"]?.min)
-        .max(255, updateUserErrorMessages["profile.nickname"]?.max),
+        .required(nickname?.required)
+        .min(2, nickname?.min)
+        .max(255, nickname?.max),
     }),
   });
 
@@ -69,7 +69,7 @@ export const EditProfileForm: FC = () => {
       placeholder: "Username",
     },
     {
-      name: "profile.nickname" as keyof UpdateUserInput,
+      name: "profile.nickname",
       type: FormComponentTypes.Input,
       placeholder: "Name",
     },

@@ -2,9 +2,9 @@ import React, { FC, useRef } from "react";
 import { StyleSheet } from "react-native";
 import { useQuery } from "@apollo/client";
 import {
-  GetAllPostsQuery,
-  GetAllPostsQueryVariables,
-  GetAllPostsDocument,
+  GetExplorePostsQuery,
+  GetExplorePostsQueryVariables,
+  GetExplorePostsDocument,
   PostOutput,
 } from "@incoguzz/graphql";
 import LocalMasonryList from "../../shared/List/MasonryList";
@@ -18,9 +18,9 @@ import { IRenderItemType } from "../../user/Body/BookmarksBody";
 
 export const Feed: FC = () => {
   const { data, loading } = useQuery<
-    GetAllPostsQuery,
-    GetAllPostsQueryVariables
-  >(GetAllPostsDocument, {
+    GetExplorePostsQuery,
+    GetExplorePostsQueryVariables
+  >(GetExplorePostsDocument, {
     variables: { paginationInput: { take: 5, firstQueryResult: true } },
   });
 
@@ -33,7 +33,7 @@ export const Feed: FC = () => {
         key={post.id}
         post={post}
         postSection="Explore"
-        posts={(data?.getAllPosts?.posts as PostOutput[]) || []}
+        posts={(data?.getExplorePosts?.data as PostOutput[]) || []}
         initialIndex={i}
         navigateTo={RouteNames.ExplorePost}
       />
@@ -48,7 +48,7 @@ export const Feed: FC = () => {
       stickyHeaderIndices={[1]}
       contentContainerStyle={styles.masonryList}
       numColumns={2}
-      data={(data?.getAllPosts?.posts as PostOutput[]) || []}
+      data={(data?.getExplorePosts?.data as PostOutput[]) || []}
       loading={loading}
       renderItem={renderItem}
       onRefresh={() => console.log("refresh")}

@@ -1,7 +1,8 @@
+import { DotNestedKeys } from "../../interfaces";
 import { FormComponentTypes } from "./constants";
 
 export interface IFormField<T> {
-  name: keyof T;
+  name: DotNestedKeys<T>;
   type: FormComponentTypes;
   placeholder?: string;
   onChange?: (value: string) => void;

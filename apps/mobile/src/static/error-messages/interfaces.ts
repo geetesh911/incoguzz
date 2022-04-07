@@ -1,3 +1,5 @@
 export interface IErrorMessage {
-  [key: string]: string;
+  required?: string;
+  min?: string;
+  max?: string;
 }

@@ -6,6 +6,28 @@ export type AudioFieldPolicy = {
 	thumbnailUrl?: FieldPolicy<any> | FieldReadFunction<any>,
 	url?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type BookmarkKeySpecifier = ('createdAt' | 'id' | 'postId' | 'updatedAt' | 'userId' | BookmarkKeySpecifier)[];
+export type BookmarkFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type BookmarkOutputKeySpecifier = ('createdAt' | 'id' | 'post' | 'postId' | 'updatedAt' | 'userId' | BookmarkOutputKeySpecifier)[];
+export type BookmarkOutputFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	post?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type BookmarksOutputKeySpecifier = ('data' | 'pagination' | BookmarksOutputKeySpecifier)[];
+export type BookmarksOutputFieldPolicy = {
+	data?: FieldPolicy<any> | FieldReadFunction<any>,
+	pagination?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type ClipAudioKeySpecifier = ('_count' | 'audioUrl' | 'id' | 'name' | ClipAudioKeySpecifier)[];
 export type ClipAudioFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -32,10 +54,10 @@ export type ForgotPasswordOutputFieldPolicy = {
 	verificationTokenId?: FieldPolicy<any> | FieldReadFunction<any>,
 	verificationUuid?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type GetPostsOutputKeySpecifier = ('pagination' | 'posts' | GetPostsOutputKeySpecifier)[];
+export type GetPostsOutputKeySpecifier = ('data' | 'pagination' | GetPostsOutputKeySpecifier)[];
 export type GetPostsOutputFieldPolicy = {
-	pagination?: FieldPolicy<any> | FieldReadFunction<any>,
-	posts?: FieldPolicy<any> | FieldReadFunction<any>
+	data?: FieldPolicy<any> | FieldReadFunction<any>,
+	pagination?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type GoogleAuthOutputKeySpecifier = ('accessToken' | 'email' | 'id' | 'isVerified' | 'refreshToken' | 'username' | GoogleAuthOutputKeySpecifier)[];
 export type GoogleAuthOutputFieldPolicy = {
@@ -55,12 +77,13 @@ export type LoginOutputFieldPolicy = {
 	refreshToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addPollPost' | 'addTextualPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'forgotPassword' | 'googleAuth' | 'login' | 'logout' | 'multipleUploadFile' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateProfile' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addPollPost' | 'addTextualPost' | 'bookmarkPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'forgotPassword' | 'googleAuth' | 'login' | 'logout' | 'multipleUploadFile' | 'postReaction' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateProfile' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addClipPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addMediaPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addPollPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addTextualPost?: FieldPolicy<any> | FieldReadFunction<any>,
+	bookmarkPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	changePassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	changeProfilePicture?: FieldPolicy<any> | FieldReadFunction<any>,
 	deactivateUser?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -69,6 +92,7 @@ export type MutationFieldPolicy = {
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout?: FieldPolicy<any> | FieldReadFunction<any>,
 	multipleUploadFile?: FieldPolicy<any> | FieldReadFunction<any>,
+	postReaction?: FieldPolicy<any> | FieldReadFunction<any>,
 	removeProfilePicture?: FieldPolicy<any> | FieldReadFunction<any>,
 	resetPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	signUp?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -131,19 +155,21 @@ export type PostFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PostCountKeySpecifier = ('activities' | 'comments' | 'likes' | 'message' | 'photos' | 'tags' | PostCountKeySpecifier)[];
+export type PostCountKeySpecifier = ('activities' | 'bookmarks' | 'comments' | 'message' | 'photos' | 'reactions' | 'tags' | PostCountKeySpecifier)[];
 export type PostCountFieldPolicy = {
 	activities?: FieldPolicy<any> | FieldReadFunction<any>,
+	bookmarks?: FieldPolicy<any> | FieldReadFunction<any>,
 	comments?: FieldPolicy<any> | FieldReadFunction<any>,
-	likes?: FieldPolicy<any> | FieldReadFunction<any>,
 	message?: FieldPolicy<any> | FieldReadFunction<any>,
 	photos?: FieldPolicy<any> | FieldReadFunction<any>,
+	reactions?: FieldPolicy<any> | FieldReadFunction<any>,
 	tags?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PostOutputKeySpecifier = ('_count' | 'audio' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | PostOutputKeySpecifier)[];
+export type PostOutputKeySpecifier = ('_count' | 'audio' | 'bookmarks' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'reactions' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | PostOutputKeySpecifier)[];
 export type PostOutputFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
 	audio?: FieldPolicy<any> | FieldReadFunction<any>,
+	bookmarks?: FieldPolicy<any> | FieldReadFunction<any>,
 	caption?: FieldPolicy<any> | FieldReadFunction<any>,
 	clip?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -151,6 +177,7 @@ export type PostOutputFieldPolicy = {
 	photos?: FieldPolicy<any> | FieldReadFunction<any>,
 	place?: FieldPolicy<any> | FieldReadFunction<any>,
 	poll?: FieldPolicy<any> | FieldReadFunction<any>,
+	reactions?: FieldPolicy<any> | FieldReadFunction<any>,
 	tags?: FieldPolicy<any> | FieldReadFunction<any>,
 	textual?: FieldPolicy<any> | FieldReadFunction<any>,
 	type?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -187,15 +214,35 @@ export type ProfileOutputFieldPolicy = {
 	relationshipStatus?: FieldPolicy<any> | FieldReadFunction<any>,
 	website?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('getAllPosts' | 'getMediaAccessToken' | 'getUser' | 'getUserPosts' | 'isUsernameAvailable' | 'test' | 'verifyAccessToken' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('getBookmarkedPosts' | 'getExplorePosts' | 'getMediaAccessToken' | 'getUser' | 'getUserPosts' | 'isUsernameAvailable' | 'test' | 'verifyAccessToken' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
-	getAllPosts?: FieldPolicy<any> | FieldReadFunction<any>,
+	getBookmarkedPosts?: FieldPolicy<any> | FieldReadFunction<any>,
+	getExplorePosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	getMediaAccessToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUserPosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	isUsernameAvailable?: FieldPolicy<any> | FieldReadFunction<any>,
 	test?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyAccessToken?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReactionKeySpecifier = ('createdAt' | 'id' | 'postId' | 'reaction' | 'updatedAt' | 'userId' | ReactionKeySpecifier)[];
+export type ReactionFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>,
+	reaction?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type ReactionOutputKeySpecifier = ('createdAt' | 'deleted' | 'id' | 'postId' | 'reaction' | 'updatedAt' | 'userId' | ReactionOutputKeySpecifier)[];
+export type ReactionOutputFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleted?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>,
+	reaction?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type SignUpOutputKeySpecifier = ('email' | 'id' | 'isVerified' | 'username' | SignUpOutputKeySpecifier)[];
 export type SignUpOutputFieldPolicy = {
@@ -250,6 +297,18 @@ export type StrictTypedTypePolicies = {
 	Audio?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | AudioKeySpecifier | (() => undefined | AudioKeySpecifier),
 		fields?: AudioFieldPolicy,
+	},
+	Bookmark?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | BookmarkKeySpecifier | (() => undefined | BookmarkKeySpecifier),
+		fields?: BookmarkFieldPolicy,
+	},
+	BookmarkOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | BookmarkOutputKeySpecifier | (() => undefined | BookmarkOutputKeySpecifier),
+		fields?: BookmarkOutputFieldPolicy,
+	},
+	BookmarksOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | BookmarksOutputKeySpecifier | (() => undefined | BookmarksOutputKeySpecifier),
+		fields?: BookmarksOutputFieldPolicy,
 	},
 	ClipAudio?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | ClipAudioKeySpecifier | (() => undefined | ClipAudioKeySpecifier),
@@ -334,6 +393,14 @@ export type StrictTypedTypePolicies = {
 	Query?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | QueryKeySpecifier | (() => undefined | QueryKeySpecifier),
 		fields?: QueryFieldPolicy,
+	},
+	Reaction?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReactionKeySpecifier | (() => undefined | ReactionKeySpecifier),
+		fields?: ReactionFieldPolicy,
+	},
+	ReactionOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | ReactionOutputKeySpecifier | (() => undefined | ReactionOutputKeySpecifier),
+		fields?: ReactionOutputFieldPolicy,
 	},
 	SignUpOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | SignUpOutputKeySpecifier | (() => undefined | SignUpOutputKeySpecifier),
