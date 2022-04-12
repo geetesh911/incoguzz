@@ -57,4 +57,9 @@ export class PostCountOrderByAggregateInput {
     nullable: true,
   })
   slug?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  views?: "asc" | "desc" | undefined;
 }

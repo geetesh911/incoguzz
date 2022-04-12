@@ -47,6 +47,7 @@ export class FindFirstPostArgs {
         | "archive"
         | "published"
         | "slug"
+        | "views"
       >
     | undefined;
 }

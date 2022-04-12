@@ -47,6 +47,7 @@ export class TagPostsArgs {
         | "archive"
         | "published"
         | "slug"
+        | "views"
       >
     | undefined;
 }

@@ -112,6 +112,7 @@ Table Post {
   published Boolean [not null, default: true]
   slug String [unique, not null]
   message Message [not null]
+  views Int [not null, default: 0]
 }
 
 Table Poll {

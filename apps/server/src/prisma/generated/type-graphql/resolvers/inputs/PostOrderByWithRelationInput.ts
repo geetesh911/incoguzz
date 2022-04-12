@@ -141,4 +141,9 @@ export class PostOrderByWithRelationInput {
     nullable: true,
   })
   message?: MessageOrderByRelationAggregateInput | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  views?: "asc" | "desc" | undefined;
 }

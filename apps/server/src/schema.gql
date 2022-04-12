@@ -164,6 +164,7 @@ type Mutation {
   deactivateUser: Boolean!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): ForgotPasswordOutput!
   googleAuth(googleAuthInput: GoogleAuthInput!): GoogleAuthOutput!
+  incrementPostView(postId: String!): Boolean!
   login(loginInput: LoginInput!): LoginOutput!
   logout: Boolean!
   multipleUploadFile(picture: [Upload!]!): Boolean!
@@ -244,6 +245,7 @@ type Post {
   type: PostType!
   updatedAt: DateTime!
   userId: String!
+  views: Int!
 }
 
 type PostCount {

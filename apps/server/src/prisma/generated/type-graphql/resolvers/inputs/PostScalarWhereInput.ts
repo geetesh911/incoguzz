@@ -5,6 +5,7 @@ import { DecimalJSScalar } from "../../scalars";
 import { BoolFilter } from "../inputs/BoolFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { EnumPostTypeFilter } from "../inputs/EnumPostTypeFilter";
+import { IntFilter } from "../inputs/IntFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 
@@ -76,4 +77,9 @@ export class PostScalarWhereInput {
     nullable: true,
   })
   slug?: StringFilter | undefined;
+
+  @TypeGraphQL.Field(_type => IntFilter, {
+    nullable: true,
+  })
+  views?: IntFilter | undefined;
 }

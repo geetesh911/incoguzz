@@ -57,4 +57,9 @@ export class PostCreateManyInput {
     nullable: false,
   })
   slug!: string;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true,
+  })
+  views?: number | undefined;
 }

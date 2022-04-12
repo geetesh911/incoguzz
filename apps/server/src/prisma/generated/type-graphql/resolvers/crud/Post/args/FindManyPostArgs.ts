@@ -47,6 +47,7 @@ export class FindManyPostArgs {
         | "archive"
         | "published"
         | "slug"
+        | "views"
       >
     | undefined;
 }

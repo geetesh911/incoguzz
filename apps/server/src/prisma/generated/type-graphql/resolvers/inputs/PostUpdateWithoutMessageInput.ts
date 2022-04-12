@@ -10,6 +10,7 @@ import { ClipUpdateOneWithoutPostInput } from "../inputs/ClipUpdateOneWithoutPos
 import { CommentUpdateManyWithoutPostInput } from "../inputs/CommentUpdateManyWithoutPostInput";
 import { DateTimeFieldUpdateOperationsInput } from "../inputs/DateTimeFieldUpdateOperationsInput";
 import { EnumPostTypeFieldUpdateOperationsInput } from "../inputs/EnumPostTypeFieldUpdateOperationsInput";
+import { IntFieldUpdateOperationsInput } from "../inputs/IntFieldUpdateOperationsInput";
 import { NullableStringFieldUpdateOperationsInput } from "../inputs/NullableStringFieldUpdateOperationsInput";
 import { PhotoUpdateManyWithoutPostInput } from "../inputs/PhotoUpdateManyWithoutPostInput";
 import { PlaceUpdateOneWithoutPostsInput } from "../inputs/PlaceUpdateOneWithoutPostsInput";
@@ -129,4 +130,9 @@ export class PostUpdateWithoutMessageInput {
     nullable: true,
   })
   slug?: StringFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => IntFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  views?: IntFieldUpdateOperationsInput | undefined;
 }

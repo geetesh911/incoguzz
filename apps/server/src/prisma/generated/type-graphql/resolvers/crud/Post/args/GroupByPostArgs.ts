@@ -31,6 +31,7 @@ export class GroupByPostArgs {
     | "archive"
     | "published"
     | "slug"
+    | "views"
   >;
 
   @TypeGraphQL.Field(_type => PostScalarWhereWithAggregatesInput, {

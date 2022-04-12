@@ -47,6 +47,7 @@ export class PlacePostsArgs {
         | "archive"
         | "published"
         | "slug"
+        | "views"
       >
     | undefined;
 }

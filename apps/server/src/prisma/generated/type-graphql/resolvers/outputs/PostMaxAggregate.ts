@@ -57,4 +57,9 @@ export class PostMaxAggregate {
     nullable: true,
   })
   slug!: string | null;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true,
+  })
+  views!: number | null;
 }

@@ -637,6 +637,7 @@ export { PollUpsertWithoutPollOptionsInput } from "./PollUpsertWithoutPollOption
 export { PollUpsertWithoutPostInput } from "./PollUpsertWithoutPostInput";
 export { PollWhereInput } from "./PollWhereInput";
 export { PollWhereUniqueInput } from "./PollWhereUniqueInput";
+export { PostAvgOrderByAggregateInput } from "./PostAvgOrderByAggregateInput";
 export { PostCountOrderByAggregateInput } from "./PostCountOrderByAggregateInput";
 export { PostCreateInput } from "./PostCreateInput";
 export { PostCreateManyInput } from "./PostCreateManyInput";
@@ -695,6 +696,7 @@ export { PostOrderByWithRelationInput } from "./PostOrderByWithRelationInput";
 export { PostRelationFilter } from "./PostRelationFilter";
 export { PostScalarWhereInput } from "./PostScalarWhereInput";
 export { PostScalarWhereWithAggregatesInput } from "./PostScalarWhereWithAggregatesInput";
+export { PostSumOrderByAggregateInput } from "./PostSumOrderByAggregateInput";
 export { PostUpdateInput } from "./PostUpdateInput";
 export { PostUpdateManyMutationInput } from "./PostUpdateManyMutationInput";
 export { PostUpdateManyWithWhereWithoutPlaceInput } from "./PostUpdateManyWithWhereWithoutPlaceInput";

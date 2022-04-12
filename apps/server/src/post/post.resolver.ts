@@ -67,6 +67,14 @@ export class PostResolver {
   }
 
   @Authorized()
+  @Mutation(() => Boolean)
+  async incrementPostView(
+    @Arg("postId", () => String) postId: string,
+  ): Promise<boolean> {
+    return this.postService.incrementPostView({ postId });
+  }
+
+  @Authorized()
   @Mutation(() => ReactionOutput)
   async postReaction(
     @Ctx() { user }: Context,

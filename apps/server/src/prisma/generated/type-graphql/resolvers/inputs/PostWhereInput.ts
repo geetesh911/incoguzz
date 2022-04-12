@@ -10,6 +10,7 @@ import { ClipRelationFilter } from "../inputs/ClipRelationFilter";
 import { CommentListRelationFilter } from "../inputs/CommentListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { EnumPostTypeFilter } from "../inputs/EnumPostTypeFilter";
+import { IntFilter } from "../inputs/IntFilter";
 import { MessageListRelationFilter } from "../inputs/MessageListRelationFilter";
 import { PhotoListRelationFilter } from "../inputs/PhotoListRelationFilter";
 import { PlaceRelationFilter } from "../inputs/PlaceRelationFilter";
@@ -160,4 +161,9 @@ export class PostWhereInput {
     nullable: true,
   })
   message?: MessageListRelationFilter | undefined;
+
+  @TypeGraphQL.Field(_type => IntFilter, {
+    nullable: true,
+  })
+  views?: IntFilter | undefined;
 }

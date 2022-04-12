@@ -101,6 +101,11 @@ export class Post {
 
   message?: Message[];
 
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false,
+  })
+  views!: number;
+
   @TypeGraphQL.Field(_type => PostCount, {
     nullable: true,
   })

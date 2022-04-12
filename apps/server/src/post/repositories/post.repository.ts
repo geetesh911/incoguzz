@@ -16,13 +16,15 @@ import {
 import { Prisma } from "@prisma/client";
 import CreateBasicPostInputHelper from "../helpers/create-input.helper";
 import { IBookmarkPostParams } from "../interfaces/bookmark.interface";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import {
   IAddPostReactionParams,
   IDeletePostReactionParams,
   IGetPostReactionParams,
 } from "../interfaces/reaction.interface";
-import { IGetPostParams } from "../interfaces/get-post.interface";
+import {
+  IGetPostParams,
+  IIncrementPostViewsParams,
+} from "../interfaces/get-post.interface";
 
 interface IReader {
   getUserPosts: (params: IGetPostParams) => Promise<Post[]>;
@@ -37,7 +39,9 @@ interface IWriter {
   addClipPost: (params: IAddClipPostParams) => Promise<Post>;
   addPostReaction: (params: IAddPostReactionParams) => Promise<Reaction>;
   deletePostReaction: (params: IDeletePostReactionParams) => Promise<Reaction>;
-  bookmarkPost: (params: IBookmarkPostParams) => Promise<void>;
+  addPostBookmark: (params: IBookmarkPostParams) => Promise<void>;
+  deletePostBookmark: (params: IBookmarkPostParams) => Promise<void>;
+  incrementPostView: (params: IIncrementPostViewsParams) => Promise<void>;
 }
 
 type TUserRepository = IReader & IWriter;
@@ -158,26 +162,40 @@ class PostRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async bookmarkPost({
+  public async incrementPostView({
+    postId,
+  }: IIncrementPostViewsParams): Promise<void> {
+    await this.prisma.post.update({
+      where: { id: postId },
+      data: {
+        views: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
+  public async addPostBookmark({
     postId,
     userId,
   }: IBookmarkPostParams): Promise<void> {
-    try {
-      await this.prisma.bookmark.create({
-        data: {
-          post: { connect: { id: postId } },
-          user: { connect: { id: userId } },
-        },
-      });
-    } catch (error) {
-      if ((error as PrismaClientKnownRequestError).code === "P2002") {
-        await this.prisma.bookmark.delete({
-          where: {
-            postId_userId: { postId, userId },
-          },
-        });
-      }
-    }
+    await this.prisma.bookmark.create({
+      data: {
+        post: { connect: { id: postId } },
+        user: { connect: { id: userId } },
+      },
+    });
+  }
+
+  public async deletePostBookmark({
+    postId,
+    userId,
+  }: IBookmarkPostParams): Promise<void> {
+    await this.prisma.bookmark.delete({
+      where: {
+        postId_userId: { postId, userId },
+      },
+    });
   }
 
   public addTextualPost({

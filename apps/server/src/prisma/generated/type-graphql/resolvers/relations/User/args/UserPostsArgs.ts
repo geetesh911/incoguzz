@@ -47,6 +47,7 @@ export class UserPostsArgs {
         | "archive"
         | "published"
         | "slug"
+        | "views"
       >
     | undefined;
 }

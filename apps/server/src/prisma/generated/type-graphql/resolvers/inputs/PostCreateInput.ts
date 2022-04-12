@@ -131,4 +131,9 @@ export class PostCreateInput {
     nullable: true,
   })
   message?: MessageCreateNestedManyWithoutPostInput | undefined;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true,
+  })
+  views?: number | undefined;
 }

@@ -5,6 +5,7 @@ import { DecimalJSScalar } from "../../scalars";
 import { BoolWithAggregatesFilter } from "../inputs/BoolWithAggregatesFilter";
 import { DateTimeWithAggregatesFilter } from "../inputs/DateTimeWithAggregatesFilter";
 import { EnumPostTypeWithAggregatesFilter } from "../inputs/EnumPostTypeWithAggregatesFilter";
+import { IntWithAggregatesFilter } from "../inputs/IntWithAggregatesFilter";
 import { StringNullableWithAggregatesFilter } from "../inputs/StringNullableWithAggregatesFilter";
 import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
@@ -76,4 +77,9 @@ export class PostScalarWhereWithAggregatesInput {
     nullable: true,
   })
   slug?: StringWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => IntWithAggregatesFilter, {
+    nullable: true,
+  })
+  views?: IntWithAggregatesFilter | undefined;
 }

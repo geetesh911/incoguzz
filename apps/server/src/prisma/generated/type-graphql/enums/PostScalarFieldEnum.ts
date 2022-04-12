@@ -11,6 +11,7 @@ export enum PostScalarFieldEnum {
   archive = "archive",
   published = "published",
   slug = "slug",
+  views = "views",
 }
 TypeGraphQL.registerEnumType(PostScalarFieldEnum, {
   name: "PostScalarFieldEnum",

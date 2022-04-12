@@ -214,6 +214,7 @@ model Post {
   published  Boolean    @default(true)
   slug       String     @unique(length: 191) @db.VarChar(3000)
   message    Message[]
+  views      Int        @default(0) @db.Int()
 
   @@index([archive, published])
 }

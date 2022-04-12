@@ -13,6 +13,7 @@ import StorageService from "@/common/services/storage.service";
 import { Bookmark, Post, PostType } from "@/prisma/generated/type-graphql";
 import { AzureContainersEnum, SubFoldersEnum } from "@/user/enums/file.enum";
 import { logger } from "@azure/storage-blob";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { UserInputError } from "apollo-server-errors";
 import { FfprobeData } from "fluent-ffmpeg";
 import { FileUpload } from "graphql-upload";
@@ -26,7 +27,10 @@ import {
   IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
 import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
-import { IGetPostParams } from "./interfaces/get-post.interface";
+import {
+  IGetPostParams,
+  IIncrementPostViewsParams,
+} from "./interfaces/get-post.interface";
 import { IAddPostReactionParams } from "./interfaces/reaction.interface";
 import BookmarksOutput from "./outputs/bookmark.output";
 import GetPostsOutput from "./outputs/get-posts.output";
@@ -104,7 +108,21 @@ class PostService {
     postId,
     userId,
   }: IBookmarkPostParams): Promise<boolean> {
-    await this.postRepository.bookmarkPost({ postId, userId });
+    try {
+      await this.postRepository.addPostBookmark({ postId, userId });
+      return true;
+    } catch (error) {
+      if ((error as PrismaClientKnownRequestError).code === "P2002") {
+        await this.postRepository.deletePostBookmark({ postId, userId });
+        return false;
+      }
+    }
+  }
+
+  public async incrementPostView({
+    postId,
+  }: IIncrementPostViewsParams): Promise<boolean> {
+    await this.postRepository.incrementPostView({ postId });
     return true;
   }
 

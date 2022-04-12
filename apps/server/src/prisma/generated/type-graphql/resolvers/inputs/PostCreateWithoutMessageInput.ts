@@ -125,4 +125,9 @@ export class PostCreateWithoutMessageInput {
     nullable: false,
   })
   slug!: string;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: true,
+  })
+  views?: number | undefined;
 }
