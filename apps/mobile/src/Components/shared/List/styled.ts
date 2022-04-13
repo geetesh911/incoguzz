@@ -1,3 +1,4 @@
+import { StyleSheet } from "react-native";
 import styled from "styled-components/native";
 
 interface IMasonaryListContainer {
@@ -19,3 +20,10 @@ export const StyledMasonaryListItemContainer = styled.View<IMasonaryListItemCont
   flex: ${({ numColumns }) => 1 / numColumns};
   flex-direction: ${({ horizontal }) => (horizontal ? "column" : "row")};
 `;
+
+export const masonaryListStyles = StyleSheet.create({
+  masonryList: {
+    paddingHorizontal: 10,
+    alignSelf: "stretch",
+  },
+});

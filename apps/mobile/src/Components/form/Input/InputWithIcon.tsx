@@ -16,7 +16,6 @@ interface IInputWithIconProps extends IInputProps {
 
 export const InputWithIcon: FC<IInputWithIconProps> = ({
   value,
-  name,
   onChange,
   placeholder,
   error,

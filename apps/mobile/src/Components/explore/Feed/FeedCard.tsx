@@ -102,6 +102,7 @@ export const FeedCard: FC<IFeedCardProps> = ({
         thumbnailUrl={PostHelper.getPostThumbnailUrl(post)}
         type={post.type}
         text={post?.textual?.text}
+        postId={post?.id}
       />
     </>
   );

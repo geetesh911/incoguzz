@@ -14,7 +14,6 @@ interface IPasswordInputProps extends IInputProps {}
 
 export const PasswordInput: FC<IPasswordInputProps> = ({
   value,
-  name,
   onChange,
   placeholder,
   error,

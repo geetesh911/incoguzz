@@ -41,6 +41,7 @@ export const StyledPostContainer = styled.View<{ isFullScreen: boolean }>`
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  /* margin-top: 10px; */
 `;
 
 export const StyledMediaContainer = styled.View<Partial<IMediaProperties>>`
@@ -229,5 +230,15 @@ export const StyledImageCarouselIndicator = styled.View<{ active: boolean }>`
   border-bottom-right-radius: 40px;
   border-bottom-left-radius: 40px;
   background-color: ${({ theme }) => theme?.textColors?.primary};
-  opacity: ${({ theme, active }) => (active ? 1 : 0.5)};
+  opacity: ${({ active }) => (active ? 1 : 0.5)};
+`;
+
+export const StyledBookmarkButton = styled.Pressable`
+  position: absolute;
+  right: 10px;
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

@@ -21,10 +21,7 @@ import {
   IDeletePostReactionParams,
   IGetPostReactionParams,
 } from "../interfaces/reaction.interface";
-import {
-  IGetPostParams,
-  IIncrementPostViewsParams,
-} from "../interfaces/get-post.interface";
+import { IGetPostParams } from "../interfaces/get-post.interface";
 
 interface IReader {
   getUserPosts: (params: IGetPostParams) => Promise<Post[]>;
@@ -41,7 +38,7 @@ interface IWriter {
   deletePostReaction: (params: IDeletePostReactionParams) => Promise<Reaction>;
   addPostBookmark: (params: IBookmarkPostParams) => Promise<void>;
   deletePostBookmark: (params: IBookmarkPostParams) => Promise<void>;
-  incrementPostView: (params: IIncrementPostViewsParams) => Promise<void>;
+  incrementPostView: (postId: string) => Promise<void>;
 }
 
 type TUserRepository = IReader & IWriter;
@@ -162,9 +159,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
     });
   }
 
-  public async incrementPostView({
-    postId,
-  }: IIncrementPostViewsParams): Promise<void> {
+  public async incrementPostView(postId: string): Promise<void> {
     await this.prisma.post.update({
       where: { id: postId },
       data: {

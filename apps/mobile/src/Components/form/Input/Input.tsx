@@ -17,7 +17,6 @@ export interface IInputProps {
 
 export const Input: FC<IInputProps> = ({
   value,
-  name,
   onChange,
   placeholder,
   error,

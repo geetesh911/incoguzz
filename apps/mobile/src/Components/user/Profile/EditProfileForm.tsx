@@ -14,7 +14,8 @@ import { Button, Form, FormComponentTypes, IFormFields } from "../../form";
 import { StyledEditProfileFormContainer } from "./styled";
 import { useAppSelector } from "../../../redux/hooks";
 import { useNavigation } from "@react-navigation/native";
-import { RouteNames, UserInfoScreenNavigationProp } from "../../../Navigation";
+import { RouteNames } from "../../../Navigation/constants";
+import { UserInfoScreenNavigationProp } from "../../../Navigation/interfaces";
 
 export const EditProfileForm: FC = () => {
   const userData = useAppSelector(state => state.user.userData);

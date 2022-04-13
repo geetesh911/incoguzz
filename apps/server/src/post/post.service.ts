@@ -27,10 +27,7 @@ import {
   IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
 import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
-import {
-  IGetPostParams,
-  IIncrementPostViewsParams,
-} from "./interfaces/get-post.interface";
+import { IGetPostParams } from "./interfaces/get-post.interface";
 import { IAddPostReactionParams } from "./interfaces/reaction.interface";
 import BookmarksOutput from "./outputs/bookmark.output";
 import GetPostsOutput from "./outputs/get-posts.output";
@@ -119,10 +116,8 @@ class PostService {
     }
   }
 
-  public async incrementPostView({
-    postId,
-  }: IIncrementPostViewsParams): Promise<boolean> {
-    await this.postRepository.incrementPostView({ postId });
+  public async incrementPostView(postId: string): Promise<boolean> {
+    await this.postRepository.incrementPostView(postId);
     return true;
   }
 

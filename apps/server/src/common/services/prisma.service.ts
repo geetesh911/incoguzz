@@ -6,7 +6,7 @@ import { logger } from "@/utils/logger";
 @Service()
 class PrismaService extends PrismaClient {
   constructor() {
-    super();
+    super({ log: ["query", "info", "warn", "error"] });
     this.hashPassword();
     this.timeLogging();
   }

@@ -11,7 +11,7 @@ import {
   Textual,
   Video,
 } from "@/prisma/generated/type-graphql";
-import { Field, ObjectType } from "type-graphql";
+import { Field, Int, ObjectType } from "type-graphql";
 import ClipOutput from "./clip.output";
 import PollOutput from "./poll.output";
 
@@ -64,6 +64,9 @@ export class PostOutput {
 
   @Field(() => [Reaction], { nullable: true })
   reactions?: Reaction[] | null;
+
+  @Field(() => Int, { nullable: false })
+  views?: number;
 
   @Field(() => PostCount, { nullable: true })
   _count?: PostCount | null;

@@ -1,4 +1,3 @@
-import { FlatList } from "react-native-gesture-handler";
 import React, { FC, useRef } from "react";
 import { useQuery } from "@apollo/client";
 import {
@@ -7,67 +6,60 @@ import {
   GetUserPostsQuery,
   GetUserPostsQueryVariables,
 } from "@incoguzz/graphql";
-import { ListRenderItemInfo, ScrollView } from "react-native";
-import {
-  StyledTimlineItemContainer,
-  StyledTimlineRoadContainer,
-  StyledTimlineRoad,
-  StyledPostContainer,
-  StyledPostDateText,
-  StyledUserPostsTimelineContainer,
-  StyledPostFeedCard,
-} from "./styled";
-import { TimelineStopIcon } from "../../icons/TimelineStopIcon";
-import { ScreenHeader } from "../../shared";
-import { DateHelper } from "../../../helpers";
+import { PageHeader } from "../../shared";
 import { RouteNames } from "../../../Navigation/constants";
+import { IRenderItemType } from "../Bookmarks/BookmarksBody";
+import { FeedCard } from "../../explore";
+import LocalMasonryList from "../../shared/List/MasonryList";
+import Animated from "react-native-reanimated";
+import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
+import { masonaryListStyles } from "../../shared/List/styled";
+import { useRefetch } from "../../../hooks";
 
 export const UserPostsTimeline: FC = () => {
-  const { data } = useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(
-    GetUserPostsDocument,
-    {
-      variables: { paginationInput: { take: 5, firstQueryResult: true } },
-    },
-  );
+  const { data, loading, refetch, networkStatus } = useQuery<
+    GetUserPostsQuery,
+    GetUserPostsQueryVariables
+  >(GetUserPostsDocument, {
+    variables: { paginationInput: { take: 5, firstQueryResult: true } },
+    notifyOnNetworkStatusChange: true,
+  });
+  const { refetchQuery, isRefecting } = useRefetch({ refetch, networkStatus });
 
-  const scrollHandler = useRef<ScrollView>();
+  const pageHeader = "User Posts";
+  const scrollHandler = useRef<Animated.ScrollView | null>(null);
+  const posts = (data?.getUserPosts?.data as PostOutput[]) || [];
 
-  const renderItem = ({
-    item: post,
-    index,
-  }: ListRenderItemInfo<PostOutput>) => {
+  const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
-      <StyledTimlineItemContainer>
-        <StyledTimlineRoadContainer>
-          <TimelineStopIcon />
-          <StyledTimlineRoad />
-        </StyledTimlineRoadContainer>
-        <StyledPostContainer>
-          <StyledPostDateText>
-            {`Posted ${DateHelper.dateDifference(post?.createdAt)} ago`}
-          </StyledPostDateText>
-          <StyledPostFeedCard
-            postSection="Posts"
-            innerRef={scrollHandler}
-            key={post.id}
-            post={post}
-            posts={(data?.getUserPosts?.data as PostOutput[]) || []}
-            initialIndex={index}
-            navigateTo={RouteNames.UserPost}
-          />
-        </StyledPostContainer>
-      </StyledTimlineItemContainer>
+      <FeedCard
+        innerRef={scrollHandler}
+        key={post.id}
+        post={post}
+        postSection={pageHeader}
+        posts={posts}
+        initialIndex={i}
+        navigateTo={RouteNames.BookmarksPost}
+      />
     );
   };
+
   return (
-    <StyledUserPostsTimelineContainer>
-      <FlatList
-        ListHeaderComponent={<ScreenHeader heading="Timeline" />}
-        data={(data?.getUserPosts?.data as PostOutput[]) || []}
-        renderItem={renderItem}
-        showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      />
-    </StyledUserPostsTimelineContainer>
+    <LocalMasonryList
+      innerRef={scrollHandler}
+      StickyComponent={<PageHeader text={pageHeader} />}
+      stickyHeaderIndices={[1]}
+      contentContainerStyle={masonaryListStyles.masonryList}
+      numColumns={2}
+      data={isRefecting ? [] : posts}
+      loading={loading}
+      renderItem={renderItem}
+      onRefresh={() => refetchQuery()}
+      refreshing={isRefecting}
+      onEndReached={() => null}
+      onEndReachedThreshold={0.2}
+      showsVerticalScrollIndicator={false}
+      LoadingView={<FeedContentLoader />}
+    />
   );
 };

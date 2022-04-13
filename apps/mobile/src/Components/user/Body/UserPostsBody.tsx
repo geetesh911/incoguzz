@@ -10,7 +10,7 @@ import {
 } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
 import { FeedCard } from "../../explore";
-import { IRenderItemType } from "./BookmarksBody";
+import { IRenderItemType } from "../Bookmarks/BookmarksBody";
 
 export const UserPostsBody: FC = () => {
   const { data } = useQuery<GetUserPostsQuery, GetUserPostsQueryVariables>(

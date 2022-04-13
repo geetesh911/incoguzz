@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { RouteNames } from "../../../Navigation/constants";
-import { BookmarksBody } from "./BookmarksBody";
+import { BookmarksBody } from "../Bookmarks/BookmarksBody";
 import Option, { IOptionProps } from "./Option";
 import {
   LogoutIcon,

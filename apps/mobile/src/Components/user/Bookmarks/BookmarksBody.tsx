@@ -1,16 +1,17 @@
-import React, { FC, useRef } from "react";
+import React, { FC, useMemo, useRef } from "react";
 import { ScrollView, StyleSheet } from "react-native";
-import { StyledBookmarksContainer, StyledFeedCard } from "./styled";
-import MasonryList from "@react-native-seoul/masonry-list";
+import { StyledBookmarksContainer, StyledFeedCard } from "../Body/styled";
+import LocalMasonryList from "../../shared/List/MasonryList";
 import {
-  GetUserPostsDocument,
-  GetUserPostsQuery,
-  GetUserPostsQueryVariables,
+  GetBookmarkedPostsDocument,
+  GetBookmarkedPostsQuery,
+  GetBookmarkedPostsQueryVariables,
   PostOutput,
 } from "@incoguzz/graphql";
 import { RouteNames } from "../../../Navigation/constants";
 import { useQuery } from "@apollo/client";
 import { BookmarksBodyContentLoader } from "./BookmarksBodyContentLoader";
+import Animated from "react-native-reanimated";
 
 export type IRenderItemType = {
   item: PostOutput;
@@ -19,13 +20,19 @@ export type IRenderItemType = {
 
 export const BookmarksBody: FC = () => {
   const { data, loading } = useQuery<
-    GetUserPostsQuery,
-    GetUserPostsQueryVariables
-  >(GetUserPostsDocument, {
+    GetBookmarkedPostsQuery,
+    GetBookmarkedPostsQueryVariables
+  >(GetBookmarkedPostsDocument, {
     variables: { paginationInput: { take: 5, firstQueryResult: true } },
   });
 
-  const scrollHandler = useRef<ScrollView>();
+  const scrollHandler = useRef<Animated.ScrollView | null>(null);
+  const posts =
+    (useMemo(
+      () =>
+        data?.getBookmarkedPosts?.data.map(bookmarkPost => bookmarkPost?.post),
+      [data],
+    ) as PostOutput[]) || [];
 
   const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
@@ -36,7 +43,7 @@ export const BookmarksBody: FC = () => {
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        posts={(data?.getUserPosts?.data as PostOutput[]) || []}
+        posts={posts}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />
@@ -45,11 +52,11 @@ export const BookmarksBody: FC = () => {
 
   return (
     <StyledBookmarksContainer>
-      <MasonryList
+      <LocalMasonryList
         innerRef={scrollHandler}
         contentContainerStyle={styles.masonryList}
         numColumns={1}
-        data={data?.getUserPosts?.data || []}
+        data={posts}
         loading={loading}
         renderItem={renderItem}
         onRefresh={() => console.log("refresh")}

@@ -1,34 +1,32 @@
-import React, { FC, useRef } from "react";
-import { useQuery } from "@apollo/client";
-import {
-  GetExplorePostsQuery,
-  GetExplorePostsQueryVariables,
-  GetExplorePostsDocument,
-  PostOutput,
-} from "@incoguzz/graphql";
-import LocalMasonryList from "../../shared/List/MasonryList";
-import { FeedCard } from "./FeedCard";
-import { ExploreHeader } from "../ExploreHeader";
-import { FeedContentLoader } from "./FeedContentLoader";
+import React, { useRef } from "react";
+import { QueryResult } from "@apollo/client";
+import { PostOutput } from "@incoguzz/graphql";
+import LocalMasonryList, { LocalMasonryListProps } from "./MasonryList";
 import { RouteNames } from "../../../Navigation/constants";
 import Animated from "react-native-reanimated";
-import ExploreSearch from "../ExploreSearch";
 import { IRenderItemType } from "../../user/Bookmarks/BookmarksBody";
 import { masonaryListStyles } from "../../shared/List/styled";
 import { useRefetch } from "../../../hooks";
+import { FeedCard } from "../../explore";
+import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
+import { PageHeader } from "../Header";
 
-export const Feed: FC = () => {
-  const { data, loading, refetch, networkStatus } = useQuery<
-    GetExplorePostsQuery,
-    GetExplorePostsQueryVariables
-  >(GetExplorePostsDocument, {
-    variables: { paginationInput: { take: 5, firstQueryResult: true } },
-    notifyOnNetworkStatusChange: true,
-  });
+interface IPostsMasonryListProps<TData, TVariables>
+  extends Partial<LocalMasonryListProps<PostOutput>> {
+  posts: PostOutput[];
+  query: QueryResult<TData, TVariables>;
+  pageHeader: string;
+}
+
+export const PostsMasonryList = <TData, TVariables>(
+  props: IPostsMasonryListProps<TData, TVariables>,
+) => {
+  const { query, posts, pageHeader, ...masonaryListProps } = props;
+
+  const { refetch, networkStatus, loading } = query;
   const { refetchQuery, isRefecting } = useRefetch({ refetch, networkStatus });
 
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
-  const posts = (data?.getExplorePosts?.data as PostOutput[]) || [];
 
   const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
@@ -47,8 +45,7 @@ export const Feed: FC = () => {
   return (
     <LocalMasonryList
       innerRef={scrollHandler}
-      ListHeaderComponent={<ExploreHeader />}
-      StickyComponent={<ExploreSearch />}
+      StickyComponent={<PageHeader text={pageHeader} />}
       stickyHeaderIndices={[1]}
       contentContainerStyle={masonaryListStyles.masonryList}
       numColumns={2}
@@ -61,6 +58,7 @@ export const Feed: FC = () => {
       onEndReachedThreshold={0.2}
       showsVerticalScrollIndicator={false}
       LoadingView={<FeedContentLoader />}
+      {...masonaryListProps}
     />
   );
 };

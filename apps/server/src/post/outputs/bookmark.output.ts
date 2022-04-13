@@ -4,6 +4,14 @@ import { Field, ObjectType } from "type-graphql";
 import { PostOutput } from "./get-posts.output";
 
 @ObjectType()
+export class BookmarkPostOutput {
+  @Field(() => String)
+  postId: string;
+
+  @Field(() => Boolean)
+  bookmarked: boolean;
+}
+@ObjectType()
 class BookmarkOutput {
   @Field(() => String)
   id!: string;

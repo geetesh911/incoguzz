@@ -6,8 +6,11 @@ import {
   LazyPagerView,
   PagerViewOnPageSelectedEvent,
 } from "react-native-pager-view";
-import { Post, StyledPostPageContainer } from "../../Components/explore/Post";
-import { PageHeader } from "../../Components/shared";
+import {
+  Post,
+  PostHeader,
+  StyledPostPageContainer,
+} from "../../Components/explore/Post";
 import { PostScreenRouteProp } from "../../Navigation";
 
 type IItemType = {
@@ -52,7 +55,11 @@ export const PostScreen: FC = () => {
 
   return (
     <>
-      <PageHeader text={route?.params?.heading} />
+      <PostHeader
+        heading={route?.params?.heading}
+        bookmarked={posts?.[activeIndex]?.bookmarks?.length === 1}
+        postId={posts?.[activeIndex]?.id}
+      />
       <LazyPagerView
         initialPage={route?.params?.initialIndex}
         ref={pagerViewRef}
@@ -79,7 +86,7 @@ export const PostScreen: FC = () => {
 const styles = StyleSheet.create({
   lazyPagerView: {
     width: "100%",
-    height: 100,
+    // height: 100,
     flex: 1,
   },
 });

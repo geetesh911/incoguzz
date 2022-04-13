@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { ScreenHeader } from "../../Components/shared";
+import { PageHeader } from "../../Components/shared";
 import {
   EditDp,
   EditProfileForm,
@@ -9,7 +9,7 @@ import {
 export const UserEditScreen: FC = () => {
   return (
     <StyledProfileContainer>
-      <ScreenHeader heading="Edit Profile" />
+      <PageHeader text={"Edit Profile"} />
       <EditDp />
       <EditProfileForm />
     </StyledProfileContainer>

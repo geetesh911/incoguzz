@@ -1,29 +1,42 @@
-import React, { FC, useRef } from "react";
-import { StyleSheet } from "react-native";
-import { useQuery } from "@apollo/client";
+import React, { FC, useMemo, useRef } from "react";
+import { useQuery, NetworkStatus } from "@apollo/client";
 import {
-  GetExplorePostsQuery,
-  GetExplorePostsQueryVariables,
-  GetExplorePostsDocument,
+  GetBookmarkedPostsDocument,
+  GetBookmarkedPostsQuery,
+  GetBookmarkedPostsQueryVariables,
   PostOutput,
 } from "@incoguzz/graphql";
 import LocalMasonryList from "../../shared/List/MasonryList";
 import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
-import { ScreenHeader } from "../../shared";
+import { PageHeader } from "../../shared";
 import Animated from "react-native-reanimated";
 import { FeedCard } from "../../explore";
 import { RouteNames } from "../../../Navigation/constants";
-import { IRenderItemType } from "../Body/BookmarksBody";
+import { IRenderItemType } from "./BookmarksBody";
+import { masonaryListStyles } from "../../shared/List/styled";
+import { useRefetch } from "../../../hooks";
 
 export const UserBookmarks: FC = () => {
-  const { data, loading } = useQuery<
-    GetExplorePostsQuery,
-    GetExplorePostsQueryVariables
-  >(GetExplorePostsDocument, {
+  const { data, loading, refetch, networkStatus } = useQuery<
+    GetBookmarkedPostsQuery,
+    GetBookmarkedPostsQueryVariables
+  >(GetBookmarkedPostsDocument, {
     variables: { paginationInput: { take: 5, firstQueryResult: true } },
+    notifyOnNetworkStatusChange: true,
   });
+  const { refetchQuery, isRefecting } = useRefetch({ refetch, networkStatus });
 
+  const pageHeader = "Bookmarks";
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
+
+  const posts =
+    useMemo(
+      () =>
+        data?.getBookmarkedPosts?.data.map(
+          bookmarkPost => bookmarkPost?.post,
+        ) as PostOutput[],
+      [data],
+    ) || [];
 
   const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (
@@ -31,8 +44,8 @@ export const UserBookmarks: FC = () => {
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        postSection="Bookmarks"
-        posts={(data?.getExplorePosts?.data as PostOutput[]) || []}
+        postSection={pageHeader}
+        posts={posts}
         initialIndex={i}
         navigateTo={RouteNames.BookmarksPost}
       />
@@ -42,13 +55,15 @@ export const UserBookmarks: FC = () => {
   return (
     <LocalMasonryList
       innerRef={scrollHandler}
-      ListHeaderComponent={<ScreenHeader heading="Bookmarks" />}
-      contentContainerStyle={styles.masonryList}
+      StickyComponent={<PageHeader text={pageHeader} />}
+      stickyHeaderIndices={[1]}
+      contentContainerStyle={masonaryListStyles.masonryList}
       numColumns={2}
-      data={(data?.getExplorePosts?.data as PostOutput[]) || []}
+      data={isRefecting ? [] : posts}
       loading={loading}
       renderItem={renderItem}
-      onRefresh={() => console.log("refresh")}
+      onRefresh={() => refetchQuery()}
+      refreshing={isRefecting}
       onEndReached={() => null}
       onEndReachedThreshold={0.2}
       showsVerticalScrollIndicator={false}
@@ -56,10 +71,3 @@ export const UserBookmarks: FC = () => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  masonryList: {
-    paddingHorizontal: 10,
-    alignSelf: "stretch",
-  },
-});

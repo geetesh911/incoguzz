@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { FC } from "react";
+import { StyleProp, ViewStyle } from "react-native";
 import { PostScreenNavigationProp } from "../../../Navigation";
 import { useAppSelector } from "../../../redux/hooks";
 import {
@@ -11,10 +12,11 @@ import {
 
 interface IPageHeaderProps {
   text: string;
+  style?: StyleProp<ViewStyle>;
   onBack?: () => void;
 }
 
-export const PageHeader: FC<IPageHeaderProps> = ({ text, onBack }) => {
+export const PageHeader: FC<IPageHeaderProps> = ({ text, style, onBack }) => {
   const navigation = useNavigation<PostScreenNavigationProp>();
   const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
 
@@ -23,7 +25,7 @@ export const PageHeader: FC<IPageHeaderProps> = ({ text, onBack }) => {
   return (
     <>
       {!videoPlayerState?.isFullScreen && (
-        <StyledPageHeader>
+        <StyledPageHeader style={style}>
           <StyledBackIconContainer onPress={onPress}>
             <StyledBackIcon name="arrow-left" />
           </StyledBackIconContainer>

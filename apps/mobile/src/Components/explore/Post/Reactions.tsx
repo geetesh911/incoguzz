@@ -7,17 +7,33 @@ import { FireEmoji } from "../../icons/FireEmoji";
 import { PopperEmoji } from "../../icons/PopperEmoji";
 import { IReaction, IReactions } from "./interfaces";
 import Sound from "react-native-sound";
+import {
+  PostReactionDocument,
+  PostReactionMutation,
+  PostReactionMutationVariables,
+  ReactionType,
+} from "@incoguzz/graphql";
+import { useMutation } from "@apollo/client";
 
-export const Reactions: FC = () => {
+interface IReactionsProps {
+  postId: string;
+}
+
+export const Reactions: FC<IReactionsProps> = ({ postId }) => {
+  const [postReaction] = useMutation<
+    PostReactionMutation,
+    PostReactionMutationVariables
+  >(PostReactionDocument);
+
   const reactions: IReactions = [
-    { name: "like", Component: HeartEmoji },
-    { name: "laugh", Component: LaughEmoji },
-    { name: "cool", Component: CoolEmoji },
-    { name: "fire", Component: FireEmoji },
-    { name: "celebrate", Component: PopperEmoji },
+    { name: ReactionType.Like, Component: HeartEmoji },
+    { name: ReactionType.Laugh, Component: LaughEmoji },
+    { name: ReactionType.Cool, Component: CoolEmoji },
+    { name: ReactionType.Fire, Component: FireEmoji },
+    { name: ReactionType.Celebrate, Component: PopperEmoji },
   ];
 
-  const onReactionPress = (Reaction: IReaction) => {
+  const onReactionPress = (reaction: IReaction) => {
     Sound.setCategory("Playback");
 
     const reactionSound = new Sound(
@@ -27,7 +43,13 @@ export const Reactions: FC = () => {
         if (error) console.log("error", error);
 
         reactionSound.play(success => {
-          if (success) console.log(Reaction.name);
+          if (success) {
+            postReaction({
+              variables: {
+                postReactionInput: { postId, reactionType: reaction.name },
+              },
+            });
+          }
         });
       },
     );

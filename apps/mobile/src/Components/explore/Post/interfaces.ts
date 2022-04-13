@@ -1,8 +1,9 @@
+import { ReactionType } from "@incoguzz/graphql";
 import * as React from "react";
 import { IIconInterface } from "../../icons";
 
 export interface IReaction {
-  name: string;
+  name: ReactionType;
   Component: React.FC<IIconInterface>;
 }
 

@@ -39,6 +39,7 @@ export class UserResolver {
     private readonly azureStorageService: AzureStorageService,
   ) {}
 
+  @Authorized()
   @Query(() => String)
   async test() {
     await this.prisma.user.deleteMany({});

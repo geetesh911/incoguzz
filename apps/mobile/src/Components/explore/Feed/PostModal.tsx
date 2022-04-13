@@ -22,6 +22,7 @@ export const PostModal: FC<IPostModalProps> = ({
   thumbnailUrl,
   text,
   type,
+  postId,
 }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={open}>
@@ -42,6 +43,7 @@ export const PostModal: FC<IPostModalProps> = ({
             url={url as string}
             text={text as string}
             type={type}
+            postId={postId}
           />
         </StyledModalPostContainer>
       </StyledModalContainer>

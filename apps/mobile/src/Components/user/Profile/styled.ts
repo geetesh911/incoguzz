@@ -10,6 +10,7 @@ export const StyledEditDpContainer = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 15px;
 `;
 
 export const StyledEditDpImageContainer = styled.Pressable`

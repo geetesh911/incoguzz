@@ -65,6 +65,11 @@ type BookmarkOutput {
   userId: String!
 }
 
+type BookmarkPostOutput {
+  bookmarked: Boolean!
+  postId: String!
+}
+
 type BookmarksOutput {
   data: [BookmarkOutput!]!
   pagination: PaginationOutput!
@@ -158,7 +163,7 @@ type Mutation {
   addMediaPost(addMediaPostInput: AddMediaPostInput!, media: [Upload!]!, mediaThumbnail: Upload): Post!
   addPollPost(addPollPostInput: AddPollPostInput!): Post!
   addTextualPost(addTextualPostInput: AddTextualPostInput!): Post!
-  bookmarkPost(postId: String!): Boolean!
+  bookmarkPost(postId: String!): BookmarkPostOutput!
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
   changeProfilePicture(picture: Upload!): Boolean!
   deactivateUser: Boolean!
@@ -276,6 +281,7 @@ type PostOutput {
   updatedAt: DateTime!
   userId: String!
   video: Video
+  views: Int!
 }
 
 input PostReactionInput {

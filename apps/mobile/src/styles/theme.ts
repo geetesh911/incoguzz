@@ -71,7 +71,7 @@ export const dark: DefaultTheme = {
     contentLoader: "#1a1a1a",
   },
   colors: {
-    primary: "#FBB034",
+    primary: "#00DD88",
     secondary: "#3f3f46",
     error: "#DD4A48",
   },
@@ -109,7 +109,7 @@ export const light: DefaultTheme = {
     contentLoader: "#d9d9d9",
   },
   colors: {
-    primary: "#FBB034",
+    primary: "#00DD88",
     secondary: "#3f3f46",
     error: "#DD4A48",
   },

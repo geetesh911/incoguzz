@@ -12,6 +12,7 @@ export interface IPostComponent {
   type: PostType;
   thumbnailUrl: string;
   paused?: boolean;
+  postId: string;
 }
 
 export type IPostComponentProps = RequireAtLeastOne<

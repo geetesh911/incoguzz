@@ -11,7 +11,7 @@ import GetPostsOutput from "./outputs/get-posts.output";
 import PaginationInput from "@/common/inputs/pagination.input";
 import PostReactionInput from "./inputs/post-reaction.input";
 import ReactionOutput from "./outputs/reaction.output";
-import BookmarksOutput from "./outputs/bookmark.output";
+import BookmarksOutput, { BookmarkPostOutput } from "./outputs/bookmark.output";
 
 @Service()
 @Resolver(() => Post)
@@ -58,12 +58,20 @@ export class PostResolver {
   }
 
   @Authorized()
-  @Mutation(() => Boolean)
+  @Mutation(() => BookmarkPostOutput)
   async bookmarkPost(
     @Ctx() { user }: Context,
     @Arg("postId", () => String) postId: string,
-  ): Promise<boolean> {
-    return this.postService.bookmarPost({ postId, userId: user.userId });
+  ): Promise<BookmarkPostOutput> {
+    const isPostBookmarked = await this.postService.bookmarPost({
+      postId,
+      userId: user.userId,
+    });
+
+    return {
+      bookmarked: isPostBookmarked,
+      postId,
+    };
   }
 
   @Authorized()
@@ -71,7 +79,7 @@ export class PostResolver {
   async incrementPostView(
     @Arg("postId", () => String) postId: string,
   ): Promise<boolean> {
-    return this.postService.incrementPostView({ postId });
+    return this.postService.incrementPostView(postId);
   }
 
   @Authorized()

@@ -54,6 +54,7 @@ fragment PostCommonFields on PostOutput {
     url
     thumbnailUrl
   }
+  views
   _count {
     reactions
     comments
@@ -96,7 +97,14 @@ query GetExplorePosts($paginationInput: PaginationInput!) {
 }
 
 mutation BookmarkPost($postId: String!) {
-  bookmarkPost(postId: $postId)
+  bookmarkPost(postId: $postId) {
+    bookmarked
+    postId
+  }
+}
+
+mutation IncrementPostView($postId: String!) {
+  incrementPostView(postId: $postId)
 }
 
 mutation PostReaction($postReactionInput: PostReactionInput!) {

@@ -4,7 +4,6 @@ import { Dimensions } from "react-native";
 import { useTheme } from "../../../styles/theme";
 
 const windowWidth = Dimensions.get("window").width;
-const windowHeight = Dimensions.get("window").height;
 
 export const BookmarksBodyContentLoader: FC = () => {
   const theme = useTheme();

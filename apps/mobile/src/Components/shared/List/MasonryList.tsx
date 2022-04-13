@@ -14,7 +14,8 @@ import Animated from "react-native-reanimated";
 
 type ReactComponent = React.ComponentType<any> | React.ReactElement | null;
 
-interface Props<T> extends Omit<ScrollViewProps, "refreshControl"> {
+export interface LocalMasonryListProps<T>
+  extends Omit<ScrollViewProps, "refreshControl"> {
   innerRef?: MutableRefObject<Animated.ScrollView | null>;
   keyPrefix?: string;
   loading?: boolean;
@@ -48,7 +49,7 @@ export const isCloseToBottom = (
   );
 };
 
-function LocalMasonryList<T>(props: Props<T>): ReactElement {
+function LocalMasonryList<T>(props: LocalMasonryListProps<T>): ReactElement {
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
   const {

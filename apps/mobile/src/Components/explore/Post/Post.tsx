@@ -23,11 +23,12 @@ export const Post: FC<IPostProps> = ({ post, unpauseVideo }) => {
           text={post?.textual?.text}
           type={post?.type}
           paused={!unpauseVideo}
+          postId={post?.id}
         />
       </StyledPostContainer>
       {!videoPlayerState?.isFullScreen && (
         <>
-          <Reactions />
+          <Reactions postId={post?.id} />
           <Caption
             caption={post?.caption || ""}
             postId={Math.random().toString()}

@@ -4,7 +4,3 @@ export interface IGetPostParams {
   paginationInput: PaginationInput;
   userId: string;
 }
-
-export interface IIncrementPostViewsParams {
-  postId: string;
-}

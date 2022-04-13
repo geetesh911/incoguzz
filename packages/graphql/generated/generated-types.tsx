@@ -84,6 +84,12 @@ export type BookmarkOutput = {
   userId: Scalars['String'];
 };
 
+export type BookmarkPostOutput = {
+  __typename?: 'BookmarkPostOutput';
+  bookmarked: Scalars['Boolean'];
+  postId: Scalars['String'];
+};
+
 export type BookmarksOutput = {
   __typename?: 'BookmarksOutput';
   data: Array<BookmarkOutput>;
@@ -181,12 +187,13 @@ export type Mutation = {
   addMediaPost: Post;
   addPollPost: Post;
   addTextualPost: Post;
-  bookmarkPost: Scalars['Boolean'];
+  bookmarkPost: BookmarkPostOutput;
   changePassword: Scalars['Boolean'];
   changeProfilePicture: Scalars['Boolean'];
   deactivateUser: Scalars['Boolean'];
   forgotPassword: ForgotPasswordOutput;
   googleAuth: GoogleAuthOutput;
+  incrementPostView: Scalars['Boolean'];
   login: LoginOutput;
   logout: Scalars['Boolean'];
   multipleUploadFile: Scalars['Boolean'];
@@ -248,6 +255,11 @@ export type MutationForgotPasswordArgs = {
 
 export type MutationGoogleAuthArgs = {
   googleAuthInput: GoogleAuthInput;
+};
+
+
+export type MutationIncrementPostViewArgs = {
+  postId: Scalars['String'];
 };
 
 
@@ -374,6 +386,7 @@ export type Post = {
   type: PostType;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
+  views: Scalars['Int'];
 };
 
 export type PostCount = {
@@ -406,6 +419,7 @@ export type PostOutput = {
   updatedAt: Scalars['DateTime'];
   userId: Scalars['String'];
   video?: Maybe<Video>;
+  views: Scalars['Int'];
 };
 
 export type PostReactionInput = {
@@ -695,35 +709,42 @@ export type UpdateProfileMutationVariables = Exact<{
 
 export type UpdateProfileMutation = { __typename?: 'Mutation', updateProfile: { __typename?: 'ProfileOutput', id: string, nickname: string, bio?: string | null, mobileNo?: string | null, country?: string | null, gender?: Gender | null, dob?: any | null, interestedIn?: InterestedInTypes | null, relationshipStatus?: RelationshipStatus | null, website?: string | null, dpUrl?: string | null } };
 
-export type PostCommonFieldsFragment = { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null };
+export type PostCommonFieldsFragment = { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, views: number, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null };
 
 export type GetUserPostsQueryVariables = Exact<{
   paginationInput: PaginationInput;
 }>;
 
 
-export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+export type GetUserPostsQuery = { __typename?: 'Query', getUserPosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, views: number, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
 export type GetBookmarkedPostsQueryVariables = Exact<{
   paginationInput: PaginationInput;
 }>;
 
 
-export type GetBookmarkedPostsQuery = { __typename?: 'Query', getBookmarkedPosts: { __typename?: 'BookmarksOutput', data: Array<{ __typename?: 'BookmarkOutput', post: { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+export type GetBookmarkedPostsQuery = { __typename?: 'Query', getBookmarkedPosts: { __typename?: 'BookmarksOutput', data: Array<{ __typename?: 'BookmarkOutput', post: { __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, views: number, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null } }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
 export type GetExplorePostsQueryVariables = Exact<{
   paginationInput: PaginationInput;
 }>;
 
 
-export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
+export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'GetPostsOutput', data: Array<{ __typename?: 'PostOutput', id: string, caption?: string | null, type: PostType, createdAt: any, updatedAt: any, views: number, tags?: Array<{ __typename?: 'Tag', id: string, name: string }> | null, bookmarks?: Array<{ __typename?: 'Bookmark', id: string }> | null, reactions?: Array<{ __typename?: 'Reaction', reaction: ReactionType }> | null, place?: { __typename?: 'Place', id: string, name: string } | null, poll?: { __typename?: 'PollOutput', id: string, question: string, pollOptions: Array<{ __typename?: 'PollOption', id: string, option: string }> } | null, photos?: Array<{ __typename?: 'Photo', id: string, url: string }> | null, video?: { __typename?: 'Video', id: string, url: string, thumbnailUrl: string } | null, clip?: { __typename?: 'ClipOutput', id: string, url: string, thumbnailUrl: string, clipAudio: { __typename?: 'ClipAudio', id: string, name: string, audioUrl: string } } | null, textual?: { __typename?: 'Textual', id: string, text: string } | null, audio?: { __typename?: 'Audio', id: string, url: string, thumbnailUrl?: string | null } | null, _count?: { __typename?: 'PostCount', reactions: number, comments: number } | null }>, pagination: { __typename?: 'PaginationOutput', cursor: string } } };
 
 export type BookmarkPostMutationVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type BookmarkPostMutation = { __typename?: 'Mutation', bookmarkPost: boolean };
+export type BookmarkPostMutation = { __typename?: 'Mutation', bookmarkPost: { __typename?: 'BookmarkPostOutput', bookmarked: boolean, postId: string } };
+
+export type IncrementPostViewMutationVariables = Exact<{
+  postId: Scalars['String'];
+}>;
+
+
+export type IncrementPostViewMutation = { __typename?: 'Mutation', incrementPostView: boolean };
 
 export type PostReactionMutationVariables = Exact<{
   postReactionInput: PostReactionInput;
@@ -871,6 +892,7 @@ export const PostCommonFieldsFragmentDoc = gql`
     url
     thumbnailUrl
   }
+  views
   _count {
     reactions
     comments
@@ -1400,7 +1422,10 @@ export type GetExplorePostsLazyQueryHookResult = ReturnType<typeof useGetExplore
 export type GetExplorePostsQueryResult = Apollo.QueryResult<GetExplorePostsQuery, GetExplorePostsQueryVariables>;
 export const BookmarkPostDocument = gql`
     mutation BookmarkPost($postId: String!) {
-  bookmarkPost(postId: $postId)
+  bookmarkPost(postId: $postId) {
+    bookmarked
+    postId
+  }
 }
     `;
 export type BookmarkPostMutationFn = Apollo.MutationFunction<BookmarkPostMutation, BookmarkPostMutationVariables>;
@@ -1429,6 +1454,37 @@ export function useBookmarkPostMutation(baseOptions?: Apollo.MutationHookOptions
 export type BookmarkPostMutationHookResult = ReturnType<typeof useBookmarkPostMutation>;
 export type BookmarkPostMutationResult = Apollo.MutationResult<BookmarkPostMutation>;
 export type BookmarkPostMutationOptions = Apollo.BaseMutationOptions<BookmarkPostMutation, BookmarkPostMutationVariables>;
+export const IncrementPostViewDocument = gql`
+    mutation IncrementPostView($postId: String!) {
+  incrementPostView(postId: $postId)
+}
+    `;
+export type IncrementPostViewMutationFn = Apollo.MutationFunction<IncrementPostViewMutation, IncrementPostViewMutationVariables>;
+
+/**
+ * __useIncrementPostViewMutation__
+ *
+ * To run a mutation, you first call `useIncrementPostViewMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIncrementPostViewMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [incrementPostViewMutation, { data, loading, error }] = useIncrementPostViewMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *   },
+ * });
+ */
+export function useIncrementPostViewMutation(baseOptions?: Apollo.MutationHookOptions<IncrementPostViewMutation, IncrementPostViewMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IncrementPostViewMutation, IncrementPostViewMutationVariables>(IncrementPostViewDocument, options);
+      }
+export type IncrementPostViewMutationHookResult = ReturnType<typeof useIncrementPostViewMutation>;
+export type IncrementPostViewMutationResult = Apollo.MutationResult<IncrementPostViewMutation>;
+export type IncrementPostViewMutationOptions = Apollo.BaseMutationOptions<IncrementPostViewMutation, IncrementPostViewMutationVariables>;
 export const PostReactionDocument = gql`
     mutation PostReaction($postReactionInput: PostReactionInput!) {
   postReaction(postReactionInput: $postReactionInput) {

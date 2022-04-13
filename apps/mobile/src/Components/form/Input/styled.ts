@@ -84,7 +84,7 @@ export const StyledInputWithIconIconContainer = styled.View`
   border-radius: ${({ theme }) => theme?.commonConstants?.borderRadius};
   position: absolute;
   right: 5px;
-  background-color: ${({ theme }) => theme?.backgrounds?.primary};
+  background-color: ${({ theme }) => theme?.colors?.primary};
 `;
 
 export const PasswordIcon = styled(Icon)`

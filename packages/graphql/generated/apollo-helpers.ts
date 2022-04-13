@@ -23,6 +23,11 @@ export type BookmarkOutputFieldPolicy = {
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type BookmarkPostOutputKeySpecifier = ('bookmarked' | 'postId' | BookmarkPostOutputKeySpecifier)[];
+export type BookmarkPostOutputFieldPolicy = {
+	bookmarked?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type BookmarksOutputKeySpecifier = ('data' | 'pagination' | BookmarksOutputKeySpecifier)[];
 export type BookmarksOutputFieldPolicy = {
 	data?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -77,7 +82,7 @@ export type LoginOutputFieldPolicy = {
 	refreshToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addPollPost' | 'addTextualPost' | 'bookmarkPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'forgotPassword' | 'googleAuth' | 'login' | 'logout' | 'multipleUploadFile' | 'postReaction' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateProfile' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
+export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addPollPost' | 'addTextualPost' | 'bookmarkPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'forgotPassword' | 'googleAuth' | 'incrementPostView' | 'login' | 'logout' | 'multipleUploadFile' | 'postReaction' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateProfile' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addClipPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addMediaPost?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -89,6 +94,7 @@ export type MutationFieldPolicy = {
 	deactivateUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	forgotPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleAuth?: FieldPolicy<any> | FieldReadFunction<any>,
+	incrementPostView?: FieldPolicy<any> | FieldReadFunction<any>,
 	login?: FieldPolicy<any> | FieldReadFunction<any>,
 	logout?: FieldPolicy<any> | FieldReadFunction<any>,
 	multipleUploadFile?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -141,7 +147,7 @@ export type PollOutputFieldPolicy = {
 	postId?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PostKeySpecifier = ('_count' | 'archive' | 'caption' | 'createdAt' | 'id' | 'placeId' | 'published' | 'slug' | 'type' | 'updatedAt' | 'userId' | PostKeySpecifier)[];
+export type PostKeySpecifier = ('_count' | 'archive' | 'caption' | 'createdAt' | 'id' | 'placeId' | 'published' | 'slug' | 'type' | 'updatedAt' | 'userId' | 'views' | PostKeySpecifier)[];
 export type PostFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
 	archive?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -153,7 +159,8 @@ export type PostFieldPolicy = {
 	slug?: FieldPolicy<any> | FieldReadFunction<any>,
 	type?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
-	userId?: FieldPolicy<any> | FieldReadFunction<any>
+	userId?: FieldPolicy<any> | FieldReadFunction<any>,
+	views?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type PostCountKeySpecifier = ('activities' | 'bookmarks' | 'comments' | 'message' | 'photos' | 'reactions' | 'tags' | PostCountKeySpecifier)[];
 export type PostCountFieldPolicy = {
@@ -165,7 +172,7 @@ export type PostCountFieldPolicy = {
 	reactions?: FieldPolicy<any> | FieldReadFunction<any>,
 	tags?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PostOutputKeySpecifier = ('_count' | 'audio' | 'bookmarks' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'reactions' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | PostOutputKeySpecifier)[];
+export type PostOutputKeySpecifier = ('_count' | 'audio' | 'bookmarks' | 'caption' | 'clip' | 'createdAt' | 'id' | 'photos' | 'place' | 'poll' | 'reactions' | 'tags' | 'textual' | 'type' | 'updatedAt' | 'userId' | 'video' | 'views' | PostOutputKeySpecifier)[];
 export type PostOutputFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
 	audio?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -183,7 +190,8 @@ export type PostOutputFieldPolicy = {
 	type?: FieldPolicy<any> | FieldReadFunction<any>,
 	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	userId?: FieldPolicy<any> | FieldReadFunction<any>,
-	video?: FieldPolicy<any> | FieldReadFunction<any>
+	video?: FieldPolicy<any> | FieldReadFunction<any>,
+	views?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type ProfileKeySpecifier = ('bio' | 'country' | 'dob' | 'dpUrl' | 'gender' | 'id' | 'interestedIn' | 'mobileNo' | 'nickname' | 'relationshipStatus' | 'userId' | 'website' | ProfileKeySpecifier)[];
 export type ProfileFieldPolicy = {
@@ -305,6 +313,10 @@ export type StrictTypedTypePolicies = {
 	BookmarkOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | BookmarkOutputKeySpecifier | (() => undefined | BookmarkOutputKeySpecifier),
 		fields?: BookmarkOutputFieldPolicy,
+	},
+	BookmarkPostOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | BookmarkPostOutputKeySpecifier | (() => undefined | BookmarkPostOutputKeySpecifier),
+		fields?: BookmarkPostOutputFieldPolicy,
 	},
 	BookmarksOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | BookmarksOutputKeySpecifier | (() => undefined | BookmarksOutputKeySpecifier),

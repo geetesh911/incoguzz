@@ -19,7 +19,8 @@ import { setUserData } from "@incoguzz/redux";
 import { useQuery } from "@apollo/client";
 import { UserHeaderContentLoader } from "./UserHeaderContentLoader";
 import { useNavigation } from "@react-navigation/native";
-import { RouteNames, UserEditScreenNavigationProp } from "../../../Navigation";
+import { RouteNames } from "../../../Navigation/constants";
+import { UserEditScreenNavigationProp } from "../../../Navigation/interfaces";
 import { useAppDispatch } from "../../../redux/hooks";
 import { defaultUserImage } from "../../../constants/defaultImages";
 
