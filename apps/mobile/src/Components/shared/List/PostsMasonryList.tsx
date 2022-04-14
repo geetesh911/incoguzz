@@ -2,26 +2,28 @@ import React, { useRef } from "react";
 import { QueryResult } from "@apollo/client";
 import { PostOutput } from "@incoguzz/graphql";
 import LocalMasonryList, { LocalMasonryListProps } from "./MasonryList";
-import { RouteNames } from "../../../Navigation/constants";
 import Animated from "react-native-reanimated";
 import { IRenderItemType } from "../../user/Bookmarks/BookmarksBody";
-import { masonaryListStyles } from "../../shared/List/styled";
+import { masonaryListStyles } from "./styled";
 import { useRefetch } from "../../../hooks";
-import { FeedCard } from "../../explore";
+import { FeedCard, IFeedCardProps } from "../../explore/Feed/FeedCard";
 import { FeedContentLoader } from "../../explore/Feed/FeedContentLoader";
-import { PageHeader } from "../Header";
+import { PageHeader } from "../Header/PageHeader";
 
+type IListFeedCardProps = Pick<IFeedCardProps, "postSection" | "navigateTo">;
 interface IPostsMasonryListProps<TData, TVariables>
   extends Partial<LocalMasonryListProps<PostOutput>> {
   posts: PostOutput[];
   query: QueryResult<TData, TVariables>;
-  pageHeader: string;
+  pageHeader?: string;
+  feedCardProps: IListFeedCardProps;
 }
 
 export const PostsMasonryList = <TData, TVariables>(
   props: IPostsMasonryListProps<TData, TVariables>,
 ) => {
-  const { query, posts, pageHeader, ...masonaryListProps } = props;
+  const { query, posts, pageHeader, feedCardProps, ...masonaryListProps } =
+    props;
 
   const { refetch, networkStatus, loading } = query;
   const { refetchQuery, isRefecting } = useRefetch({ refetch, networkStatus });
@@ -34,10 +36,9 @@ export const PostsMasonryList = <TData, TVariables>(
         innerRef={scrollHandler}
         key={post.id}
         post={post}
-        postSection="Explore"
         posts={posts}
         initialIndex={i}
-        navigateTo={RouteNames.ExplorePost}
+        {...feedCardProps}
       />
     );
   };
@@ -45,7 +46,9 @@ export const PostsMasonryList = <TData, TVariables>(
   return (
     <LocalMasonryList
       innerRef={scrollHandler}
-      StickyComponent={<PageHeader text={pageHeader} />}
+      StickyComponent={
+        <PageHeader text={pageHeader || feedCardProps?.postSection} />
+      }
       stickyHeaderIndices={[1]}
       contentContainerStyle={masonaryListStyles.masonryList}
       numColumns={2}

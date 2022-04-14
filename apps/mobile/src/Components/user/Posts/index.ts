@@ -1,2 +1,2 @@
-export * from "./UserPostsTimeline";
+export * from "./UserPosts";
 export * from "./styled";

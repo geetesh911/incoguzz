@@ -1,17 +1,17 @@
 import React, { FC, useMemo, useRef } from "react";
-import { ScrollView, StyleSheet } from "react-native";
-import { StyledBookmarksContainer, StyledFeedCard } from "../Body/styled";
-import LocalMasonryList from "../../shared/List/MasonryList";
+import { StyleSheet } from "react-native";
 import {
   GetBookmarkedPostsDocument,
   GetBookmarkedPostsQuery,
   GetBookmarkedPostsQueryVariables,
   PostOutput,
 } from "@incoguzz/graphql";
-import { RouteNames } from "../../../Navigation/constants";
 import { useQuery } from "@apollo/client";
-import { BookmarksBodyContentLoader } from "./BookmarksBodyContentLoader";
 import Animated from "react-native-reanimated";
+import LocalMasonryList from "../../shared/List/MasonryList";
+import { StyledBookmarksContainer, StyledFeedCard } from "../Body/styled";
+import { RouteNames } from "../../../Navigation/constants";
+import { BookmarksBodyContentLoader } from "./BookmarksBodyContentLoader";
 
 export type IRenderItemType = {
   item: PostOutput;
@@ -28,11 +28,13 @@ export const BookmarksBody: FC = () => {
 
   const scrollHandler = useRef<Animated.ScrollView | null>(null);
   const posts =
-    (useMemo(
+    useMemo(
       () =>
-        data?.getBookmarkedPosts?.data.map(bookmarkPost => bookmarkPost?.post),
+        data?.getBookmarkedPosts?.data.map(
+          bookmarkPost => bookmarkPost?.post,
+        ) as PostOutput[],
       [data],
-    ) as PostOutput[]) || [];
+    ) || [];
 
   const renderItem = ({ item: post, i }: IRenderItemType) => {
     return (

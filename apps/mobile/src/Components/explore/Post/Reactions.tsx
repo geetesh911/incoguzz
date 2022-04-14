@@ -1,10 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { StyledReaction, StyledReactionsContainer } from "./styled";
-import { LaughEmoji } from "../../icons/LaughEmoji";
-import { CoolEmoji } from "../../icons/CoolEmoji";
-import { HeartEmoji } from "../../icons/HeartEmoji";
-import { FireEmoji } from "../../icons/FireEmoji";
-import { PopperEmoji } from "../../icons/PopperEmoji";
 import { IReaction, IReactions } from "./interfaces";
 import Sound from "react-native-sound";
 import {
@@ -14,26 +9,71 @@ import {
   ReactionType,
 } from "@incoguzz/graphql";
 import { useMutation } from "@apollo/client";
+import {
+  LaughEmoji,
+  CoolEmoji,
+  HeartEmoji,
+  FireEmoji,
+  PopperEmoji,
+  HeartDimEmoji,
+  LaughDimEmoji,
+  CoolDimEmoji,
+  FireDimEmoji,
+  PopperDimEmoji,
+} from "../../icons";
 
 interface IReactionsProps {
   postId: string;
+  activeReaction?: ReactionType;
 }
 
-export const Reactions: FC<IReactionsProps> = ({ postId }) => {
-  const [postReaction] = useMutation<
+export const Reactions: FC<IReactionsProps> = ({ postId, activeReaction }) => {
+  const [userReaction, setReaction] = useState<ReactionType | undefined>(
+    activeReaction,
+  );
+
+  const [postReactionMutation] = useMutation<
     PostReactionMutation,
     PostReactionMutationVariables
-  >(PostReactionDocument);
+  >(PostReactionDocument, {
+    onCompleted: ({ postReaction }) => {
+      if (postReaction.deleted) {
+        setReaction(undefined);
+        return;
+      }
+      setReaction(postReaction.reaction);
+    },
+  });
 
   const reactions: IReactions = [
-    { name: ReactionType.Like, Component: HeartEmoji },
-    { name: ReactionType.Laugh, Component: LaughEmoji },
-    { name: ReactionType.Cool, Component: CoolEmoji },
-    { name: ReactionType.Fire, Component: FireEmoji },
-    { name: ReactionType.Celebrate, Component: PopperEmoji },
+    {
+      name: ReactionType.Like,
+      Component: HeartEmoji,
+      DimmedComponent: HeartDimEmoji,
+    },
+    {
+      name: ReactionType.Laugh,
+      Component: LaughEmoji,
+      DimmedComponent: LaughDimEmoji,
+    },
+    {
+      name: ReactionType.Cool,
+      Component: CoolEmoji,
+      DimmedComponent: CoolDimEmoji,
+    },
+    {
+      name: ReactionType.Fire,
+      Component: FireEmoji,
+      DimmedComponent: FireDimEmoji,
+    },
+    {
+      name: ReactionType.Celebrate,
+      Component: PopperEmoji,
+      DimmedComponent: PopperDimEmoji,
+    },
   ];
 
-  const onReactionPress = (reaction: IReaction) => {
+  const onReactionPress = (Reaction: IReaction) => {
     Sound.setCategory("Playback");
 
     const reactionSound = new Sound(
@@ -42,17 +82,23 @@ export const Reactions: FC<IReactionsProps> = ({ postId }) => {
       error => {
         if (error) console.log("error", error);
 
-        reactionSound.play(success => {
-          if (success) {
-            postReaction({
-              variables: {
-                postReactionInput: { postId, reactionType: reaction.name },
-              },
-            });
-          }
-        });
+        reactionSound.play();
       },
     );
+    postReactionMutation({
+      variables: {
+        postReactionInput: { postId, reactionType: Reaction.name },
+      },
+    });
+  };
+
+  const REACTION_BASE_SIZE = 35;
+  const REACTION_SELECTED_SIZE = 40;
+
+  const reactionSize = (Reaction: IReaction) => {
+    if (!userReaction || Reaction.name !== userReaction)
+      return REACTION_BASE_SIZE;
+    return REACTION_SELECTED_SIZE;
   };
 
   return (
@@ -62,7 +108,17 @@ export const Reactions: FC<IReactionsProps> = ({ postId }) => {
           key={Reaction.name}
           onPress={() => onReactionPress(Reaction)}
         >
-          <Reaction.Component height={35} width={35} />
+          {Reaction.name === userReaction || !userReaction ? (
+            <Reaction.Component
+              height={reactionSize(Reaction)}
+              width={reactionSize(Reaction)}
+            />
+          ) : (
+            <Reaction.DimmedComponent
+              height={reactionSize(Reaction)}
+              width={reactionSize(Reaction)}
+            />
+          )}
         </StyledReaction>
       ))}
     </StyledReactionsContainer>

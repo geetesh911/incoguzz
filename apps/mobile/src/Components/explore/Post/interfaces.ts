@@ -5,6 +5,7 @@ import { IIconInterface } from "../../icons";
 export interface IReaction {
   name: ReactionType;
   Component: React.FC<IIconInterface>;
+  DimmedComponent: React.FC<IIconInterface>;
 }
 
 export type IReactions = IReaction[];

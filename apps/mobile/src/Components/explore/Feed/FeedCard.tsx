@@ -22,7 +22,7 @@ import {
 } from "./styled";
 import { TapAndLongPressGesture } from "../../shared";
 
-interface IFeedCardProps {
+export interface IFeedCardProps {
   post: PostOutput;
   style?: StyleProp<ViewStyle>;
   postSection: string;

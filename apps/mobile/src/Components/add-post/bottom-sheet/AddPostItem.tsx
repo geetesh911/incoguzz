@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { useTheme } from "../../../styles/theme";
 import { RoundIcon, RoundIconProps } from "../../shared";
 import { StyledAddPostItemContainer, StyledAddPostItemLabel } from "./styled";
 
@@ -12,7 +11,6 @@ export const AddPostItem: FC<IAddPostItemProps> = ({
   iconName,
   iconComponent,
 }) => {
-  const theme = useTheme();
   return (
     <StyledAddPostItemContainer>
       <RoundIcon iconName={iconName as string} iconComponent={iconComponent} />

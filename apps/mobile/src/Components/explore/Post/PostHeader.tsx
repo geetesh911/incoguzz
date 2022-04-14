@@ -5,7 +5,7 @@ import {
   BookmarkPostMutationVariables,
 } from "@incoguzz/graphql";
 import React, { FC } from "react";
-import { StyledBookmarkButton } from ".";
+import { StyledBookmarkButton, StyledPostInnerHeaderContainer } from "./styled";
 import { BookmarkIcon } from "../../icons";
 import { FilledBookmarkIcon } from "../../icons/FilledBookmarkIcon";
 import { PageHeader } from "../../shared";
@@ -30,13 +30,8 @@ export const PostHeader: FC<IPostHeaderProps> = ({
     await bookmarkPostMutation({ variables: { postId } });
   };
 
-  console.log(
-    data,
-    data?.bookmarkPost?.bookmarked && data?.bookmarkPost?.postId === postId,
-    bookmarked,
-  );
   return (
-    <>
+    <StyledPostInnerHeaderContainer>
       <PageHeader text={heading} />
       <StyledBookmarkButton onPress={bookmarkPost}>
         {(data?.bookmarkPost?.bookmarked &&
@@ -47,6 +42,6 @@ export const PostHeader: FC<IPostHeaderProps> = ({
           <BookmarkIcon height={23} width={23} />
         )}
       </StyledBookmarkButton>
-    </>
+    </StyledPostInnerHeaderContainer>
   );
 };

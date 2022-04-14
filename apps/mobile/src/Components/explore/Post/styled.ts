@@ -27,6 +27,15 @@ export const StyledPostPageContainer = styled.View`
   justify-content: center;
 `;
 
+export const StyledPostComponentContainer = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme?.backgrounds?.primary};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: ${windowHeight - 60}px;
+`;
+
 export const StyledPostContainer = styled.View<{ isFullScreen: boolean }>`
   height: ${({ isFullScreen }) =>
     isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
@@ -241,4 +250,18 @@ export const StyledBookmarkButton = styled.Pressable`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const StyledPostOuterHeaderContainer = styled.View`
+  width: ${windowWidth}px;
+  margin-bottom: 10px;
+  height: 50px;
+`;
+
+export const StyledPostInnerHeaderContainer = styled.View`
+  position: relative;
+  top: 0;
+  width: ${windowWidth}px;
+  height: 50px;
+  margin-bottom: 10px;
 `;
