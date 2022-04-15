@@ -4,9 +4,12 @@ import { ResourceType, UploadApiResponse } from "cloudinary";
 
 export type IBlobUploadCommonResponse = BlobUploadCommonResponse & {
   filename: string;
+  metadata: string[];
 };
 
-export type IUploadApiResponse = UploadApiResponse;
+export type IUploadApiResponse = UploadApiResponse & {
+  metadata: string[];
+};
 
 export interface IFileOptions {
   resourceType?: ResourceType;

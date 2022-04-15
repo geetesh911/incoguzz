@@ -1,15 +1,25 @@
 import { FileUpload } from "graphql-upload";
 import { Service } from "typedi";
 import { fileOptionsDefaults } from "../defaults/azure-storage.defaults";
-import { IFileOptions } from "../interfaces/storage.interface";
-import cloudinary, { UploadApiResponse } from "cloudinary";
+import {
+  IFileOptions,
+  IUploadApiResponse,
+} from "../interfaces/storage.interface";
+import cloudinary from "cloudinary";
 import config from "@/configs";
 import { nanoid } from "nanoid";
 import { logger } from "@/utils/logger";
+import MediaHelper from "../helpers/media.helper";
+import { optimizeImageExtensions } from "../lists/media.list";
+import MediaService from "./media.service";
 @Service()
 class CloudinaryStorageService {
   cloudinaryv2 = cloudinary.v2;
-  constructor() {
+
+  constructor(
+    private readonly mediaHelper: MediaHelper,
+    private readonly mediaService: MediaService,
+  ) {
     this.cloudinaryv2.config({
       cloud_name: config.get("cloudinary.cloudName"),
       api_key: config.get("cloudinary.apiKey"),
@@ -19,24 +29,38 @@ class CloudinaryStorageService {
   private async uploadFileToCloudinary(
     { filename, createReadStream }: Partial<FileUpload>,
     options: IFileOptions = fileOptionsDefaults,
-  ): Promise<UploadApiResponse> {
+  ): Promise<IUploadApiResponse> {
     const { folder, containerName, resourceType } = options;
-    return new Promise<UploadApiResponse>((resolve, reject) => {
-      const stream = this.cloudinaryv2.uploader.upload_stream(
-        {
-          public_id: folder
-            ? `${containerName}/${folder}/${nanoid()}${filename}`
-            : `${containerName}/${nanoid()}${filename}`,
-          resource_type: resourceType || "raw",
-        },
-        (error, result) => {
-          if (result) {
-            resolve(result);
-          } else {
-            reject(error);
-          }
-        },
-      );
+    return new Promise<IUploadApiResponse>((resolve, reject) => {
+      const buffer = [];
+      const stream = this.cloudinaryv2.uploader
+        .upload_stream(
+          {
+            public_id: folder
+              ? `${containerName}/${folder}/${nanoid()}${filename}`
+              : `${containerName}/${nanoid()}${filename}`,
+            resource_type: resourceType || "raw",
+          },
+          async (error, result) => {
+            const extension = this.mediaHelper.getFileExtension(filename);
+
+            const combinedBuffer = Buffer.concat(buffer);
+
+            let metadata: string[] = [];
+
+            if (optimizeImageExtensions.includes(extension)) {
+              metadata = await this.mediaService.getMetaTags(
+                combinedBuffer,
+                extension,
+              );
+            }
+
+            result ? resolve({ ...result, metadata }) : reject(error);
+          },
+        )
+        .on("data", async data => {
+          buffer.push(data);
+        });
 
       createReadStream().pipe(stream);
     });
@@ -51,7 +75,7 @@ class CloudinaryStorageService {
 
       onSuccess?.(uploadResponse, uploadResponse.secure_url);
 
-      onCompletion?.([uploadResponse] as UploadApiResponse[], [
+      onCompletion?.([uploadResponse] as IUploadApiResponse[], [
         uploadResponse.secure_url,
       ]);
     } catch (error) {
@@ -65,7 +89,7 @@ class CloudinaryStorageService {
   ) {
     const { onSuccess, onError, onCompletion } = options;
 
-    const uploadResponses: UploadApiResponse[] = [];
+    const uploadResponses: IUploadApiResponse[] = [];
     const fileUrls: string[] = [];
 
     (await Promise.all(files)).forEach(async file => {

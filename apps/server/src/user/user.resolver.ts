@@ -56,7 +56,10 @@ export class UserResolver {
     return new Promise<boolean>(async (resolve, reject) => {
       await this.storageService.uploadFile(picture, {
         containerName: AzureContainersEnum.profile,
-        onCompletion: async () => resolve(true),
+        onCompletion: async uploadResponse => {
+          console.log(uploadResponse[0].metadata);
+          resolve(true);
+        },
         onError: async () => reject(false),
       });
     });

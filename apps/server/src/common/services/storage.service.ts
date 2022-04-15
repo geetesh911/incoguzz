@@ -16,13 +16,13 @@ class StorageService {
     file: Partial<FileUpload>,
     options: IFileOptions = fileOptionsDefaults,
   ): Promise<void> {
-    this.azureStorageService.uploadFile(file, options);
+    this.cloudinaryStorageService.uploadFile(file, options);
   }
   public async uploadFiles(
     files: Promise<Partial<FileUpload>>[],
     options: IFileOptions = fileOptionsDefaults,
   ): Promise<void> {
-    this.azureStorageService.uploadFiles(files, options);
+    this.cloudinaryStorageService.uploadFiles(files, options);
   }
   public async deleteFileFromAzure(
     filename: string,

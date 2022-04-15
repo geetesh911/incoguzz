@@ -16,11 +16,16 @@ import imageminMozjpeg from "imagemin-mozjpeg";
 import imageminPngquant from "imagemin-pngquant";
 import jimp from "jimp";
 import { JimpConstants } from "../enums/media.enum";
+import { optimizeImageExtensions } from "../lists/media.list";
+import { ImageClassificationService } from "./image-classification.service";
 
 @Service()
 class MediaService {
   private static readonly offsets = [1000];
-  constructor(private readonly fileService: FileService) {
+  constructor(
+    private readonly fileService: FileService,
+    private readonly imageClassificationService: ImageClassificationService,
+  ) {
     ffmpeg.setFfmpegPath(ffmpegPath);
     ffmpeg.setFfprobePath(ffprobePath.path);
   }
@@ -269,6 +274,25 @@ class MediaService {
             .run();
         });
     });
+  }
+
+  public async getMetaTags(
+    buffer: Buffer,
+    extension: string,
+  ): Promise<string[]> {
+    const metaTags = [];
+
+    if (optimizeImageExtensions.includes(extension)) {
+      const predictions = await this.imageClassificationService.classify(
+        buffer,
+      );
+
+      predictions.forEach(prediction =>
+        metaTags.push(...prediction.className.split(", ")),
+      );
+    }
+
+    return metaTags;
   }
 }
 

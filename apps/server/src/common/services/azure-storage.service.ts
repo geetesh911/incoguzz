@@ -20,6 +20,7 @@ import { AzureContainersEnum } from "@/user/enums/file.enum";
 import MediaHelper from "../helpers/media.helper";
 import { optimizeImageExtensions } from "../lists/media.list";
 import MediaService from "./media.service";
+import { ImageClassificationService } from "./image-classification.service";
 
 @Service()
 class AzureStorageService {
@@ -35,6 +36,7 @@ class AzureStorageService {
     private readonly dateHelper: DateHelper,
     private readonly mediaHelper: MediaHelper,
     private readonly mediaService: MediaService,
+    private readonly imageClassificationService: ImageClassificationService,
   ) {}
 
   private async uploadFileToAzure(
@@ -45,8 +47,10 @@ class AzureStorageService {
   ): Promise<IBlobUploadCommonResponse> {
     const extension = this.mediaHelper.getFileExtension(filename);
 
+    let metadata: string[] = [];
     if (optimizeImageExtensions.includes(extension)) {
       file = await this.mediaService.compressImage(file as Buffer);
+      metadata = await this.mediaService.getMetaTags(file, extension);
     }
 
     const containerClient =
@@ -63,7 +67,7 @@ class AzureStorageService {
       concurrency: 200,
     });
 
-    return { ...uploadResponse, filename: blobName };
+    return { ...uploadResponse, filename: blobName, metadata };
   }
 
   public async deleteFileFromAzure(
@@ -121,6 +125,7 @@ class AzureStorageService {
       })
       .on("end", async () => {
         const combinedBuffer = Buffer.concat(buffer);
+
         const uploadResponse = await this.uploadFileToAzure(
           combinedBuffer,
           filename,
