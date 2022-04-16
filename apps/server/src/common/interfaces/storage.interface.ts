@@ -2,13 +2,17 @@ import { AzureContainersEnum } from "@/user/enums/file.enum";
 import { BlobUploadCommonResponse } from "@azure/storage-blob";
 import { ResourceType, UploadApiResponse } from "cloudinary";
 
+export type IMetaData = {
+  metaTags: string[];
+};
+
 export type IBlobUploadCommonResponse = BlobUploadCommonResponse & {
   filename: string;
-  metadata: string[];
+  metadata: IMetaData;
 };
 
 export type IUploadApiResponse = UploadApiResponse & {
-  metadata: string[];
+  metadata: IMetaData;
 };
 
 export interface IFileOptions {

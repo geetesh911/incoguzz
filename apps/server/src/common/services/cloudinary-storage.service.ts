@@ -10,8 +10,9 @@ import config from "@/configs";
 import { nanoid } from "nanoid";
 import { logger } from "@/utils/logger";
 import MediaHelper from "../helpers/media.helper";
-import { optimizeImageExtensions } from "../lists/media.list";
 import MediaService from "./media.service";
+import { Readable } from "stream";
+
 @Service()
 class CloudinaryStorageService {
   cloudinaryv2 = cloudinary.v2;
@@ -33,36 +34,43 @@ class CloudinaryStorageService {
     const { folder, containerName, resourceType } = options;
     return new Promise<IUploadApiResponse>((resolve, reject) => {
       const buffer = [];
-      const stream = this.cloudinaryv2.uploader
-        .upload_stream(
-          {
-            public_id: folder
-              ? `${containerName}/${folder}/${nanoid()}${filename}`
-              : `${containerName}/${nanoid()}${filename}`,
-            resource_type: resourceType || "raw",
-          },
-          async (error, result) => {
-            const extension = this.mediaHelper.getFileExtension(filename);
 
-            const combinedBuffer = Buffer.concat(buffer);
-
-            let metadata: string[] = [];
-
-            if (optimizeImageExtensions.includes(extension)) {
-              metadata = await this.mediaService.getMetaTags(
-                combinedBuffer,
-                extension,
-              );
-            }
-
-            result ? resolve({ ...result, metadata }) : reject(error);
-          },
-        )
+      createReadStream()
         .on("data", async data => {
           buffer.push(data);
-        });
+        })
+        .on("end", async () => {
+          const extension = this.mediaHelper.getFileExtension(filename);
 
-      createReadStream().pipe(stream);
+          const newFileName = this.mediaHelper.getFileName(filename);
+
+          const combinedBuffer = Buffer.concat(buffer);
+
+          const file = await this.mediaService.compressImage(
+            combinedBuffer,
+            extension,
+          );
+
+          const metaTags = await this.mediaService.getMetaTags(file, extension);
+
+          const stream = this.cloudinaryv2.uploader.upload_stream(
+            {
+              public_id: folder
+                ? `${containerName}/${folder}/${nanoid()}${newFileName}`
+                : `${containerName}/${nanoid()}${newFileName}`,
+              resource_type: resourceType || "raw",
+            },
+            async (error, result) => {
+              result
+                ? resolve({ ...result, metadata: { metaTags } })
+                : reject(error);
+            },
+          );
+
+          const readableStream = Readable.from(file);
+
+          readableStream.pipe(stream);
+        });
     });
   }
   public async uploadFile(
@@ -105,6 +113,7 @@ class CloudinaryStorageService {
           onCompletion?.(uploadResponses, fileUrls);
         }
       } catch (error) {
+        logger.error(error);
         onError?.(error);
       }
     });

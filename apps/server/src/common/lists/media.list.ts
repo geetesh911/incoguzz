@@ -1,4 +1,4 @@
-export const optimizeImageExtensions = ["jpeg", "jpg", "png"];
+export const optimizedImageExtensions = ["jpeg", "jpg", "png"];
 
 export const optimizeVideoExtensions = [
   "aac",
@@ -26,12 +26,13 @@ export const optimizeVideoExtensions = [
 export const validVideoExtensions = optimizeVideoExtensions;
 
 export const validImageExtensions = [
-  ...optimizeImageExtensions,
+  ...optimizedImageExtensions,
   "webp",
   "svg",
   "bmp",
   "heic",
   "heif",
+  "avif",
 ];
 
 export const validAudioExtensions = [

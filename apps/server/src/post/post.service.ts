@@ -348,6 +348,7 @@ class PostService {
           containerName,
           folder: SubFoldersEnum.thumbnail,
           onSuccess: async (_uploadResponse, fileUrl) => {
+            console.log(_uploadResponse.metadata);
             resolve(fileUrl);
           },
           onError: async error => {

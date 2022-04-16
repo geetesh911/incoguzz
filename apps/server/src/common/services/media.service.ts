@@ -11,12 +11,16 @@ import {
 import ffmpegPath from "ffmpeg-static";
 import ffprobePath from "ffprobe-static";
 import FileService from "./file.service";
+import sharp from "sharp";
 import imagemin from "imagemin";
 import imageminMozjpeg from "imagemin-mozjpeg";
 import imageminPngquant from "imagemin-pngquant";
 import jimp from "jimp";
 import { JimpConstants } from "../enums/media.enum";
-import { optimizeImageExtensions } from "../lists/media.list";
+import {
+  optimizedImageExtensions,
+  validImageExtensions,
+} from "../lists/media.list";
 import { ImageClassificationService } from "./image-classification.service";
 
 @Service()
@@ -170,6 +174,7 @@ class MediaService {
       });
     });
   }
+
   public async getVideoPreview(
     path: string,
     metadata: FfprobeData,
@@ -187,6 +192,7 @@ class MediaService {
         .run();
     });
   }
+
   public async getMetadataWithBuffer(file: FileUpload): Promise<FfprobeData> {
     return new Promise(async (resolve, reject) => {
       const video = `${file.filename}`;
@@ -207,8 +213,32 @@ class MediaService {
     });
   }
 
-  public async compressImage(buffer: Buffer): Promise<Buffer> {
+  public async converImageToPng(image: Buffer): Promise<Buffer> {
+    return sharp(image).png().toBuffer();
+  }
+
+  public async getSupportedImageBuffer(
+    image: Buffer,
+    extension: string,
+  ): Promise<Buffer> {
+    if (!optimizedImageExtensions.includes(extension.toLowerCase())) {
+      return this.converImageToPng(image);
+    }
+    return image;
+  }
+
+  public async compressImage(
+    buffer: Buffer,
+    extension: string,
+  ): Promise<Buffer> {
+    if (!validImageExtensions.includes(extension.toLowerCase())) {
+      return buffer;
+    }
+
+    buffer = await this.getSupportedImageBuffer(buffer, extension);
+
     logger.info("Compressing Image");
+
     try {
       return await imagemin.buffer(buffer, {
         plugins: [
@@ -280,9 +310,14 @@ class MediaService {
     buffer: Buffer,
     extension: string,
   ): Promise<string[]> {
-    const metaTags = [];
+    if (!validImageExtensions.includes(extension.toLowerCase())) {
+      return;
+    }
+    buffer = await this.getSupportedImageBuffer(buffer, extension);
 
-    if (optimizeImageExtensions.includes(extension)) {
+    try {
+      const metaTags = [];
+
       const predictions = await this.imageClassificationService.classify(
         buffer,
       );
@@ -290,9 +325,16 @@ class MediaService {
       predictions.forEach(prediction =>
         metaTags.push(...prediction.className.split(", ")),
       );
-    }
 
-    return metaTags;
+      const objectsPredictions =
+        await this.imageClassificationService.detectObject(buffer);
+
+      objectsPredictions.forEach(prediction => metaTags.push(prediction.class));
+
+      return metaTags;
+    } catch (_error) {
+      return [];
+    }
   }
 }
 

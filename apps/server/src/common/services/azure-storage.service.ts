@@ -18,7 +18,6 @@ import DateHelper from "../helpers/date.helper";
 import { nanoid } from "nanoid";
 import { AzureContainersEnum } from "@/user/enums/file.enum";
 import MediaHelper from "../helpers/media.helper";
-import { optimizeImageExtensions } from "../lists/media.list";
 import MediaService from "./media.service";
 import { ImageClassificationService } from "./image-classification.service";
 
@@ -47,11 +46,10 @@ class AzureStorageService {
   ): Promise<IBlobUploadCommonResponse> {
     const extension = this.mediaHelper.getFileExtension(filename);
 
-    let metadata: string[] = [];
-    if (optimizeImageExtensions.includes(extension)) {
-      file = await this.mediaService.compressImage(file as Buffer);
-      metadata = await this.mediaService.getMetaTags(file, extension);
-    }
+    const newFileName = this.mediaHelper.getFileName(filename);
+
+    file = await this.mediaService.compressImage(file as Buffer, extension);
+    const metaTags = await this.mediaService.getMetaTags(file, extension);
 
     const containerClient =
       this.blobServiceClient.getContainerClient(containerName);
@@ -60,14 +58,14 @@ class AzureStorageService {
 
     const folderPath = folder ? `${folder}/` : "";
 
-    const blobName = `${folderPath}${nanoid()}_${filename}`;
+    const blobName = `${folderPath}${nanoid()}_${newFileName}`;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
-    const uploadResponse = await blockBlobClient.uploadData(file as Buffer, {
+    const uploadResponse = await blockBlobClient.uploadData(file, {
       concurrency: 200,
     });
 
-    return { ...uploadResponse, filename: blobName, metadata };
+    return { ...uploadResponse, filename: blobName, metadata: { metaTags } };
   }
 
   public async deleteFileFromAzure(
