@@ -2,8 +2,13 @@ import { AzureContainersEnum } from "@/user/enums/file.enum";
 import { BlobUploadCommonResponse } from "@azure/storage-blob";
 import { ResourceType, UploadApiResponse } from "cloudinary";
 
+export type IMetaTag = {
+  tag: string;
+  probability: number;
+};
+
 export type IMetaData = {
-  metaTags: string[];
+  metaTags: IMetaTag[];
 };
 
 export type IBlobUploadCommonResponse = BlobUploadCommonResponse & {
@@ -20,7 +25,7 @@ export interface IFileOptions {
   folder?: string;
   containerName?: AzureContainersEnum;
   onSuccess?: (
-    uploadResponse: IBlobUploadCommonResponse | UploadApiResponse,
+    uploadResponse: IBlobUploadCommonResponse | IUploadApiResponse,
     fileUrl: string,
   ) => Promise<void>;
   onError?: (err: Error) => Promise<void>;

@@ -1,3 +1,4 @@
+import { IMetaData } from "@/common/interfaces/storage.interface";
 import { PostType } from "@/prisma/generated/type-graphql";
 import { FfprobeData } from "fluent-ffmpeg";
 import { FileUpload } from "graphql-upload";
@@ -44,6 +45,7 @@ export interface IAddMediaPostParams {
   userId: string;
   addPostInput: AddMediaPostInput;
   urls: string[];
+  metaData?: IMetaData;
   extraOptions?: IAddMediaPostExtraOptions;
 }
 
@@ -72,4 +74,9 @@ export interface IValidateAddMediaPostInputParams {
   addPostInput: AddMediaPostInput;
   media: Promise<FileUpload>[];
   metadata: FfprobeData;
+}
+
+export interface IUploadThumbnailResponse {
+  fileUrl: string;
+  metadata: IMetaData;
 }

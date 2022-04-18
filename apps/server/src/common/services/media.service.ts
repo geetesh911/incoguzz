@@ -22,6 +22,7 @@ import {
   validImageExtensions,
 } from "../lists/media.list";
 import { ImageClassificationService } from "./image-classification.service";
+import { IMetaTag } from "../interfaces/storage.interface";
 
 @Service()
 class MediaService {
@@ -309,27 +310,34 @@ class MediaService {
   public async getMetaTags(
     buffer: Buffer,
     extension: string,
-  ): Promise<string[]> {
+  ): Promise<IMetaTag[]> {
     if (!validImageExtensions.includes(extension.toLowerCase())) {
       return;
     }
     buffer = await this.getSupportedImageBuffer(buffer, extension);
 
     try {
-      const metaTags = [];
+      const metaTags: IMetaTag[] = [];
 
       const predictions = await this.imageClassificationService.classify(
         buffer,
       );
 
       predictions.forEach(prediction =>
-        metaTags.push(...prediction.className.split(", ")),
+        metaTags.push(
+          ...prediction.className.split(", ").map(className => ({
+            tag: className,
+            probability: prediction.probability,
+          })),
+        ),
       );
 
       const objectsPredictions =
         await this.imageClassificationService.detectObject(buffer);
 
-      objectsPredictions.forEach(prediction => metaTags.push(prediction.class));
+      objectsPredictions.forEach(prediction =>
+        metaTags.push({ tag: prediction.class, probability: prediction.score }),
+      );
 
       return metaTags;
     } catch (_error) {

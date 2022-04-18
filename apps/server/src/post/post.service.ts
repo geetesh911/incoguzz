@@ -2,6 +2,7 @@ import { MediaLimits } from "@/common/enums/media.enum";
 import MediaHelper from "@/common/helpers/media.helper";
 import PaginationHelper from "@/common/helpers/pagination.helper";
 import { IGetVideoThumbnail } from "@/common/interfaces/media.interface";
+import { IMetaData } from "@/common/interfaces/storage.interface";
 import {
   optimizeVideoExtensions,
   validAudioExtensions,
@@ -24,6 +25,7 @@ import {
   IAddMediaPostServiceParams,
   IAddPollPostParams,
   IAddTextualPostParams,
+  IUploadThumbnailResponse,
   IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
 import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
@@ -214,12 +216,14 @@ class PostService {
         },
       );
     });
-    thumbnailFileUrl = await this.uploadThumbnail({
+    const clipThumbnailResponse = await this.uploadThumbnail({
       thumbnailReadStream,
       thumbnailFilename,
       metadata,
       containerName: AzureContainersEnum.CLIP,
     });
+
+    thumbnailFileUrl = clipThumbnailResponse.fileUrl;
 
     return new Promise<Post>(async resolve => {
       await this.storageService.uploadFiles(
@@ -255,7 +259,8 @@ class PostService {
     mediaThumbnail,
   }: IAddMediaPostServiceParams): Promise<Post> {
     let thumbnailFileUrl: string;
-    let metaData: FfprobeData;
+    let videoMetaData: FfprobeData;
+    let metaData: IMetaData = { metaTags: [] };
 
     const mediaFiles = await Promise.all(media);
 
@@ -267,32 +272,41 @@ class PostService {
           mediaFiles[0],
         );
 
-        metaData = videoThumbnailInput.metadata;
+        videoMetaData = videoThumbnailInput.metadata;
 
-        thumbnailFileUrl = await this.uploadThumbnail({
+        const videoThumbnailResponse = await this.uploadThumbnail({
           ...videoThumbnailInput,
           containerName: AzureContainersEnum.VIDEO,
         });
+        thumbnailFileUrl = videoThumbnailResponse.fileUrl;
+        metaData = videoThumbnailResponse.metadata;
+
         break;
 
       case PostType.AUDIO:
         const thumbnail = await mediaThumbnail;
+
+        if (!thumbnail) break;
+
         const audioThumbnailInput: IGetVideoThumbnail = {
           thumbnailFilename: thumbnail.filename,
           thumbnailReadStream: thumbnail.createReadStream,
         };
 
-        thumbnailFileUrl = await this.uploadThumbnail({
+        const audioThumbnailResponse = await this.uploadThumbnail({
           ...audioThumbnailInput,
           containerName: AzureContainersEnum.AUDIO,
         });
+        thumbnailFileUrl = audioThumbnailResponse.fileUrl;
+        metaData = audioThumbnailResponse.metadata;
+
         break;
     }
 
     this.validateAddMediaPostInput({
       addPostInput: addMediaPostInput,
       media,
-      metadata: metaData,
+      metadata: videoMetaData,
     });
 
     return new Promise<Post>(async resolve => {
@@ -303,6 +317,7 @@ class PostService {
           onCompletion: async (_uploadResponse, fileUrls) => {
             const post = await this.postRepository.addMediaPost({
               userId,
+              metaData,
               addPostInput: addMediaPostInput,
               urls: fileUrls,
               extraOptions: {
@@ -334,11 +349,11 @@ class PostService {
 
   private async uploadThumbnail(
     thumbnailInput: IGetVideoThumbnail,
-  ): Promise<string> {
+  ): Promise<IUploadThumbnailResponse> {
     const { thumbnailReadStream, thumbnailFilename, containerName } =
       thumbnailInput;
 
-    return new Promise<string>(async resolve => {
+    return new Promise<IUploadThumbnailResponse>(async resolve => {
       await this.storageService.uploadFile(
         {
           filename: thumbnailFilename,
@@ -347,9 +362,8 @@ class PostService {
         {
           containerName,
           folder: SubFoldersEnum.thumbnail,
-          onSuccess: async (_uploadResponse, fileUrl) => {
-            console.log(_uploadResponse.metadata);
-            resolve(fileUrl);
+          onSuccess: async (uploadResponse, fileUrl) => {
+            resolve({ fileUrl, metadata: uploadResponse.metadata });
           },
           onError: async error => {
             logger.error(error);

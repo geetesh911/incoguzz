@@ -1,5 +1,5 @@
 import { PostType } from "@/prisma/generated/type-graphql";
-import { ArrayMaxSize, ValidateIf } from "class-validator";
+import { ArrayMaxSize, IsOptional, ValidateIf } from "class-validator";
 import { FileUpload, GraphQLUpload } from "graphql-upload";
 import { ArgsType, Field } from "type-graphql";
 import { AddMediaPostInput } from "../inputs/add-post.input";
@@ -15,6 +15,7 @@ class AddMediaPostArgs {
   media: Promise<FileUpload>[];
 
   @Field(() => GraphQLUpload, { nullable: true })
+  @IsOptional()
   @ValidateIf(postInput => postInput.addMediaPostInput.type === PostType.AUDIO)
   mediaThumbnail?: Promise<FileUpload>;
 }

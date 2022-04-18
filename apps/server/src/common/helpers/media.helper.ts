@@ -1,5 +1,8 @@
 import { Service } from "typedi";
-import { optimizedImageExtensions } from "../lists/media.list";
+import {
+  optimizedImageExtensions,
+  validImageExtensions,
+} from "../lists/media.list";
 
 @Service()
 class MediaHelper {
@@ -7,9 +10,10 @@ class MediaHelper {
     return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);
   }
   public getFileName(filename: string): string {
-    const extension = this.getFileExtension(filename);
+    const extension = this.getFileExtension(filename).toLowerCase();
 
-    return !optimizedImageExtensions.includes(extension.toLowerCase())
+    return validImageExtensions.includes(extension) &&
+      !optimizedImageExtensions.includes(extension)
       ? filename.replace(extension, "png")
       : filename;
   }
