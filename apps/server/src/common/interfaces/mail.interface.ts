@@ -8,4 +8,5 @@ export interface MailOptions {
 export interface MailConfig {
   username: string;
   password: string;
+  sendInBlueApiKey: string;
 }

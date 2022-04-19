@@ -202,6 +202,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
       ...this.createBasicPostInputHelper.createBasicPostInput({
         type,
         tags,
+        metaTags: [],
         published,
         userId,
       }),
@@ -223,6 +224,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
       ...this.createBasicPostInputHelper.createBasicPostInput({
         type,
         tags,
+        metaTags: [],
         published,
         userId,
       }),
@@ -245,15 +247,18 @@ class PostRepository extends BaseRepository implements TUserRepository {
     userId,
     addPostInput,
     urls,
+    metaData,
     extraOptions,
   }: IAddMediaPostParams): Promise<Post> {
     const { type, place, tags, published, caption } = addPostInput;
+    const { metaTags } = metaData;
 
     let postCreateInput: Prisma.PostCreateInput =
       this.createBasicPostInputHelper.createMediaBasicPostInput({
         type,
         place,
         tags,
+        metaTags,
         published,
         caption,
         userId,
@@ -302,15 +307,18 @@ class PostRepository extends BaseRepository implements TUserRepository {
     userId,
     addPostInput,
     urls,
+    metaData,
     extraOptions,
   }: IAddClipPostParams): Promise<Post> {
     const { type, place, tags, published, caption } = addPostInput;
+    const { metaTags } = metaData;
 
     let postCreateInput: Prisma.PostCreateInput =
       this.createBasicPostInputHelper.createMediaBasicPostInput({
         type,
         place,
         tags,
+        metaTags,
         published,
         caption,
         userId,

@@ -113,6 +113,7 @@ Table Post {
   slug String [unique, not null]
   message Message [not null]
   views Int [not null, default: 0]
+  metaTags Json
 }
 
 Table Poll {

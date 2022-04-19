@@ -8,7 +8,7 @@ import { LoginInput } from "@/user/inputs/login.input";
 import { RefreshAcccessTokenInput } from "@/user/inputs/refresh-token.input";
 import { ForgotPasswordInput } from "@/user/inputs/forgot-password.input";
 import { ResetPasswordInput } from "@/user/inputs/reset-password.input";
-import MailingService from "@/utils/mail.util";
+import MailingService from "@/common/services/mail.service";
 import JWTHelper from "@/common/helpers/jwt.helper";
 import { MailOptions } from "@/common/interfaces/mail.interface";
 import { logger } from "@/utils/logger";

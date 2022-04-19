@@ -54,6 +54,7 @@ fragment PostCommonFields on PostOutput {
     url
     thumbnailUrl
   }
+  metaTags
   views
   _count {
     reactions
@@ -133,7 +134,7 @@ mutation AddVideoPost(
 mutation AddAudioPost(
   $addMediaPostInput: AddMediaPostInput!
   $media: [Upload!]!
-  $mediaThumbnail: Upload!
+  $mediaThumbnail: Upload
 ) {
   addMediaPost(
     addMediaPostInput: $addMediaPostInput

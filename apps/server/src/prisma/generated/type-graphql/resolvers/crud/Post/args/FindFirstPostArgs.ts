@@ -48,6 +48,7 @@ export class FindFirstPostArgs {
         | "published"
         | "slug"
         | "views"
+        | "metaTags"
       >
     | undefined;
 }

@@ -11,12 +11,13 @@ class CreateBasicPostInputHelper {
   public createBasicPostInput(
     basicInput: BasicPostCreateInput,
   ): Prisma.PostCreateInput {
-    const { type, published, userId, tags } = basicInput;
+    const { type, published, userId, tags, metaTags } = basicInput;
     return {
       type,
       published,
       user: { connect: { id: userId } },
       slug: nanoid(),
+      metaTags: metaTags || [],
       tags: {
         connectOrCreate: tags.map(tag => ({
           where: { name: tag },

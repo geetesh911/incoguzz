@@ -1766,6 +1766,7 @@ const modelsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   Poll: ["id", "question", "postId"],
   PollOption: ["id", "option", "pollId"],
@@ -1937,6 +1938,7 @@ const outputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
     "_count",
     "_avg",
     "_sum",
@@ -2324,6 +2326,7 @@ const outputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
     "_all",
   ],
   PostAvgAggregate: ["views"],
@@ -2985,6 +2988,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostOrderByWithRelationInput: [
     "id",
@@ -3012,6 +3016,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostWhereUniqueInput: ["id", "slug"],
   PostOrderByWithAggregationInput: [
@@ -3026,6 +3031,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
     "_count",
     "_avg",
     "_max",
@@ -3047,6 +3053,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PollWhereInput: [
     "AND",
@@ -4085,6 +4092,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostUpdateInput: [
     "id",
@@ -4110,6 +4118,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateManyInput: [
     "id",
@@ -4123,6 +4132,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PostUpdateManyMutationInput: [
     "id",
@@ -4134,6 +4144,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PollCreateInput: ["id", "question", "post", "pollOptions", "pollAnswers"],
   PollUpdateInput: ["id", "question", "post", "pollOptions", "pollAnswers"],
@@ -4770,6 +4781,7 @@ const inputsInfo = {
   ClipRelationFilter: ["is", "isNot"],
   TextualRelationFilter: ["is", "isNot"],
   AudioRelationFilter: ["is", "isNot"],
+  JsonNullableFilter: ["equals", "not"],
   TagOrderByRelationAggregateInput: ["_count"],
   PhotoOrderByRelationAggregateInput: ["_count"],
   PostCountOrderByAggregateInput: [
@@ -4784,6 +4796,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PostAvgOrderByAggregateInput: ["views"],
   PostMaxOrderByAggregateInput: [
@@ -4822,6 +4835,7 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  JsonNullableWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
   PostRelationFilter: ["is", "isNot"],
   PollOptionListRelationFilter: ["every", "some", "none"],
   PollOptionOrderByRelationAggregateInput: ["_count"],
@@ -6548,6 +6562,7 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  NestedJsonNullableFilter: ["equals", "not"],
   NestedEnumReactionTypeFilter: ["equals", "in", "notIn", "not"],
   NestedEnumReactionTypeWithAggregatesFilter: [
     "equals",
@@ -6630,6 +6645,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutUserInput: ["where", "create"],
   PostCreateManyUserInputEnvelope: ["data", "skipDuplicates"],
@@ -6810,6 +6826,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   ReactionUpsertWithWhereUniqueWithoutUserInput: ["where", "update", "create"],
   ReactionUpdateWithWhereUniqueWithoutUserInput: ["where", "data"],
@@ -7572,6 +7589,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutPollInput: ["where", "create"],
   PollOptionCreateWithoutPollInput: ["id", "option", "pollAnswers"],
@@ -7604,6 +7622,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PollOptionUpsertWithWhereUniqueWithoutPollInput: [
     "where",
@@ -7737,6 +7756,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutPhotosInput: ["where", "create"],
   PostUpsertWithoutPhotosInput: ["update", "create"],
@@ -7763,6 +7783,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateWithoutVideoInput: [
     "id",
@@ -7787,6 +7808,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutVideoInput: ["where", "create"],
   PostUpsertWithoutVideoInput: ["update", "create"],
@@ -7813,6 +7835,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   ClipCreateWithoutClipAudioInput: ["id", "url", "post", "thumbnailUrl"],
   ClipCreateOrConnectWithoutClipAudioInput: ["where", "create"],
@@ -7853,6 +7876,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutClipInput: ["where", "create"],
   ClipAudioCreateWithoutClipsInput: ["id", "name", "audioUrl"],
@@ -7881,6 +7905,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   ClipAudioUpsertWithoutClipsInput: ["update", "create"],
   ClipAudioUpdateWithoutClipsInput: ["id", "name", "audioUrl"],
@@ -7907,6 +7932,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutTextualInput: ["where", "create"],
   PostUpsertWithoutTextualInput: ["update", "create"],
@@ -7933,6 +7959,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateWithoutAudioInput: [
     "id",
@@ -7957,6 +7984,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutAudioInput: ["where", "create"],
   PostUpsertWithoutAudioInput: ["update", "create"],
@@ -7983,6 +8011,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateWithoutTagsInput: [
     "id",
@@ -8007,6 +8036,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutTagsInput: ["where", "create"],
   PostUpsertWithWhereUniqueWithoutTagsInput: ["where", "update", "create"],
@@ -8035,6 +8065,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutPlaceInput: ["where", "create"],
   PostCreateManyPlaceInputEnvelope: ["data", "skipDuplicates"],
@@ -8064,6 +8095,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutBookmarksInput: ["where", "create"],
   UserCreateWithoutBookmarksInput: [
@@ -8126,6 +8158,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   UserUpsertWithoutBookmarksInput: ["update", "create"],
   UserUpdateWithoutBookmarksInput: [
@@ -8186,6 +8219,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutReactionsInput: ["where", "create"],
   UserCreateWithoutReactionsInput: [
@@ -8248,6 +8282,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   UserUpsertWithoutReactionsInput: ["update", "create"],
   UserUpdateWithoutReactionsInput: [
@@ -8308,6 +8343,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutCommentsInput: ["where", "create"],
   UserCreateWithoutCommentsInput: [
@@ -8379,6 +8415,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   UserUpsertWithoutCommentsInput: ["update", "create"],
   UserUpdateWithoutCommentsInput: [
@@ -8824,6 +8861,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutMessageInput: ["where", "create"],
   StoryCreateWithoutMessageInput: [
@@ -8960,6 +8998,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   StoryUpsertWithoutMessageInput: ["update", "create"],
   StoryUpdateWithoutMessageInput: [
@@ -9212,6 +9251,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateOrConnectWithoutActivitiesInput: ["where", "create"],
   UserUpsertWithoutActivitiesInput: ["update", "create"],
@@ -9274,6 +9314,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   TokenCreateManyUserInput: [
     "id",
@@ -9299,6 +9340,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   ReactionCreateManyUserInput: [
     "id",
@@ -9425,6 +9467,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   ReactionUpdateWithoutUserInput: [
     "id",
@@ -9623,6 +9666,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   PostCreateManyPlaceInput: [
     "id",
@@ -9635,6 +9679,7 @@ const inputsInfo = {
     "published",
     "slug",
     "views",
+    "metaTags",
   ],
   PostUpdateWithoutPlaceInput: [
     "id",
@@ -9659,6 +9704,7 @@ const inputsInfo = {
     "slug",
     "message",
     "views",
+    "metaTags",
   ],
   CommentRepliesCreateManyRepliedToInput: [
     "id",

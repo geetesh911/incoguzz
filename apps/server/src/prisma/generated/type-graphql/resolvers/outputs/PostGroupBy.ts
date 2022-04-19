@@ -68,6 +68,11 @@ export class PostGroupBy {
   })
   views!: number;
 
+  @TypeGraphQL.Field(_type => GraphQLScalars.JSONResolver, {
+    nullable: true,
+  })
+  metaTags!: Prisma.JsonValue | null;
+
   @TypeGraphQL.Field(_type => PostCountAggregate, {
     nullable: true,
   })

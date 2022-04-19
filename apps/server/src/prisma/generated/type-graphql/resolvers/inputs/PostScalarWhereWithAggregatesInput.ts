@@ -6,6 +6,7 @@ import { BoolWithAggregatesFilter } from "../inputs/BoolWithAggregatesFilter";
 import { DateTimeWithAggregatesFilter } from "../inputs/DateTimeWithAggregatesFilter";
 import { EnumPostTypeWithAggregatesFilter } from "../inputs/EnumPostTypeWithAggregatesFilter";
 import { IntWithAggregatesFilter } from "../inputs/IntWithAggregatesFilter";
+import { JsonNullableWithAggregatesFilter } from "../inputs/JsonNullableWithAggregatesFilter";
 import { StringNullableWithAggregatesFilter } from "../inputs/StringNullableWithAggregatesFilter";
 import { StringWithAggregatesFilter } from "../inputs/StringWithAggregatesFilter";
 
@@ -82,4 +83,9 @@ export class PostScalarWhereWithAggregatesInput {
     nullable: true,
   })
   views?: IntWithAggregatesFilter | undefined;
+
+  @TypeGraphQL.Field(_type => JsonNullableWithAggregatesFilter, {
+    nullable: true,
+  })
+  metaTags?: JsonNullableWithAggregatesFilter | undefined;
 }

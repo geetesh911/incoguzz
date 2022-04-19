@@ -48,6 +48,7 @@ export class TagPostsArgs {
         | "published"
         | "slug"
         | "views"
+        | "metaTags"
       >
     | undefined;
 }

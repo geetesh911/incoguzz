@@ -48,6 +48,7 @@ export class PlacePostsArgs {
         | "published"
         | "slug"
         | "views"
+        | "metaTags"
       >
     | undefined;
 }

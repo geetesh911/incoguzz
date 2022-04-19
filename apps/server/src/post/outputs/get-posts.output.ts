@@ -1,4 +1,5 @@
 import PaginatedResponse from "@/common/generic-types/pagination-response.generic";
+import { IMetaTag } from "@/common/interfaces/storage.interface";
 import {
   Audio,
   Bookmark,
@@ -11,9 +12,20 @@ import {
   Textual,
   Video,
 } from "@/prisma/generated/type-graphql";
+import { Prisma } from "@prisma/client";
+import { JSONResolver } from "graphql-scalars";
 import { Field, Int, ObjectType } from "type-graphql";
 import ClipOutput from "./clip.output";
 import PollOutput from "./poll.output";
+
+@ObjectType()
+export class MetaTag implements IMetaTag {
+  @Field(() => String)
+  tag: string;
+
+  @Field(() => Int)
+  probability: number;
+}
 
 @ObjectType()
 export class PostOutput {
@@ -67,6 +79,9 @@ export class PostOutput {
 
   @Field(() => Int, { nullable: false })
   views?: number;
+
+  @Field(() => JSONResolver, { nullable: false })
+  metaTags?: Prisma.JsonValue;
 
   @Field(() => PostCount, { nullable: true })
   _count?: PostCount | null;

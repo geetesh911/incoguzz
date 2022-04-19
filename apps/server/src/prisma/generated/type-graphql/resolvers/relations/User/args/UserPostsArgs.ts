@@ -48,6 +48,7 @@ export class UserPostsArgs {
         | "published"
         | "slug"
         | "views"
+        | "metaTags"
       >
     | undefined;
 }

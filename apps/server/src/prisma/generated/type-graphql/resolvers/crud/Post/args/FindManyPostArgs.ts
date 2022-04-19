@@ -48,6 +48,7 @@ export class FindManyPostArgs {
         | "published"
         | "slug"
         | "views"
+        | "metaTags"
       >
     | undefined;
 }

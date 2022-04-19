@@ -135,4 +135,9 @@ export class PostUpdateWithoutActivitiesInput {
     nullable: true,
   })
   views?: IntFieldUpdateOperationsInput | undefined;
+
+  @TypeGraphQL.Field(_type => GraphQLScalars.JSONResolver, {
+    nullable: true,
+  })
+  metaTags?: Prisma.InputJsonValue | undefined;
 }

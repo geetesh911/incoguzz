@@ -62,4 +62,9 @@ export class PostCountOrderByAggregateInput {
     nullable: true,
   })
   views?: "asc" | "desc" | undefined;
+
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  metaTags?: "asc" | "desc" | undefined;
 }

@@ -12,6 +12,7 @@ class Config {
     mailConfig: {
       username: "geetesh.pillarplus@gmail.com",
       password: "gee/2000119",
+      sendInBlueApiKey: process.env.SENDINBLUE_API_KEY,
     },
     cryptrSecretKey: process.env.CRYPTR_SECRET_KEY,
     googleConfig: {

@@ -106,6 +106,11 @@ export class Post {
   })
   views!: number;
 
+  @TypeGraphQL.Field(_type => GraphQLScalars.JSONResolver, {
+    nullable: true,
+  })
+  metaTags?: Prisma.JsonValue | null;
+
   @TypeGraphQL.Field(_type => PostCount, {
     nullable: true,
   })

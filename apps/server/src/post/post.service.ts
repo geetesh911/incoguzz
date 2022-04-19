@@ -54,6 +54,7 @@ class PostService {
       userId,
       paginationInput,
     });
+
     return {
       data: posts,
       pagination: {
@@ -224,6 +225,7 @@ class PostService {
     });
 
     thumbnailFileUrl = clipThumbnailResponse.fileUrl;
+    const metaData = clipThumbnailResponse.metadata;
 
     return new Promise<Post>(async resolve => {
       await this.storageService.uploadFiles(
@@ -233,6 +235,7 @@ class PostService {
           onCompletion: async (_uploadResponse, fileUrls) => {
             const post = await this.postRepository.addClipPost({
               userId,
+              metaData,
               addPostInput: addClipPostInput,
               urls: fileUrls,
               extraOptions: {

@@ -130,4 +130,9 @@ export class PostCreateWithoutActivitiesInput {
     nullable: true,
   })
   views?: number | undefined;
+
+  @TypeGraphQL.Field(_type => GraphQLScalars.JSONResolver, {
+    nullable: true,
+  })
+  metaTags?: Prisma.InputJsonValue | undefined;
 }

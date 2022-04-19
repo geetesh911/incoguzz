@@ -1,4 +1,4 @@
-import { IMetaData } from "@/common/interfaces/storage.interface";
+import { IMetaData, IMetaTag } from "@/common/interfaces/storage.interface";
 import { PostType } from "@/prisma/generated/type-graphql";
 import { FfprobeData } from "fluent-ffmpeg";
 import { FileUpload } from "graphql-upload";
@@ -24,6 +24,7 @@ export interface BasicPostCreateInput {
   published: boolean;
   userId: string;
   tags: string[];
+  metaTags: IMetaTag[];
 }
 
 export interface BasicMediaPostCreateInput extends BasicPostCreateInput {
@@ -53,6 +54,7 @@ export interface IAddClipPostParams {
   userId: string;
   addPostInput: AddClipPostInput;
   urls: string[];
+  metaData?: IMetaData;
   extraOptions?: IAddClipPostExtraOptions;
 }
 

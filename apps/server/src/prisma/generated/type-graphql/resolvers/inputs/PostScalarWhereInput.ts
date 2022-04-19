@@ -6,6 +6,7 @@ import { BoolFilter } from "../inputs/BoolFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { EnumPostTypeFilter } from "../inputs/EnumPostTypeFilter";
 import { IntFilter } from "../inputs/IntFilter";
+import { JsonNullableFilter } from "../inputs/JsonNullableFilter";
 import { StringFilter } from "../inputs/StringFilter";
 import { StringNullableFilter } from "../inputs/StringNullableFilter";
 
@@ -82,4 +83,9 @@ export class PostScalarWhereInput {
     nullable: true,
   })
   views?: IntFilter | undefined;
+
+  @TypeGraphQL.Field(_type => JsonNullableFilter, {
+    nullable: true,
+  })
+  metaTags?: JsonNullableFilter | undefined;
 }

@@ -11,6 +11,7 @@ import { CommentListRelationFilter } from "../inputs/CommentListRelationFilter";
 import { DateTimeFilter } from "../inputs/DateTimeFilter";
 import { EnumPostTypeFilter } from "../inputs/EnumPostTypeFilter";
 import { IntFilter } from "../inputs/IntFilter";
+import { JsonNullableFilter } from "../inputs/JsonNullableFilter";
 import { MessageListRelationFilter } from "../inputs/MessageListRelationFilter";
 import { PhotoListRelationFilter } from "../inputs/PhotoListRelationFilter";
 import { PlaceRelationFilter } from "../inputs/PlaceRelationFilter";
@@ -166,4 +167,9 @@ export class PostWhereInput {
     nullable: true,
   })
   views?: IntFilter | undefined;
+
+  @TypeGraphQL.Field(_type => JsonNullableFilter, {
+    nullable: true,
+  })
+  metaTags?: JsonNullableFilter | undefined;
 }

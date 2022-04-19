@@ -68,6 +68,11 @@ export class PostOrderByWithAggregationInput {
   })
   views?: "asc" | "desc" | undefined;
 
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  metaTags?: "asc" | "desc" | undefined;
+
   @TypeGraphQL.Field(_type => PostCountOrderByAggregateInput, {
     nullable: true,
   })
