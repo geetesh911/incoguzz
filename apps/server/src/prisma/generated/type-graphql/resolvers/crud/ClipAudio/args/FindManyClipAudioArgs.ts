@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { ClipAudioOrderByWithRelationInput } from "../../../inputs/ClipAudioOrderByWithRelationInput";
+import { ClipAudioOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/ClipAudioOrderByWithRelationAndSearchRelevanceInput";
 import { ClipAudioWhereInput } from "../../../inputs/ClipAudioWhereInput";
 import { ClipAudioWhereUniqueInput } from "../../../inputs/ClipAudioWhereUniqueInput";
 import { ClipAudioScalarFieldEnum } from "../../../../enums/ClipAudioScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindManyClipAudioArgs {
   })
   where?: ClipAudioWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [ClipAudioOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: ClipAudioOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [ClipAudioOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: ClipAudioOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => ClipAudioWhereUniqueInput, {
     nullable: true,

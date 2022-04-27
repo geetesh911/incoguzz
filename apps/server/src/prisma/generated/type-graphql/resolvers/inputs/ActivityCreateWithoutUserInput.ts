@@ -17,7 +17,13 @@ export class ActivityCreateWithoutUserInput {
   @TypeGraphQL.Field(_type => ActivityType, {
     nullable: false,
   })
-  type!: "LIKED" | "COMMENTED" | "POSTED" | "SHARED";
+  type!:
+    | "REACTED"
+    | "COMMENTED"
+    | "POSTED"
+    | "SHARED"
+    | "VIEWED"
+    | "BOOKMARKED";
 
   @TypeGraphQL.Field(_type => PostCreateNestedOneWithoutActivitiesInput, {
     nullable: false,

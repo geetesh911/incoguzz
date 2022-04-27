@@ -7,7 +7,7 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "interactiveTransactions", "extendedIndexes", "fullTextIndex"]
+  previewFeatures = ["referentialIntegrity", "interactiveTransactions", "extendedIndexes", "fullTextSearch", "fullTextIndex", "filterJson"]
 }
 
 generator typegraphql {
@@ -88,10 +88,12 @@ enum TokenType {
 }
 
 enum ActivityType {
-  LIKED
+  REACTED
   COMMENTED
   POSTED
   SHARED
+  VIEWED
+  BOOKMARKED
 }
 
 enum MessageMediaType {
@@ -249,7 +251,7 @@ model PollAnswer {
 
 model Photo {
   id     String @id @unique @default(cuid())
-  url    String
+  url    String @db.Text
   post   Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId String
 }
@@ -257,7 +259,7 @@ model Photo {
 model Video {
   id           String @id @unique @default(cuid())
   thumbnailUrl String @db.Text
-  url          String
+  url          String @db.Text
   post         Post   @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId       String @unique
 }
@@ -271,7 +273,7 @@ model ClipAudio {
 
 model Clip {
   id           String    @id @unique @default(cuid())
-  url          String
+  url          String    @db.Text
   post         Post      @relation(fields: [postId], references: [id], onUpdate: Cascade, onDelete: Cascade)
   postId       String    @unique
   thumbnailUrl String    @db.Text

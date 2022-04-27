@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { VideoOrderByWithRelationInput } from "../../../inputs/VideoOrderByWithRelationInput";
+import { VideoOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/VideoOrderByWithRelationAndSearchRelevanceInput";
 import { VideoWhereInput } from "../../../inputs/VideoWhereInput";
 import { VideoWhereUniqueInput } from "../../../inputs/VideoWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateVideoArgs {
   })
   where?: VideoWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [VideoOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: VideoOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [VideoOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: VideoOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => VideoWhereUniqueInput, {
     nullable: true,

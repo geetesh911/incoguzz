@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { FollowerOrderByWithRelationInput } from "../../../inputs/FollowerOrderByWithRelationInput";
+import { FollowerOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/FollowerOrderByWithRelationAndSearchRelevanceInput";
 import { FollowerWhereInput } from "../../../inputs/FollowerWhereInput";
 import { FollowerWhereUniqueInput } from "../../../inputs/FollowerWhereUniqueInput";
 import { FollowerScalarFieldEnum } from "../../../../enums/FollowerScalarFieldEnum";
@@ -12,10 +12,13 @@ export class UserFollowersArgs {
   })
   where?: FollowerWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [FollowerOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: FollowerOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [FollowerOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: FollowerOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => FollowerWhereUniqueInput, {
     nullable: true,

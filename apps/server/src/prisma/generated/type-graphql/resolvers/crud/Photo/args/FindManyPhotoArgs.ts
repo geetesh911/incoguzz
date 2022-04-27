@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { PhotoOrderByWithRelationInput } from "../../../inputs/PhotoOrderByWithRelationInput";
+import { PhotoOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/PhotoOrderByWithRelationAndSearchRelevanceInput";
 import { PhotoWhereInput } from "../../../inputs/PhotoWhereInput";
 import { PhotoWhereUniqueInput } from "../../../inputs/PhotoWhereUniqueInput";
 import { PhotoScalarFieldEnum } from "../../../../enums/PhotoScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindManyPhotoArgs {
   })
   where?: PhotoWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [PhotoOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: PhotoOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [PhotoOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: PhotoOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => PhotoWhereUniqueInput, {
     nullable: true,

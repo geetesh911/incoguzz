@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { ReactionOrderByWithRelationInput } from "../../../inputs/ReactionOrderByWithRelationInput";
+import { ReactionOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/ReactionOrderByWithRelationAndSearchRelevanceInput";
 import { ReactionWhereInput } from "../../../inputs/ReactionWhereInput";
 import { ReactionWhereUniqueInput } from "../../../inputs/ReactionWhereUniqueInput";
 import { ReactionScalarFieldEnum } from "../../../../enums/ReactionScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindFirstReactionArgs {
   })
   where?: ReactionWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [ReactionOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: ReactionOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [ReactionOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: ReactionOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => ReactionWhereUniqueInput, {
     nullable: true,

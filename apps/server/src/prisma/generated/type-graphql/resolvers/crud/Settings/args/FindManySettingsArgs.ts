@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { SettingsOrderByWithRelationInput } from "../../../inputs/SettingsOrderByWithRelationInput";
+import { SettingsOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/SettingsOrderByWithRelationAndSearchRelevanceInput";
 import { SettingsWhereInput } from "../../../inputs/SettingsWhereInput";
 import { SettingsWhereUniqueInput } from "../../../inputs/SettingsWhereUniqueInput";
 import { SettingsScalarFieldEnum } from "../../../../enums/SettingsScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindManySettingsArgs {
   })
   where?: SettingsWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [SettingsOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: SettingsOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [SettingsOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: SettingsOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => SettingsWhereUniqueInput, {
     nullable: true,

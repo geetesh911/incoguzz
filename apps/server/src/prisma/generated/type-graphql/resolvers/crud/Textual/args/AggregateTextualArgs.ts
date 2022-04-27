@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { TextualOrderByWithRelationInput } from "../../../inputs/TextualOrderByWithRelationInput";
+import { TextualOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/TextualOrderByWithRelationAndSearchRelevanceInput";
 import { TextualWhereInput } from "../../../inputs/TextualWhereInput";
 import { TextualWhereUniqueInput } from "../../../inputs/TextualWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateTextualArgs {
   })
   where?: TextualWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [TextualOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: TextualOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [TextualOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: TextualOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => TextualWhereUniqueInput, {
     nullable: true,

@@ -16,7 +16,14 @@ export class ActivityMinAggregate {
   @TypeGraphQL.Field(_type => ActivityType, {
     nullable: true,
   })
-  type!: "LIKED" | "COMMENTED" | "POSTED" | "SHARED" | null;
+  type!:
+    | "REACTED"
+    | "COMMENTED"
+    | "POSTED"
+    | "SHARED"
+    | "VIEWED"
+    | "BOOKMARKED"
+    | null;
 
   @TypeGraphQL.Field(_type => String, {
     nullable: true,

@@ -277,7 +277,6 @@ type PostOutput {
   clip: ClipOutput
   createdAt: DateTime!
   id: String!
-  metaTags: JSON!
   photos: [Photo!]
   place: Place
   poll: PollOutput
@@ -350,6 +349,8 @@ type Query {
   getBookmarkedPosts(paginationInput: PaginationInput!): BookmarksOutput!
   getExplorePosts(paginationInput: PaginationInput!): GetPostsOutput!
   getMediaAccessToken: String!
+  getPost(postId: String!): PostOutput!
+  getRelatedPosts(paginationInput: PaginationInput!, postId: String!): GetPostsOutput!
   getUser: UserOutput
   getUserPosts(paginationInput: PaginationInput!): GetPostsOutput!
   isUsernameAvailable(username: String!): Boolean

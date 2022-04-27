@@ -18,7 +18,13 @@ export class Activity {
   @TypeGraphQL.Field(_type => ActivityType, {
     nullable: false,
   })
-  type!: "LIKED" | "COMMENTED" | "POSTED" | "SHARED";
+  type!:
+    | "REACTED"
+    | "COMMENTED"
+    | "POSTED"
+    | "SHARED"
+    | "VIEWED"
+    | "BOOKMARKED";
 
   user?: User;
 

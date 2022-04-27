@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { BlockedOrderByWithRelationInput } from "../../../inputs/BlockedOrderByWithRelationInput";
+import { BlockedOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/BlockedOrderByWithRelationAndSearchRelevanceInput";
 import { BlockedWhereInput } from "../../../inputs/BlockedWhereInput";
 import { BlockedWhereUniqueInput } from "../../../inputs/BlockedWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateBlockedArgs {
   })
   where?: BlockedWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [BlockedOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: BlockedOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [BlockedOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: BlockedOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => BlockedWhereUniqueInput, {
     nullable: true,

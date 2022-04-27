@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { ProfileOrderByWithRelationInput } from "../../../inputs/ProfileOrderByWithRelationInput";
+import { ProfileOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/ProfileOrderByWithRelationAndSearchRelevanceInput";
 import { ProfileWhereInput } from "../../../inputs/ProfileWhereInput";
 import { ProfileWhereUniqueInput } from "../../../inputs/ProfileWhereUniqueInput";
 import { ProfileScalarFieldEnum } from "../../../../enums/ProfileScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindManyProfileArgs {
   })
   where?: ProfileWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [ProfileOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: ProfileOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [ProfileOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: ProfileOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => ProfileWhereUniqueInput, {
     nullable: true,

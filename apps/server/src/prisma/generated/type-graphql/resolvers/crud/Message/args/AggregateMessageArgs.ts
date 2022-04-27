@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { MessageOrderByWithRelationInput } from "../../../inputs/MessageOrderByWithRelationInput";
+import { MessageOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/MessageOrderByWithRelationAndSearchRelevanceInput";
 import { MessageWhereInput } from "../../../inputs/MessageWhereInput";
 import { MessageWhereUniqueInput } from "../../../inputs/MessageWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateMessageArgs {
   })
   where?: MessageWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [MessageOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: MessageOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [MessageOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: MessageOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => MessageWhereUniqueInput, {
     nullable: true,

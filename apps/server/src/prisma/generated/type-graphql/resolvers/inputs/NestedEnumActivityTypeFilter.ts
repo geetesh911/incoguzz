@@ -11,17 +11,32 @@ export class NestedEnumActivityTypeFilter {
   @TypeGraphQL.Field(_type => ActivityType, {
     nullable: true,
   })
-  equals?: "LIKED" | "COMMENTED" | "POSTED" | "SHARED" | undefined;
+  equals?:
+    | "REACTED"
+    | "COMMENTED"
+    | "POSTED"
+    | "SHARED"
+    | "VIEWED"
+    | "BOOKMARKED"
+    | undefined;
 
   @TypeGraphQL.Field(_type => [ActivityType], {
     nullable: true,
   })
-  in?: Array<"LIKED" | "COMMENTED" | "POSTED" | "SHARED"> | undefined;
+  in?:
+    | Array<
+        "REACTED" | "COMMENTED" | "POSTED" | "SHARED" | "VIEWED" | "BOOKMARKED"
+      >
+    | undefined;
 
   @TypeGraphQL.Field(_type => [ActivityType], {
     nullable: true,
   })
-  notIn?: Array<"LIKED" | "COMMENTED" | "POSTED" | "SHARED"> | undefined;
+  notIn?:
+    | Array<
+        "REACTED" | "COMMENTED" | "POSTED" | "SHARED" | "VIEWED" | "BOOKMARKED"
+      >
+    | undefined;
 
   @TypeGraphQL.Field(_type => NestedEnumActivityTypeFilter, {
     nullable: true,

@@ -386,10 +386,12 @@ Enum TokenType {
 }
 
 Enum ActivityType {
-  LIKED
+  REACTED
   COMMENTED
   POSTED
   SHARED
+  VIEWED
+  BOOKMARKED
 }
 
 Enum MessageMediaType {

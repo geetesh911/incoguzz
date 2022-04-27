@@ -21,12 +21,20 @@ import {
   IDeletePostReactionParams,
   IGetPostReactionParams,
 } from "../interfaces/reaction.interface";
-import { IGetPostParams } from "../interfaces/get-post.interface";
+import {
+  IGetPostParams,
+  IGetPostsParams,
+  IGetRelatedPostsRepoParams,
+} from "../interfaces/get-post.interface";
+import PaginationInput from "@/common/inputs/pagination.input";
+import { IMetaTag } from "@/common/interfaces/storage.interface";
 
 interface IReader {
-  getUserPosts: (params: IGetPostParams) => Promise<Post[]>;
-  getExplorePosts: (params: IGetPostParams) => Promise<Post[]>;
-  getBookmarkedPosts: (params: IGetPostParams) => Promise<Bookmark[]>;
+  getPost: (params: IGetPostParams) => Promise<Post>;
+  getUserPosts: (params: IGetPostsParams) => Promise<Post[]>;
+  getExplorePosts: (params: IGetPostsParams) => Promise<Post[]>;
+  getRelatedPosts: (params: IGetRelatedPostsRepoParams) => Promise<Post[]>;
+  getBookmarkedPosts: (params: IGetPostsParams) => Promise<Bookmark[]>;
   getPostReaction: (params: IGetPostReactionParams) => Promise<Reaction>;
 }
 interface IWriter {
@@ -69,16 +77,31 @@ class PostRepository extends BaseRepository implements TUserRepository {
     };
   }
 
-  public async getUserPosts({
-    userId,
-    paginationInput,
-  }: IGetPostParams): Promise<Post[]> {
+  private getPaginationArgs(
+    paginationInput: PaginationInput,
+  ): Pick<Prisma.PostFindManyArgs, "take" | "skip" | "cursor"> {
     const { take, firstQueryResult, cursor } = paginationInput;
 
-    return this.prisma.post.findMany({
+    return {
       take,
       skip: firstQueryResult ? 0 : 1,
       cursor: cursor && { id: cursor },
+    };
+  }
+
+  public async getPost({ postId, userId }: IGetPostParams): Promise<Post> {
+    return this.prisma.post.findUnique({
+      where: { id: postId },
+      include: this.getPostsIncludeArgs(userId),
+    });
+  }
+
+  public async getUserPosts({
+    userId,
+    paginationInput,
+  }: IGetPostsParams): Promise<Post[]> {
+    return this.prisma.post.findMany({
+      ...this.getPaginationArgs(paginationInput),
       where: { userId, archive: false },
       include: this.getPostsIncludeArgs(userId),
       orderBy: { createdAt: "desc" },
@@ -88,28 +111,50 @@ class PostRepository extends BaseRepository implements TUserRepository {
   public async getExplorePosts({
     userId,
     paginationInput,
-  }: IGetPostParams): Promise<Post[]> {
-    const { take, firstQueryResult, cursor } = paginationInput;
+  }: IGetPostsParams): Promise<Post[]> {
     return this.prisma.post.findMany({
-      take,
-      skip: firstQueryResult ? 0 : 1,
-      cursor: cursor && { id: cursor },
+      ...this.getPaginationArgs(paginationInput),
       where: {},
       include: this.getPostsIncludeArgs(userId),
       orderBy: { createdAt: "desc" },
     });
   }
 
+  public async getRelatedPosts({
+    userId,
+    paginationInput,
+    tags,
+    metaTags,
+  }: IGetRelatedPostsRepoParams): Promise<Post[]> {
+    metaTags = metaTags as IMetaTag[];
+
+    return this.prisma.post.findMany({
+      ...this.getPaginationArgs(paginationInput),
+      where: {
+        OR: [
+          ...tags.map(tag => ({ tags: { some: { name: tag.name } } })),
+          {
+            metaTags: {
+              path: "$[*].tag",
+              array_contains: metaTags?.map(
+                (metaTag: IMetaTag) => metaTag?.tag,
+              ),
+            },
+          },
+        ],
+      },
+      include: this.getPostsIncludeArgs(userId),
+      orderBy: { createdAt: "asc" },
+    });
+  }
+
   public async getBookmarkedPosts({
     userId,
     paginationInput,
-  }: IGetPostParams): Promise<Bookmark[]> {
-    const { take, firstQueryResult, cursor } = paginationInput;
+  }: IGetPostsParams): Promise<Bookmark[]> {
     return this.prisma.bookmark.findMany({
+      ...this.getPaginationArgs(paginationInput),
       where: { userId },
-      take,
-      skip: firstQueryResult ? 0 : 1,
-      cursor: cursor && { id: cursor },
       include: {
         post: { include: this.getPostsIncludeArgs(userId) },
       },

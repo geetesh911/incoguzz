@@ -2,7 +2,11 @@ import { MediaLimits } from "@/common/enums/media.enum";
 import MediaHelper from "@/common/helpers/media.helper";
 import PaginationHelper from "@/common/helpers/pagination.helper";
 import { IGetVideoThumbnail } from "@/common/interfaces/media.interface";
-import { IMetaData } from "@/common/interfaces/storage.interface";
+import {
+  IMetaData,
+  IMetaTag,
+  IUploadApiResponse,
+} from "@/common/interfaces/storage.interface";
 import {
   optimizeVideoExtensions,
   validAudioExtensions,
@@ -29,10 +33,14 @@ import {
   IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
 import { IBookmarkPostParams } from "./interfaces/bookmark.interface";
-import { IGetPostParams } from "./interfaces/get-post.interface";
+import {
+  IGetPostParams,
+  IGetPostsParams,
+  IGetRelatedPostsParams,
+} from "./interfaces/get-post.interface";
 import { IAddPostReactionParams } from "./interfaces/reaction.interface";
 import BookmarksOutput from "./outputs/bookmark.output";
-import GetPostsOutput from "./outputs/get-posts.output";
+import GetPostsOutput, { PostOutput } from "./outputs/get-posts.output";
 import ReactionOutput from "./outputs/reaction.output";
 import PostRepository from "./repositories/post.repository";
 
@@ -46,10 +54,17 @@ class PostService {
     private readonly paginationHelper: PaginationHelper,
   ) {}
 
+  public async getPost({
+    userId,
+    postId,
+  }: IGetPostParams): Promise<PostOutput> {
+    return this.postRepository.getPost({ userId, postId });
+  }
+
   public async getUserPosts({
     userId,
     paginationInput,
-  }: IGetPostParams): Promise<GetPostsOutput> {
+  }: IGetPostsParams): Promise<GetPostsOutput> {
     const posts = await this.postRepository.getUserPosts({
       userId,
       paginationInput,
@@ -69,7 +84,7 @@ class PostService {
   public async getBookmarkedPosts({
     userId,
     paginationInput,
-  }: IGetPostParams): Promise<BookmarksOutput> {
+  }: IGetPostsParams): Promise<BookmarksOutput> {
     const bookmarks = await this.postRepository.getBookmarkedPosts({
       paginationInput,
       userId,
@@ -88,11 +103,46 @@ class PostService {
   public async getExplorePosts({
     userId,
     paginationInput,
-  }: IGetPostParams): Promise<GetPostsOutput> {
+  }: IGetPostsParams): Promise<GetPostsOutput> {
     const posts = await this.postRepository.getExplorePosts({
       paginationInput,
       userId,
     });
+    return {
+      data: posts,
+      pagination: {
+        cursor: this.paginationHelper.getCursor<Post>({
+          results: posts,
+          key: "id",
+        }),
+      },
+    };
+  }
+
+  public async getRelatedPosts({
+    userId,
+    postId,
+    paginationInput,
+  }: IGetRelatedPostsParams): Promise<GetPostsOutput> {
+    const post = await this.postRepository.getPost({ postId, userId });
+
+    if (!post) {
+      return {
+        data: [],
+        pagination: {
+          cursor: null,
+        },
+      };
+    }
+
+    const posts = await this.postRepository.getRelatedPosts({
+      paginationInput,
+      userId,
+      postId,
+      tags: post.tags,
+      metaTags: post.metaTags,
+    });
+
     return {
       data: posts,
       pagination: {
@@ -317,7 +367,15 @@ class PostService {
         this.compressVideoMedia(media, mediaFiles),
         {
           containerName: AzureContainersEnum[addMediaPostInput.type],
-          onCompletion: async (_uploadResponse, fileUrls) => {
+          onCompletion: async (uploadResponse, fileUrls) => {
+            if (metaData?.metaTags?.length === 0) {
+              uploadResponse = uploadResponse as IUploadApiResponse[];
+              const photoMetaTags: IMetaTag[] = [];
+              uploadResponse?.map(response =>
+                photoMetaTags.push(...(response?.metadata?.metaTags || [])),
+              );
+              metaData.metaTags = photoMetaTags;
+            }
             const post = await this.postRepository.addMediaPost({
               userId,
               metaData,

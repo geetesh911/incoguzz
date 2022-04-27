@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { ActivityOrderByWithRelationInput } from "../../../inputs/ActivityOrderByWithRelationInput";
+import { ActivityOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/ActivityOrderByWithRelationAndSearchRelevanceInput";
 import { ActivityWhereInput } from "../../../inputs/ActivityWhereInput";
 import { ActivityWhereUniqueInput } from "../../../inputs/ActivityWhereUniqueInput";
 import { ActivityScalarFieldEnum } from "../../../../enums/ActivityScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindManyActivityArgs {
   })
   where?: ActivityWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [ActivityOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: ActivityOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [ActivityOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: ActivityOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => ActivityWhereUniqueInput, {
     nullable: true,

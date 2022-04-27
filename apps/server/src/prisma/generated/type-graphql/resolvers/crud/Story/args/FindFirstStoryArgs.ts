@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { StoryOrderByWithRelationInput } from "../../../inputs/StoryOrderByWithRelationInput";
+import { StoryOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/StoryOrderByWithRelationAndSearchRelevanceInput";
 import { StoryWhereInput } from "../../../inputs/StoryWhereInput";
 import { StoryWhereUniqueInput } from "../../../inputs/StoryWhereUniqueInput";
 import { StoryScalarFieldEnum } from "../../../../enums/StoryScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindFirstStoryArgs {
   })
   where?: StoryWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [StoryOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: StoryOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [StoryOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: StoryOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => StoryWhereUniqueInput, {
     nullable: true,

@@ -11,5 +11,12 @@ export class EnumActivityTypeFieldUpdateOperationsInput {
   @TypeGraphQL.Field(_type => ActivityType, {
     nullable: true,
   })
-  set?: "LIKED" | "COMMENTED" | "POSTED" | "SHARED" | undefined;
+  set?:
+    | "REACTED"
+    | "COMMENTED"
+    | "POSTED"
+    | "SHARED"
+    | "VIEWED"
+    | "BOOKMARKED"
+    | undefined;
 }

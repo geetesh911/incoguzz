@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { TokenOrderByWithRelationInput } from "../../../inputs/TokenOrderByWithRelationInput";
+import { TokenOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/TokenOrderByWithRelationAndSearchRelevanceInput";
 import { TokenWhereInput } from "../../../inputs/TokenWhereInput";
 import { TokenWhereUniqueInput } from "../../../inputs/TokenWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateTokenArgs {
   })
   where?: TokenWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [TokenOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: TokenOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [TokenOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: TokenOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => TokenWhereUniqueInput, {
     nullable: true,

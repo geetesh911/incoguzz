@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { AudioOrderByWithRelationInput } from "../../../inputs/AudioOrderByWithRelationInput";
+import { AudioOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/AudioOrderByWithRelationAndSearchRelevanceInput";
 import { AudioWhereInput } from "../../../inputs/AudioWhereInput";
 import { AudioWhereUniqueInput } from "../../../inputs/AudioWhereUniqueInput";
 import { AudioScalarFieldEnum } from "../../../../enums/AudioScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindFirstAudioArgs {
   })
   where?: AudioWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [AudioOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: AudioOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [AudioOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: AudioOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => AudioWhereUniqueInput, {
     nullable: true,

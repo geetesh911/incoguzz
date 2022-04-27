@@ -2691,7 +2691,7 @@ const inputsInfo = {
     "pollAnswers",
     "commentReplies",
   ],
-  UserOrderByWithRelationInput: [
+  UserOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "email",
     "username",
@@ -2726,6 +2726,7 @@ const inputsInfo = {
     "settings",
     "pollAnswers",
     "commentReplies",
+    "_relevance",
   ],
   UserWhereUniqueInput: ["id", "email", "username"],
   UserOrderByWithAggregationInput: [
@@ -2788,7 +2789,7 @@ const inputsInfo = {
     "user",
     "userId",
   ],
-  ProfileOrderByWithRelationInput: [
+  ProfileOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "nickname",
     "bio",
@@ -2802,6 +2803,7 @@ const inputsInfo = {
     "dpUrl",
     "user",
     "userId",
+    "_relevance",
   ],
   ProfileWhereUniqueInput: ["id", "mobileNo", "userId"],
   ProfileOrderByWithAggregationInput: [
@@ -2839,7 +2841,12 @@ const inputsInfo = {
     "userId",
   ],
   SettingsWhereInput: ["AND", "OR", "NOT", "id", "user", "userId"],
-  SettingsOrderByWithRelationInput: ["id", "user", "userId"],
+  SettingsOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "user",
+    "userId",
+    "_relevance",
+  ],
   SettingsWhereUniqueInput: ["id", "userId"],
   SettingsOrderByWithAggregationInput: [
     "id",
@@ -2867,7 +2874,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  TokenOrderByWithRelationInput: [
+  TokenOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "user",
     "userId",
@@ -2881,6 +2888,7 @@ const inputsInfo = {
     "country",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   TokenWhereUniqueInput: ["id", "token"],
   TokenOrderByWithAggregationInput: [
@@ -2929,7 +2937,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  BlockedOrderByWithRelationInput: [
+  BlockedOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "sourceUser",
     "sourceUserId",
@@ -2937,6 +2945,7 @@ const inputsInfo = {
     "targetUserId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   BlockedWhereUniqueInput: ["id"],
   BlockedOrderByWithAggregationInput: [
@@ -2990,7 +2999,7 @@ const inputsInfo = {
     "views",
     "metaTags",
   ],
-  PostOrderByWithRelationInput: [
+  PostOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "user",
     "userId",
@@ -3017,6 +3026,7 @@ const inputsInfo = {
     "message",
     "views",
     "metaTags",
+    "_relevance",
   ],
   PostWhereUniqueInput: ["id", "slug"],
   PostOrderByWithAggregationInput: [
@@ -3066,13 +3076,14 @@ const inputsInfo = {
     "pollOptions",
     "pollAnswers",
   ],
-  PollOrderByWithRelationInput: [
+  PollOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "question",
     "post",
     "postId",
     "pollOptions",
     "pollAnswers",
+    "_relevance",
   ],
   PollWhereUniqueInput: ["id", "postId"],
   PollOrderByWithAggregationInput: [
@@ -3101,12 +3112,13 @@ const inputsInfo = {
     "pollId",
     "pollAnswers",
   ],
-  PollOptionOrderByWithRelationInput: [
+  PollOptionOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "option",
     "poll",
     "pollId",
     "pollAnswers",
+    "_relevance",
   ],
   PollOptionWhereUniqueInput: ["id"],
   PollOptionOrderByWithAggregationInput: [
@@ -3137,7 +3149,7 @@ const inputsInfo = {
     "pollOption",
     "pollOptionId",
   ],
-  PollAnswerOrderByWithRelationInput: [
+  PollAnswerOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "user",
     "userId",
@@ -3145,6 +3157,7 @@ const inputsInfo = {
     "pollId",
     "pollOption",
     "pollOptionId",
+    "_relevance",
   ],
   PollAnswerWhereUniqueInput: ["id", "userId", "pollId", "pollOptionId"],
   PollAnswerOrderByWithAggregationInput: [
@@ -3166,7 +3179,13 @@ const inputsInfo = {
     "pollOptionId",
   ],
   PhotoWhereInput: ["AND", "OR", "NOT", "id", "url", "post", "postId"],
-  PhotoOrderByWithRelationInput: ["id", "url", "post", "postId"],
+  PhotoOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "url",
+    "post",
+    "postId",
+    "_relevance",
+  ],
   PhotoWhereUniqueInput: ["id"],
   PhotoOrderByWithAggregationInput: [
     "id",
@@ -3194,12 +3213,13 @@ const inputsInfo = {
     "post",
     "postId",
   ],
-  VideoOrderByWithRelationInput: [
+  VideoOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "thumbnailUrl",
     "url",
     "post",
     "postId",
+    "_relevance",
   ],
   VideoWhereUniqueInput: ["id", "postId"],
   VideoOrderByWithAggregationInput: [
@@ -3221,7 +3241,13 @@ const inputsInfo = {
     "postId",
   ],
   ClipAudioWhereInput: ["AND", "OR", "NOT", "id", "name", "audioUrl", "clips"],
-  ClipAudioOrderByWithRelationInput: ["id", "name", "audioUrl", "clips"],
+  ClipAudioOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "name",
+    "audioUrl",
+    "clips",
+    "_relevance",
+  ],
   ClipAudioWhereUniqueInput: ["id"],
   ClipAudioOrderByWithAggregationInput: [
     "id",
@@ -3251,7 +3277,7 @@ const inputsInfo = {
     "clipAudio",
     "clipAudioId",
   ],
-  ClipOrderByWithRelationInput: [
+  ClipOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "url",
     "post",
@@ -3259,6 +3285,7 @@ const inputsInfo = {
     "thumbnailUrl",
     "clipAudio",
     "clipAudioId",
+    "_relevance",
   ],
   ClipWhereUniqueInput: ["id", "postId"],
   ClipOrderByWithAggregationInput: [
@@ -3282,7 +3309,13 @@ const inputsInfo = {
     "clipAudioId",
   ],
   TextualWhereInput: ["AND", "OR", "NOT", "id", "text", "post", "postId"],
-  TextualOrderByWithRelationInput: ["id", "text", "post", "postId"],
+  TextualOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "text",
+    "post",
+    "postId",
+    "_relevance",
+  ],
   TextualWhereUniqueInput: ["id", "postId"],
   TextualOrderByWithAggregationInput: [
     "id",
@@ -3310,12 +3343,13 @@ const inputsInfo = {
     "postId",
     "thumbnailUrl",
   ],
-  AudioOrderByWithRelationInput: [
+  AudioOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "url",
     "post",
     "postId",
     "thumbnailUrl",
+    "_relevance",
   ],
   AudioWhereUniqueInput: ["id", "postId"],
   AudioOrderByWithAggregationInput: [
@@ -3337,12 +3371,23 @@ const inputsInfo = {
     "thumbnailUrl",
   ],
   TagWhereInput: ["AND", "OR", "NOT", "id", "name", "posts"],
-  TagOrderByWithRelationInput: ["id", "name", "posts"],
+  TagOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "name",
+    "posts",
+    "_relevance",
+  ],
   TagWhereUniqueInput: ["id", "name"],
   TagOrderByWithAggregationInput: ["id", "name", "_count", "_max", "_min"],
   TagScalarWhereWithAggregatesInput: ["AND", "OR", "NOT", "id", "name"],
   PlaceWhereInput: ["AND", "OR", "NOT", "id", "name", "address", "posts"],
-  PlaceOrderByWithRelationInput: ["id", "name", "address", "posts"],
+  PlaceOrderByWithRelationAndSearchRelevanceInput: [
+    "id",
+    "name",
+    "address",
+    "posts",
+    "_relevance",
+  ],
   PlaceWhereUniqueInput: ["id", "address"],
   PlaceOrderByWithAggregationInput: [
     "id",
@@ -3372,7 +3417,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  BookmarkOrderByWithRelationInput: [
+  BookmarkOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "post",
     "postId",
@@ -3380,6 +3425,7 @@ const inputsInfo = {
     "userId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   BookmarkWhereUniqueInput: ["id", "postId_userId"],
   BookmarkOrderByWithAggregationInput: [
@@ -3415,7 +3461,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  ReactionOrderByWithRelationInput: [
+  ReactionOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "post",
     "postId",
@@ -3424,6 +3470,7 @@ const inputsInfo = {
     "reaction",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   ReactionWhereUniqueInput: ["id", "postId_userId"],
   ReactionOrderByWithAggregationInput: [
@@ -3462,7 +3509,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  CommentOrderByWithRelationInput: [
+  CommentOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "comment",
     "post",
@@ -3472,6 +3519,7 @@ const inputsInfo = {
     "commentReplies",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   CommentWhereUniqueInput: ["id"],
   CommentOrderByWithAggregationInput: [
@@ -3509,7 +3557,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  CommentRepliesOrderByWithRelationInput: [
+  CommentRepliesOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "comment",
     "repliedTo",
@@ -3518,6 +3566,7 @@ const inputsInfo = {
     "userId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   CommentRepliesWhereUniqueInput: ["id"],
   CommentRepliesOrderByWithAggregationInput: [
@@ -3552,12 +3601,13 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  FollowerOrderByWithRelationInput: [
+  FollowerOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "user",
     "userId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   FollowerWhereUniqueInput: ["id"],
   FollowerOrderByWithAggregationInput: [
@@ -3588,12 +3638,13 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  FollowingOrderByWithRelationInput: [
+  FollowingOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "user",
     "userId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   FollowingWhereUniqueInput: ["id"],
   FollowingOrderByWithAggregationInput: [
@@ -3627,7 +3678,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  FollowRequestOrderByWithRelationInput: [
+  FollowRequestOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "message",
     "sourceUser",
@@ -3636,6 +3687,7 @@ const inputsInfo = {
     "targetUserId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   FollowRequestWhereUniqueInput: ["id"],
   FollowRequestOrderByWithAggregationInput: [
@@ -3682,7 +3734,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  MessageOrderByWithRelationInput: [
+  MessageOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "message",
     "mediaUrl",
@@ -3700,6 +3752,7 @@ const inputsInfo = {
     "mediaType",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   MessageWhereUniqueInput: ["id"],
   MessageOrderByWithAggregationInput: [
@@ -3747,7 +3800,7 @@ const inputsInfo = {
     "updatedAt",
     "message",
   ],
-  StoryOrderByWithRelationInput: [
+  StoryOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "mediaUrl",
     "link",
@@ -3756,6 +3809,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
     "message",
+    "_relevance",
   ],
   StoryWhereUniqueInput: ["id"],
   StoryOrderByWithAggregationInput: [
@@ -3793,7 +3847,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
-  ActivityOrderByWithRelationInput: [
+  ActivityOrderByWithRelationAndSearchRelevanceInput: [
     "id",
     "type",
     "user",
@@ -3802,6 +3856,7 @@ const inputsInfo = {
     "postId",
     "createdAt",
     "updatedAt",
+    "_relevance",
   ],
   ActivityWhereUniqueInput: ["id"],
   ActivityOrderByWithAggregationInput: [
@@ -4418,6 +4473,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
   ],
   StringNullableFilter: [
@@ -4431,6 +4487,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
   ],
   EnumRoleFilter: ["equals", "in", "notIn", "not"],
@@ -4468,6 +4525,7 @@ const inputsInfo = {
   BlockedOrderByRelationAggregateInput: ["_count"],
   PollAnswerOrderByRelationAggregateInput: ["_count"],
   CommentRepliesOrderByRelationAggregateInput: ["_count"],
+  UserOrderByRelevanceInput: ["fields", "sort", "search"],
   UserCountOrderByAggregateInput: [
     "id",
     "email",
@@ -4532,6 +4590,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
     "_count",
     "_min",
@@ -4548,6 +4607,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
     "_count",
     "_min",
@@ -4614,6 +4674,7 @@ const inputsInfo = {
   EnumInterestedInTypesNullableFilter: ["equals", "in", "notIn", "not"],
   EnumRelationshipStatusNullableFilter: ["equals", "in", "notIn", "not"],
   UserRelationFilter: ["is", "isNot"],
+  ProfileOrderByRelevanceInput: ["fields", "sort", "search"],
   ProfileCountOrderByAggregateInput: [
     "id",
     "nickname",
@@ -4696,10 +4757,12 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  SettingsOrderByRelevanceInput: ["fields", "sort", "search"],
   SettingsCountOrderByAggregateInput: ["id", "userId"],
   SettingsMaxOrderByAggregateInput: ["id", "userId"],
   SettingsMinOrderByAggregateInput: ["id", "userId"],
   EnumTokenTypeFilter: ["equals", "in", "notIn", "not"],
+  TokenOrderByRelevanceInput: ["fields", "sort", "search"],
   TokenCountOrderByAggregateInput: [
     "id",
     "userId",
@@ -4751,6 +4814,7 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  BlockedOrderByRelevanceInput: ["fields", "sort", "search"],
   BlockedCountOrderByAggregateInput: [
     "id",
     "sourceUserId",
@@ -4781,9 +4845,24 @@ const inputsInfo = {
   ClipRelationFilter: ["is", "isNot"],
   TextualRelationFilter: ["is", "isNot"],
   AudioRelationFilter: ["is", "isNot"],
-  JsonNullableFilter: ["equals", "not"],
+  JsonNullableFilter: [
+    "equals",
+    "path",
+    "string_contains",
+    "string_starts_with",
+    "string_ends_with",
+    "array_contains",
+    "array_starts_with",
+    "array_ends_with",
+    "lt",
+    "lte",
+    "gt",
+    "gte",
+    "not",
+  ],
   TagOrderByRelationAggregateInput: ["_count"],
   PhotoOrderByRelationAggregateInput: ["_count"],
+  PostOrderByRelevanceInput: ["fields", "sort", "search"],
   PostCountOrderByAggregateInput: [
     "id",
     "userId",
@@ -4835,17 +4914,37 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
-  JsonNullableWithAggregatesFilter: ["equals", "not", "_count", "_min", "_max"],
+  JsonNullableWithAggregatesFilter: [
+    "equals",
+    "path",
+    "string_contains",
+    "string_starts_with",
+    "string_ends_with",
+    "array_contains",
+    "array_starts_with",
+    "array_ends_with",
+    "lt",
+    "lte",
+    "gt",
+    "gte",
+    "not",
+    "_count",
+    "_min",
+    "_max",
+  ],
   PostRelationFilter: ["is", "isNot"],
   PollOptionListRelationFilter: ["every", "some", "none"],
   PollOptionOrderByRelationAggregateInput: ["_count"],
+  PollOrderByRelevanceInput: ["fields", "sort", "search"],
   PollCountOrderByAggregateInput: ["id", "question", "postId"],
   PollMaxOrderByAggregateInput: ["id", "question", "postId"],
   PollMinOrderByAggregateInput: ["id", "question", "postId"],
+  PollOptionOrderByRelevanceInput: ["fields", "sort", "search"],
   PollOptionCountOrderByAggregateInput: ["id", "option", "pollId"],
   PollOptionMaxOrderByAggregateInput: ["id", "option", "pollId"],
   PollOptionMinOrderByAggregateInput: ["id", "option", "pollId"],
   PollOptionRelationFilter: ["is", "isNot"],
+  PollAnswerOrderByRelevanceInput: ["fields", "sort", "search"],
   PollAnswerCountOrderByAggregateInput: [
     "id",
     "userId",
@@ -4864,18 +4963,22 @@ const inputsInfo = {
     "pollId",
     "pollOptionId",
   ],
+  PhotoOrderByRelevanceInput: ["fields", "sort", "search"],
   PhotoCountOrderByAggregateInput: ["id", "url", "postId"],
   PhotoMaxOrderByAggregateInput: ["id", "url", "postId"],
   PhotoMinOrderByAggregateInput: ["id", "url", "postId"],
+  VideoOrderByRelevanceInput: ["fields", "sort", "search"],
   VideoCountOrderByAggregateInput: ["id", "thumbnailUrl", "url", "postId"],
   VideoMaxOrderByAggregateInput: ["id", "thumbnailUrl", "url", "postId"],
   VideoMinOrderByAggregateInput: ["id", "thumbnailUrl", "url", "postId"],
   ClipListRelationFilter: ["every", "some", "none"],
   ClipOrderByRelationAggregateInput: ["_count"],
+  ClipAudioOrderByRelevanceInput: ["fields", "sort", "search"],
   ClipAudioCountOrderByAggregateInput: ["id", "name", "audioUrl"],
   ClipAudioMaxOrderByAggregateInput: ["id", "name", "audioUrl"],
   ClipAudioMinOrderByAggregateInput: ["id", "name", "audioUrl"],
   ClipAudioRelationFilter: ["is", "isNot"],
+  ClipOrderByRelevanceInput: ["fields", "sort", "search"],
   ClipCountOrderByAggregateInput: [
     "id",
     "url",
@@ -4897,18 +5000,23 @@ const inputsInfo = {
     "thumbnailUrl",
     "clipAudioId",
   ],
+  TextualOrderByRelevanceInput: ["fields", "sort", "search"],
   TextualCountOrderByAggregateInput: ["id", "text", "postId"],
   TextualMaxOrderByAggregateInput: ["id", "text", "postId"],
   TextualMinOrderByAggregateInput: ["id", "text", "postId"],
+  AudioOrderByRelevanceInput: ["fields", "sort", "search"],
   AudioCountOrderByAggregateInput: ["id", "url", "postId", "thumbnailUrl"],
   AudioMaxOrderByAggregateInput: ["id", "url", "postId", "thumbnailUrl"],
   AudioMinOrderByAggregateInput: ["id", "url", "postId", "thumbnailUrl"],
+  TagOrderByRelevanceInput: ["fields", "sort", "search"],
   TagCountOrderByAggregateInput: ["id", "name"],
   TagMaxOrderByAggregateInput: ["id", "name"],
   TagMinOrderByAggregateInput: ["id", "name"],
+  PlaceOrderByRelevanceInput: ["fields", "sort", "search"],
   PlaceCountOrderByAggregateInput: ["id", "name", "address"],
   PlaceMaxOrderByAggregateInput: ["id", "name", "address"],
   PlaceMinOrderByAggregateInput: ["id", "name", "address"],
+  BookmarkOrderByRelevanceInput: ["fields", "sort", "search"],
   BookmarkPostIdUserIdCompoundUniqueInput: ["postId", "userId"],
   BookmarkCountOrderByAggregateInput: [
     "id",
@@ -4932,6 +5040,7 @@ const inputsInfo = {
     "updatedAt",
   ],
   EnumReactionTypeFilter: ["equals", "in", "notIn", "not"],
+  ReactionOrderByRelevanceInput: ["fields", "sort", "search"],
   ReactionPostIdUserIdCompoundUniqueInput: ["postId", "userId"],
   ReactionCountOrderByAggregateInput: [
     "id",
@@ -4966,6 +5075,7 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  CommentOrderByRelevanceInput: ["fields", "sort", "search"],
   CommentCountOrderByAggregateInput: [
     "id",
     "comment",
@@ -4991,6 +5101,7 @@ const inputsInfo = {
     "updatedAt",
   ],
   CommentRelationFilter: ["is", "isNot"],
+  CommentRepliesOrderByRelevanceInput: ["fields", "sort", "search"],
   CommentRepliesCountOrderByAggregateInput: [
     "id",
     "comment",
@@ -5015,6 +5126,7 @@ const inputsInfo = {
     "createdAt",
     "updatedAt",
   ],
+  FollowerOrderByRelevanceInput: ["fields", "sort", "search"],
   FollowerCountOrderByAggregateInput: [
     "id",
     "userId",
@@ -5023,6 +5135,7 @@ const inputsInfo = {
   ],
   FollowerMaxOrderByAggregateInput: ["id", "userId", "createdAt", "updatedAt"],
   FollowerMinOrderByAggregateInput: ["id", "userId", "createdAt", "updatedAt"],
+  FollowingOrderByRelevanceInput: ["fields", "sort", "search"],
   FollowingCountOrderByAggregateInput: [
     "id",
     "userId",
@@ -5031,6 +5144,7 @@ const inputsInfo = {
   ],
   FollowingMaxOrderByAggregateInput: ["id", "userId", "createdAt", "updatedAt"],
   FollowingMinOrderByAggregateInput: ["id", "userId", "createdAt", "updatedAt"],
+  FollowRequestOrderByRelevanceInput: ["fields", "sort", "search"],
   FollowRequestCountOrderByAggregateInput: [
     "id",
     "message",
@@ -5058,6 +5172,7 @@ const inputsInfo = {
   StoryRelationFilter: ["is", "isNot"],
   MessageRelationFilter: ["is", "isNot"],
   EnumMessageMediaTypeFilter: ["equals", "in", "notIn", "not"],
+  MessageOrderByRelevanceInput: ["fields", "sort", "search"],
   MessageCountOrderByAggregateInput: [
     "id",
     "message",
@@ -5106,6 +5221,7 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
+  StoryOrderByRelevanceInput: ["fields", "sort", "search"],
   StoryCountOrderByAggregateInput: [
     "id",
     "mediaUrl",
@@ -5131,6 +5247,7 @@ const inputsInfo = {
     "updatedAt",
   ],
   EnumActivityTypeFilter: ["equals", "in", "notIn", "not"],
+  ActivityOrderByRelevanceInput: ["fields", "sort", "search"],
   ActivityCountOrderByAggregateInput: [
     "id",
     "type",
@@ -6370,6 +6487,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
   ],
   NestedStringNullableFilter: [
@@ -6383,6 +6501,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
   ],
   NestedEnumRoleFilter: ["equals", "in", "notIn", "not"],
@@ -6410,6 +6529,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
     "_count",
     "_min",
@@ -6426,6 +6546,7 @@ const inputsInfo = {
     "contains",
     "startsWith",
     "endsWith",
+    "search",
     "not",
     "_count",
     "_min",
@@ -6562,7 +6683,21 @@ const inputsInfo = {
     "_min",
     "_max",
   ],
-  NestedJsonNullableFilter: ["equals", "not"],
+  NestedJsonNullableFilter: [
+    "equals",
+    "path",
+    "string_contains",
+    "string_starts_with",
+    "string_ends_with",
+    "array_contains",
+    "array_starts_with",
+    "array_ends_with",
+    "lt",
+    "lte",
+    "gt",
+    "gte",
+    "not",
+  ],
   NestedEnumReactionTypeFilter: ["equals", "in", "notIn", "not"],
   NestedEnumReactionTypeWithAggregatesFilter: [
     "equals",

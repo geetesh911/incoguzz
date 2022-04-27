@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { PlaceOrderByWithRelationInput } from "../../../inputs/PlaceOrderByWithRelationInput";
+import { PlaceOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/PlaceOrderByWithRelationAndSearchRelevanceInput";
 import { PlaceWhereInput } from "../../../inputs/PlaceWhereInput";
 import { PlaceWhereUniqueInput } from "../../../inputs/PlaceWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregatePlaceArgs {
   })
   where?: PlaceWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [PlaceOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: PlaceOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [PlaceOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: PlaceOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => PlaceWhereUniqueInput, {
     nullable: true,

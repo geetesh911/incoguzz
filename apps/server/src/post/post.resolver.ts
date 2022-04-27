@@ -7,16 +7,27 @@ import PostService from "./post.service";
 import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
 import AddClipPostArgs from "./args/add-clip-post.args";
 import AddMediaPostArgs from "./args/add-media-post.args";
-import GetPostsOutput from "./outputs/get-posts.output";
+import GetPostsOutput, { PostOutput } from "./outputs/get-posts.output";
 import PaginationInput from "@/common/inputs/pagination.input";
 import PostReactionInput from "./inputs/post-reaction.input";
 import ReactionOutput from "./outputs/reaction.output";
 import BookmarksOutput, { BookmarkPostOutput } from "./outputs/bookmark.output";
+import GetRelatedPostsArgs from "./args/get-post.args";
 
 @Service()
 @Resolver(() => Post)
 export class PostResolver {
   constructor(private readonly postService: PostService) {}
+
+  @Authorized()
+  @Query(() => PostOutput)
+  async getPost(
+    @Ctx() { user }: Context,
+    @Arg("postId", () => String)
+    postId: string,
+  ): Promise<PostOutput> {
+    return this.postService.getPost({ userId: user.userId, postId });
+  }
 
   @Authorized()
   @Query(() => GetPostsOutput)
@@ -41,6 +52,19 @@ export class PostResolver {
     return this.postService.getExplorePosts({
       userId: user.userId,
       paginationInput,
+    });
+  }
+
+  @Authorized()
+  @Query(() => GetPostsOutput)
+  async getRelatedPosts(
+    @Ctx() { user }: Context,
+    @Args() { paginationInput, postId }: GetRelatedPostsArgs,
+  ): Promise<GetPostsOutput> {
+    return this.postService.getRelatedPosts({
+      userId: user.userId,
+      paginationInput,
+      postId,
     });
   }
 

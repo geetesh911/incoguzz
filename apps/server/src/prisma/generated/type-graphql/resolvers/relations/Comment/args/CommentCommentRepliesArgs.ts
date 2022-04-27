@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { CommentRepliesOrderByWithRelationInput } from "../../../inputs/CommentRepliesOrderByWithRelationInput";
+import { CommentRepliesOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/CommentRepliesOrderByWithRelationAndSearchRelevanceInput";
 import { CommentRepliesWhereInput } from "../../../inputs/CommentRepliesWhereInput";
 import { CommentRepliesWhereUniqueInput } from "../../../inputs/CommentRepliesWhereUniqueInput";
 import { CommentRepliesScalarFieldEnum } from "../../../../enums/CommentRepliesScalarFieldEnum";
@@ -12,10 +12,15 @@ export class CommentCommentRepliesArgs {
   })
   where?: CommentRepliesWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [CommentRepliesOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: CommentRepliesOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [CommentRepliesOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?:
+    | CommentRepliesOrderByWithRelationAndSearchRelevanceInput[]
+    | undefined;
 
   @TypeGraphQL.Field(_type => CommentRepliesWhereUniqueInput, {
     nullable: true,

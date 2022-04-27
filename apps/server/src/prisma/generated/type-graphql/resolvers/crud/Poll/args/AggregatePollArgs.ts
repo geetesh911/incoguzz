@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { PollOrderByWithRelationInput } from "../../../inputs/PollOrderByWithRelationInput";
+import { PollOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/PollOrderByWithRelationAndSearchRelevanceInput";
 import { PollWhereInput } from "../../../inputs/PollWhereInput";
 import { PollWhereUniqueInput } from "../../../inputs/PollWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregatePollArgs {
   })
   where?: PollWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [PollOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: PollOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [PollOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: PollOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => PollWhereUniqueInput, {
     nullable: true,

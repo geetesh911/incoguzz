@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { CommentOrderByWithRelationInput } from "../../../inputs/CommentOrderByWithRelationInput";
+import { CommentOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/CommentOrderByWithRelationAndSearchRelevanceInput";
 import { CommentWhereInput } from "../../../inputs/CommentWhereInput";
 import { CommentWhereUniqueInput } from "../../../inputs/CommentWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateCommentArgs {
   })
   where?: CommentWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [CommentOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: CommentOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [CommentOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: CommentOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => CommentWhereUniqueInput, {
     nullable: true,

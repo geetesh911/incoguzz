@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { BookmarkOrderByWithRelationInput } from "../../../inputs/BookmarkOrderByWithRelationInput";
+import { BookmarkOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/BookmarkOrderByWithRelationAndSearchRelevanceInput";
 import { BookmarkWhereInput } from "../../../inputs/BookmarkWhereInput";
 import { BookmarkWhereUniqueInput } from "../../../inputs/BookmarkWhereUniqueInput";
 
@@ -11,10 +11,13 @@ export class AggregateBookmarkArgs {
   })
   where?: BookmarkWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [BookmarkOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: BookmarkOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [BookmarkOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: BookmarkOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => BookmarkWhereUniqueInput, {
     nullable: true,

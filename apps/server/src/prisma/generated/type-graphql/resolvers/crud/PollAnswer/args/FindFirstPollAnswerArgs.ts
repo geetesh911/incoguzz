@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { PollAnswerOrderByWithRelationInput } from "../../../inputs/PollAnswerOrderByWithRelationInput";
+import { PollAnswerOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/PollAnswerOrderByWithRelationAndSearchRelevanceInput";
 import { PollAnswerWhereInput } from "../../../inputs/PollAnswerWhereInput";
 import { PollAnswerWhereUniqueInput } from "../../../inputs/PollAnswerWhereUniqueInput";
 import { PollAnswerScalarFieldEnum } from "../../../../enums/PollAnswerScalarFieldEnum";
@@ -12,10 +12,13 @@ export class FindFirstPollAnswerArgs {
   })
   where?: PollAnswerWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [PollAnswerOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: PollAnswerOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [PollAnswerOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?: PollAnswerOrderByWithRelationAndSearchRelevanceInput[] | undefined;
 
   @TypeGraphQL.Field(_type => PollAnswerWhereUniqueInput, {
     nullable: true,

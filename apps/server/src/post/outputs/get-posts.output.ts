@@ -12,8 +12,6 @@ import {
   Textual,
   Video,
 } from "@/prisma/generated/type-graphql";
-import { Prisma } from "@prisma/client";
-import { JSONResolver } from "graphql-scalars";
 import { Field, Int, ObjectType } from "type-graphql";
 import ClipOutput from "./clip.output";
 import PollOutput from "./poll.output";
@@ -80,14 +78,14 @@ export class PostOutput {
   @Field(() => Int, { nullable: false })
   views?: number;
 
-  @Field(() => JSONResolver, { nullable: false })
-  metaTags?: Prisma.JsonValue;
-
   @Field(() => PostCount, { nullable: true })
   _count?: PostCount | null;
 }
 
 @ObjectType()
 class GetPostsOutput extends PaginatedResponse(PostOutput) {}
+
+@ObjectType()
+export class GetPostOutput extends PostOutput {}
 
 export default GetPostsOutput;

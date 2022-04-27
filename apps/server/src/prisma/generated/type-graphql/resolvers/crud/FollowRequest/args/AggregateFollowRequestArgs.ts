@@ -1,6 +1,6 @@
 import * as TypeGraphQL from "type-graphql";
 import * as GraphQLScalars from "graphql-scalars";
-import { FollowRequestOrderByWithRelationInput } from "../../../inputs/FollowRequestOrderByWithRelationInput";
+import { FollowRequestOrderByWithRelationAndSearchRelevanceInput } from "../../../inputs/FollowRequestOrderByWithRelationAndSearchRelevanceInput";
 import { FollowRequestWhereInput } from "../../../inputs/FollowRequestWhereInput";
 import { FollowRequestWhereUniqueInput } from "../../../inputs/FollowRequestWhereUniqueInput";
 
@@ -11,10 +11,15 @@ export class AggregateFollowRequestArgs {
   })
   where?: FollowRequestWhereInput | undefined;
 
-  @TypeGraphQL.Field(_type => [FollowRequestOrderByWithRelationInput], {
-    nullable: true,
-  })
-  orderBy?: FollowRequestOrderByWithRelationInput[] | undefined;
+  @TypeGraphQL.Field(
+    _type => [FollowRequestOrderByWithRelationAndSearchRelevanceInput],
+    {
+      nullable: true,
+    },
+  )
+  orderBy?:
+    | FollowRequestOrderByWithRelationAndSearchRelevanceInput[]
+    | undefined;
 
   @TypeGraphQL.Field(_type => FollowRequestWhereUniqueInput, {
     nullable: true,

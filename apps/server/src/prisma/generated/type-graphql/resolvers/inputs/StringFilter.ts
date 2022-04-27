@@ -58,6 +58,11 @@ export class StringFilter {
   })
   endsWith?: string | undefined;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  search?: string | undefined;
+
   @TypeGraphQL.Field(_type => NestedStringFilter, {
     nullable: true,
   })
