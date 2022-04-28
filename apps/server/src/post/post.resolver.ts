@@ -20,6 +20,18 @@ export class PostResolver {
   constructor(private readonly postService: PostService) {}
 
   @Authorized()
+  @Query(() => Boolean)
+  async trainSimilarPostRecommender(): Promise<boolean> {
+    return this.postService.trainSimilarPostRecommender();
+  }
+
+  @Authorized()
+  @Query(() => Boolean)
+  async trainSimilarPostRecommenderWithSinglePost(): Promise<boolean> {
+    return this.postService.trainSimilarPostRecommenderWithSinglePost();
+  }
+
+  @Authorized()
   @Query(() => PostOutput)
   async getPost(
     @Ctx() { user }: Context,

@@ -1,5 +1,4 @@
 import { PrismaClient, Prisma } from "@prisma/client";
-// import { logger } from "../utils/logger";
 import faker from "@faker-js/faker";
 import fs from "fs";
 import { IUser } from "./scrapedData/interfaces/usersData.interface";

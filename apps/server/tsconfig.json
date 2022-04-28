@@ -50,6 +50,6 @@
       "@generated*": ["prisma/generated/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.json", ".env"],
+  "include": ["src/**/*.ts", "src/**/*.json", ".env", "decs.d.ts"],
   "exclude": ["node_modules"]
 }

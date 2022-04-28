@@ -355,6 +355,8 @@ type Query {
   getUserPosts(paginationInput: PaginationInput!): GetPostsOutput!
   isUsernameAvailable(username: String!): Boolean
   test: String!
+  trainSimilarPostRecommender: Boolean!
+  trainSimilarPostRecommenderWithSinglePost: Boolean!
   verifyAccessToken(accessToken: String!): Boolean
 }
 

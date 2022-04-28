@@ -30,6 +30,7 @@ import PaginationInput from "@/common/inputs/pagination.input";
 import { IMetaTag } from "@/common/interfaces/storage.interface";
 
 interface IReader {
+  getAllPosts: () => Promise<Post[]>;
   getPost: (params: IGetPostParams) => Promise<Post>;
   getUserPosts: (params: IGetPostsParams) => Promise<Post[]>;
   getExplorePosts: (params: IGetPostsParams) => Promise<Post[]>;
@@ -93,6 +94,13 @@ class PostRepository extends BaseRepository implements TUserRepository {
     return this.prisma.post.findUnique({
       where: { id: postId },
       include: this.getPostsIncludeArgs(userId),
+    });
+  }
+
+  public async getAllPosts(): Promise<Post[]> {
+    return this.prisma.post.findMany({
+      where: {},
+      include: { tags: true },
     });
   }
 
