@@ -18,7 +18,7 @@ import {
   ApolloServerPluginLandingPageGraphQLPlayground,
 } from "apollo-server-core";
 import http, { Server } from "http";
-import { dbConnection } from "@databases";
+import { mongodbConnection } from "@databases";
 import { Routes } from "@/common/interfaces/routes.interface";
 import { errorMiddleware } from "@/common/middlewares/error.middleware";
 import { logger, stream } from "@utils/logger";
@@ -88,12 +88,16 @@ class App {
     return this.app;
   }
 
-  private connectToDatabase() {
+  private async connectToDatabase() {
     if (this.env !== "production") {
       set("debug", true);
     }
 
-    connect(dbConnection.url);
+    const conn = await connect(mongodbConnection.url);
+
+    console.log(
+      `MongoDB ${conn.connection.readyState === 1 ? "connected" : "error"}`,
+    );
   }
 
   private initializeMiddlewares() {

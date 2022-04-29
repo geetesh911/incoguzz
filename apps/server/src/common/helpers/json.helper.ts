@@ -55,7 +55,7 @@ export class JsonHelper {
     return this.parse<T>(stream, jsonType);
   }
 
-  public stringify(data: object): Promise<string> {
+  public stringify<T = object>(data: T): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       let stringified = "";
 
@@ -81,12 +81,15 @@ export class JsonHelper {
     });
   }
 
-  public async stringfyBuffer(data: object): Promise<Buffer> {
+  public async stringfyBuffer<T = object>(data: T): Promise<Buffer> {
     const stringified = await this.stringify(data);
     return Buffer.from(stringified);
   }
 
-  public async stringfyFs(data: object, filePath: string): Promise<void> {
+  public async stringfyFs<T = object>(
+    data: T,
+    filePath: string,
+  ): Promise<void> {
     const stringified = await this.stringify(data);
     await fs.promises.writeFile(filePath, stringified);
   }

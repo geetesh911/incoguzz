@@ -45,16 +45,15 @@ import ReactionOutput from "./outputs/reaction.output";
 import PostRepository from "./repositories/post.repository";
 import { SimilarPostsRecommenderService } from "./services/similar-post-recommender.service";
 import { Prisma } from "@prisma/client";
-import fs from "fs";
-import path from "path";
 import { nanoid } from "nanoid";
-import { IExport } from "./interfaces/similar-post-recommender.interface";
 import { JsonHelper } from "@/common/helpers/json.helper";
-import { JsonType } from "@/common/interfaces/json.interface";
+import { SimilarPostRepository } from "./repositories/similarPost.repository";
+
 @Service()
 class PostService {
   constructor(
     private readonly postRepository: PostRepository,
+    private readonly similarPostRepository: SimilarPostRepository,
     private readonly storageService: StorageService,
     private readonly mediaService: MediaService,
     private readonly mediaHelper: MediaHelper,
@@ -86,68 +85,16 @@ class PostService {
 
     this.similarPostsRecommenderService.train(documents);
 
-    const { data, processedDocs, docVectors } =
-      this.similarPostsRecommenderService.export();
+    const exportedData = this.similarPostsRecommenderService.export();
 
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "../../../trainedRecommenderData.json"),
-      await this.jsonHelper.stringify(data),
-    );
-
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "../../../trainedRecommenderProcessedDocs.json"),
-      await this.jsonHelper.stringify(processedDocs),
-    );
-
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "../../../trainedRecommenderDocVectors.json"),
-      await this.jsonHelper.stringify(docVectors),
-    );
+    await this.similarPostRepository.saveTrainingExportedData(exportedData);
 
     return true;
   }
 
   public async trainSimilarPostRecommenderWithSinglePost(): Promise<boolean> {
-    const trainedData = await new Promise<IExport["data"]>(async resolve => {
-      const data = await fs.promises.readFile(
-        path.resolve(__dirname, "../../../trainedRecommenderData.json"),
-        "utf8",
-      );
-
-      const output: IExport["data"] = await this.jsonHelper.parseBuffer<
-        IExport["data"]
-      >(data);
-      resolve(output);
-    });
-    const processedDocs = await new Promise<IExport["processedDocs"]>(
-      async resolve => {
-        const data = await fs.promises.readFile(
-          path.resolve(
-            __dirname,
-            "../../../trainedRecommenderProcessedDocs.json",
-          ),
-          "utf8",
-        );
-        const output: IExport["processedDocs"] =
-          await this.jsonHelper.parseBuffer<IExport["processedDocs"]>(
-            data,
-            JsonType.array,
-          );
-        resolve(output);
-      },
-    );
-    const docVectors = await new Promise<IExport["docVectors"]>(
-      async resolve => {
-        const data = await fs.promises.readFile(
-          path.resolve(__dirname, "../../../trainedRecommenderDocVectors.json"),
-          "utf8",
-        );
-        const output: IExport["docVectors"] = await this.jsonHelper.parseBuffer<
-          IExport["docVectors"]
-        >(data, JsonType.array);
-        resolve(output);
-      },
-    );
+    const { trainedData, processedDocs, docVectors } =
+      await this.similarPostRepository.getTrainingData();
 
     const document = {
       id: nanoid(),
@@ -155,28 +102,41 @@ class PostService {
     };
 
     this.similarPostsRecommenderService.import({
-      data: trainedData,
+      data: {},
+      trainedData,
       processedDocs,
       docVectors,
     });
-    this.similarPostsRecommenderService.trainWithSingleDoc(document);
 
-    const trainedRecommenderData = this.similarPostsRecommenderService.export();
+    const data =
+      this.similarPostsRecommenderService.trainWithSingleDoc(document);
 
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "./trainedRecommenderData.json"),
-      await this.jsonHelper.stringify(trainedRecommenderData.data),
+    await this.similarPostRepository.createNewTrainindDataEntry(data);
+
+    const scoreMap = new Map<string, number>();
+    const ids = data.trainedDataEntry.similarPosts.map(post => {
+      scoreMap.set(post.id, post.score);
+      return post.id;
+    });
+    const entries = await this.similarPostRepository.getTrainingDataEntries(
+      ids,
     );
+    console.log(entries);
 
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "../../../trainedRecommenderProcessedDocs.json"),
-      await this.jsonHelper.stringify(trainedRecommenderData.processedDocs),
-    );
+    const updatedEntries = entries.map(entry => ({
+      ...entry,
+      similarPosts: [
+        ...entry.similarPosts,
+        {
+          id: data.trainedDataEntry.id,
+          score: scoreMap.get(entry.id),
+        },
+      ].sort((a, b) => b.score - a.score),
+    }));
 
-    await fs.promises.writeFile(
-      path.resolve(__dirname, "../../../trainedRecommenderDocVectors.json"),
-      await this.jsonHelper.stringify(trainedRecommenderData.docVectors),
-    );
+    await this.similarPostRepository.updateExistingEntries(updatedEntries);
+
+    console.log(data, data.trainedDataEntry, updatedEntries);
 
     return true;
   }

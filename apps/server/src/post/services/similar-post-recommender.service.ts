@@ -11,6 +11,9 @@ import {
   IExport,
   IProcessedDocument,
   IDocumentVector,
+  ITrainedData,
+  TrainedData,
+  ISingleDocumentEntry,
 } from "../interfaces/similar-post-recommender.interface";
 import { Service } from "typedi";
 import { logger } from "@/utils/logger";
@@ -21,6 +24,7 @@ const tokenizer = new natural.WordTokenizer();
 @Service()
 export class SimilarPostsRecommenderService {
   private data: IData = {};
+  private trainedData: ITrainedData = [];
   private processedDocs: IProcessedDocument[] = [];
   private docVectors: IDocumentVector[] = [];
   private options: IOptions = {
@@ -80,12 +84,15 @@ export class SimilarPostsRecommenderService {
     );
 
     // step 3 - calculate similarities
-    this.data = this._calculateSimilarities(this.docVectors, this.options);
+    this.trainedData = this._calculateSimilarities(
+      this.docVectors,
+      this.options,
+    );
 
     logger.info(`Training Completed`);
   }
 
-  public trainWithSingleDoc(document: IDocument) {
+  public trainWithSingleDoc(document: IDocument): ISingleDocumentEntry {
     logger.info(`Training Started`);
 
     this.validateDocument(document);
@@ -99,16 +106,20 @@ export class SimilarPostsRecommenderService {
     const docVector = this._produceWordVector(processedDoc, this.options, true);
 
     // step 3 - calculate similarities
-    const data = this._calculateSimilarityForSingleDoc(
+    const trainedDataEntry = this._calculateSimilarityForSingleDoc(
       this.docVectors,
       docVector,
       processedDoc,
       this.options,
     );
 
-    console.log(data);
-
     logger.info(`Training Completed`);
+
+    return {
+      trainedDataEntry,
+      docVector,
+      processedDoc,
+    };
   }
 
   public trainBidirectional(
@@ -161,6 +172,7 @@ export class SimilarPostsRecommenderService {
     return {
       options: this.options,
       data: this.data,
+      trainedData: this.trainedData,
       docVectors: this.docVectors,
       processedDocs: this.processedDocs,
     };
@@ -171,6 +183,7 @@ export class SimilarPostsRecommenderService {
 
     options && this.setOptions(options);
     this.data = data;
+    this.trainedData = this.trainedData;
     this.docVectors = docVectors;
     this.processedDocs = processedDocs;
   }
@@ -345,11 +358,26 @@ export class SimilarPostsRecommenderService {
     }, {});
   }
 
+  private initializeDataHashAndIndexMap(
+    documentVectors: IDocumentVector[],
+  ): [ITrainedData, Map<string, number>] {
+    const data = [];
+    const indexMap = new Map<string, number>();
+
+    documentVectors.forEach((documentVector, index) => {
+      indexMap.set(documentVector.id, index);
+      data.push({ id: documentVector.id, similarPosts: [] });
+    });
+
+    return [data, indexMap];
+  }
+
   private _calculateSimilarities(
     documentVectors: IDocumentVector[],
     options: IOptions,
-  ): IData {
-    const data = { ...this.initializeDataHash(documentVectors) };
+  ): ITrainedData {
+    const [data, indexMap] =
+      this.initializeDataHashAndIndexMap(documentVectors);
 
     // calculate the similar scores
     documentVectors.forEach((documentVectorA, i) => {
@@ -365,12 +393,12 @@ export class SimilarPostsRecommenderService {
         const similarity = vi.getCosineSimilarity(vj);
 
         if (similarity > options.minScore) {
-          data[idi].push({
+          data[indexMap.get(idi)].similarPosts.push({
             id: documentVectorB.id,
             score: similarity,
           });
 
-          data[idj].push({
+          data[indexMap.get(idj)].similarPosts.push({
             id: documentVectorA.id,
             score: similarity,
           });
@@ -378,7 +406,7 @@ export class SimilarPostsRecommenderService {
       }
     });
 
-    this.orderDocuments(data, options);
+    this.orderTrainedData(data, options);
 
     return data;
   }
@@ -388,34 +416,44 @@ export class SimilarPostsRecommenderService {
     documentVector: IDocumentVector,
     processedDoc: IProcessedDocument,
     options: IOptions,
-  ): IData {
-    const data: IData = {
-      [documentVector.id]: [],
+  ): TrainedData {
+    const data: TrainedData = {
+      id: documentVector.id,
+      similarPosts: [],
     };
 
     documentVectors.forEach(documentVectorB => {
       const documentVectorA = documentVector;
-      const idi = documentVectorA.id;
       const vi = new Vector(documentVectorA.vector?.vector);
       const vj = new Vector(documentVectorB.vector?.vector);
       const similarity = vi.getCosineSimilarity(vj);
 
       if (similarity > options.minScore) {
-        data[idi].push({
+        data.similarPosts.push({
           id: documentVectorB.id,
           score: similarity,
         });
       }
     });
 
-    this.orderDocuments(data, options);
-    this.updateDatasetAfterSingleDocSimilarity(
-      data[documentVector.id],
-      documentVector,
-      processedDoc,
-    );
+    this.orderTrainedData([data], options);
+    // this.updateDatasetAfterSingleDocSimilarity(
+    //   data,
+    //   documentVector,
+    //   processedDoc,
+    // );
 
     return data;
+  }
+
+  private orderTrainedData(data: ITrainedData, options: IOptions) {
+    // finally sort the similar documents by descending order
+    data.forEach(({ similarPosts }) => {
+      similarPosts.sort((a, b) => b.score - a.score);
+
+      if (similarPosts.length > options.maxSimilarDocs)
+        similarPosts = similarPosts.slice(0, options.maxSimilarDocs);
+    });
   }
 
   private orderDocuments(data: IData, options: IOptions) {
@@ -429,16 +467,16 @@ export class SimilarPostsRecommenderService {
   }
 
   private updateDatasetAfterSingleDocSimilarity(
-    data: IDocumentScore[],
+    data: TrainedData,
     documentVector: IDocumentVector,
     processedDoc: IProcessedDocument,
   ) {
     this.docVectors.push(documentVector);
     this.processedDocs.push(processedDoc);
 
-    this.data[documentVector.id] = data;
+    this.trainedData.push(data);
 
-    data.forEach(documentScore => {
+    data.similarPosts.forEach(documentScore => {
       const docs = [...this.data[documentScore.id]];
 
       docs.push({ id: documentVector.id, score: documentScore.score });

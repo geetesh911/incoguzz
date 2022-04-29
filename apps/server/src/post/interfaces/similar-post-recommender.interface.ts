@@ -1,6 +1,12 @@
 export interface IData {
   [key: string]: IDocumentScore[];
 }
+
+export interface TrainedData {
+  id: string;
+  similarPosts: IDocumentScore[];
+}
+export type ITrainedData = TrainedData[];
 /**
  * - Options to create a ContentBasedRecommender
  */
@@ -33,6 +39,7 @@ export interface IDocumentScore {
 }
 export interface IExport {
   data: IData;
+  trainedData: ITrainedData;
   processedDocs: IProcessedDocument[];
   docVectors: IDocumentVector[];
   options?: IOptions;
@@ -50,4 +57,10 @@ export interface IProcessedDocument {
 export interface IDocumentVector {
   id: string;
   vector: any;
+}
+
+export interface ISingleDocumentEntry {
+  trainedDataEntry: TrainedData;
+  docVector: IDocumentVector;
+  processedDoc: IProcessedDocument;
 }

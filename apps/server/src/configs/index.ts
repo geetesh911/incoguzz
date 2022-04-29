@@ -6,7 +6,7 @@ class Config {
       database: "mongoose",
       port: 27017,
       connectionString:
-        "mongodb+srv://admin:admin@node-app.ta6ie.mongodb.net/node-app?retryWrites=true&w=majority",
+        "mongodb+srv://geetesh:Geetesh@incoguzz.2mley.mongodb.net/incoguzz?retryWrites=true&w=majority",
     },
     secretKey: process.env.SECRET_KEY,
     mailConfig: {
