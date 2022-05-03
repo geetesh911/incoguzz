@@ -5,8 +5,7 @@ class Config {
       host: "localhost",
       database: "mongoose",
       port: 27017,
-      connectionString:
-        "mongodb+srv://geetesh:Geetesh@incoguzz.2mley.mongodb.net/incoguzz?retryWrites=true&w=majority",
+      connectionString: process.env.MONGODB_CONNECTION_STRING,
     },
     secretKey: process.env.SECRET_KEY,
     mailConfig: {

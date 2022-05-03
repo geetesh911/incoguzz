@@ -38,9 +38,9 @@ export class SimilarPostRepository implements TSimilarPostRepository {
     };
   }
   public async getTrainingDataEntries(ids: string[]): Promise<ITrainedData> {
-    return TrainedDataModel.find({
-      id: { $in: ids },
-    }).select(["-_id", "-__v"]);
+    return TrainedDataModel.find()
+      .where({ id: { $in: ids } })
+      .select(["-_id", "-__v"]);
   }
 
   public async saveTrainingExportedData(exportedData: IExport) {

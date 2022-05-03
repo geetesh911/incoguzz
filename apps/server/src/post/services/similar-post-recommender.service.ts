@@ -109,7 +109,6 @@ export class SimilarPostsRecommenderService {
     const trainedDataEntry = this._calculateSimilarityForSingleDoc(
       this.docVectors,
       docVector,
-      processedDoc,
       this.options,
     );
 
@@ -179,11 +178,11 @@ export class SimilarPostsRecommenderService {
   }
 
   public import(object: IExport) {
-    const { options, data, docVectors, processedDocs } = object;
+    const { options, data, docVectors, processedDocs, trainedData } = object;
 
     options && this.setOptions(options);
     this.data = data;
-    this.trainedData = this.trainedData;
+    this.trainedData = trainedData;
     this.docVectors = docVectors;
     this.processedDocs = processedDocs;
   }
@@ -414,7 +413,6 @@ export class SimilarPostsRecommenderService {
   private _calculateSimilarityForSingleDoc(
     documentVectors: IDocumentVector[],
     documentVector: IDocumentVector,
-    processedDoc: IProcessedDocument,
     options: IOptions,
   ): TrainedData {
     const data: TrainedData = {
@@ -437,22 +435,17 @@ export class SimilarPostsRecommenderService {
     });
 
     this.orderTrainedData([data], options);
-    // this.updateDatasetAfterSingleDocSimilarity(
-    //   data,
-    //   documentVector,
-    //   processedDoc,
-    // );
 
     return data;
   }
 
   private orderTrainedData(data: ITrainedData, options: IOptions) {
     // finally sort the similar documents by descending order
-    data.forEach(({ similarPosts }) => {
+    data.forEach(({ similarPosts }, index, arr) => {
       similarPosts.sort((a, b) => b.score - a.score);
 
       if (similarPosts.length > options.maxSimilarDocs)
-        similarPosts = similarPosts.slice(0, options.maxSimilarDocs);
+        arr[index].similarPosts = similarPosts.slice(0, options.maxSimilarDocs);
     });
   }
 
@@ -463,26 +456,6 @@ export class SimilarPostsRecommenderService {
 
       if (data[id].length > options.maxSimilarDocs)
         data[id] = data[id].slice(0, options.maxSimilarDocs);
-    });
-  }
-
-  private updateDatasetAfterSingleDocSimilarity(
-    data: TrainedData,
-    documentVector: IDocumentVector,
-    processedDoc: IProcessedDocument,
-  ) {
-    this.docVectors.push(documentVector);
-    this.processedDocs.push(processedDoc);
-
-    this.trainedData.push(data);
-
-    data.similarPosts.forEach(documentScore => {
-      const docs = [...this.data[documentScore.id]];
-
-      docs.push({ id: documentVector.id, score: documentScore.score });
-      docs.sort((a, b) => b.score - a.score);
-
-      this.data[documentScore.id] = docs;
     });
   }
 }

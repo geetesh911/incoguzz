@@ -44,10 +44,10 @@ import GetPostsOutput, { PostOutput } from "./outputs/get-posts.output";
 import ReactionOutput from "./outputs/reaction.output";
 import PostRepository from "./repositories/post.repository";
 import { SimilarPostsRecommenderService } from "./services/similar-post-recommender.service";
+import { IDocument } from "./interfaces/similar-post-recommender.interface";
 import { Prisma } from "@prisma/client";
-import { nanoid } from "nanoid";
-import { JsonHelper } from "@/common/helpers/json.helper";
 import { SimilarPostRepository } from "./repositories/similarPost.repository";
+import { PostAgendaService } from "./services/post-agenda.service";
 
 @Service()
 class PostService {
@@ -59,29 +59,13 @@ class PostService {
     private readonly mediaHelper: MediaHelper,
     private readonly paginationHelper: PaginationHelper,
     private readonly similarPostsRecommenderService: SimilarPostsRecommenderService,
-    private readonly jsonHelper: JsonHelper,
+    private readonly postAgendaService: PostAgendaService,
   ) {}
 
   public async trainSimilarPostRecommender(): Promise<boolean> {
     const posts = await this.postRepository.getAllPosts();
 
-    const documents = posts.map(post => {
-      const id = post.id;
-      const caption = post.caption || "";
-      const metaTags = post.metaTags as Prisma.JsonArray;
-
-      const tagsString = post.tags?.map(tag => tag.name).join(" ");
-      const metaTagsString = metaTags
-        ?.map((metaTag: IMetaTag) => metaTag.tag)
-        .join(" ");
-
-      const content = `${caption} ${tagsString} ${metaTagsString}`;
-
-      return {
-        id,
-        content,
-      };
-    });
+    const documents = posts.map(this.createPostTrainingContent);
 
     this.similarPostsRecommenderService.train(documents);
 
@@ -92,14 +76,13 @@ class PostService {
     return true;
   }
 
-  public async trainSimilarPostRecommenderWithSinglePost(): Promise<boolean> {
+  public async trainSimilarPostRecommenderWithSinglePost(
+    post: Post,
+  ): Promise<boolean> {
     const { trainedData, processedDocs, docVectors } =
       await this.similarPostRepository.getTrainingData();
 
-    const document = {
-      id: nanoid(),
-      content: "Waiting For (feat. Jamila Woods) rum.gold JamilaWoods",
-    };
+    const document = this.createPostTrainingContent(post);
 
     this.similarPostsRecommenderService.import({
       data: {},
@@ -114,17 +97,17 @@ class PostService {
     await this.similarPostRepository.createNewTrainindDataEntry(data);
 
     const scoreMap = new Map<string, number>();
-    const ids = data.trainedDataEntry.similarPosts.map(post => {
-      scoreMap.set(post.id, post.score);
-      return post.id;
+    const ids = data.trainedDataEntry.similarPosts.map(similarPost => {
+      scoreMap.set(similarPost.id, similarPost.score);
+      return similarPost.id;
     });
+
     const entries = await this.similarPostRepository.getTrainingDataEntries(
       ids,
     );
-    console.log(entries);
 
     const updatedEntries = entries.map(entry => ({
-      ...entry,
+      id: entry.id,
       similarPosts: [
         ...entry.similarPosts,
         {
@@ -135,8 +118,6 @@ class PostService {
     }));
 
     await this.similarPostRepository.updateExistingEntries(updatedEntries);
-
-    console.log(data, data.trainedDataEntry, updatedEntries);
 
     return true;
   }
@@ -298,7 +279,14 @@ class PostService {
   }: IAddTextualPostParams): Promise<Post> {
     this.validateAddTextualPostInput(addTextualPostInput);
 
-    return this.postRepository.addTextualPost({ userId, addTextualPostInput });
+    const post = await this.postRepository.addTextualPost({
+      userId,
+      addTextualPostInput,
+    });
+
+    await this.postAgendaService.executeTrainingSimilarPostJob(post);
+
+    return post;
   }
 
   public async addPollPost({
@@ -307,7 +295,14 @@ class PostService {
   }: IAddPollPostParams): Promise<Post> {
     this.validateAddPollPostInput(addPollPostInput);
 
-    return this.postRepository.addPollPost({ userId, addPollPostInput });
+    const post = await this.postRepository.addPollPost({
+      userId,
+      addPollPostInput,
+    });
+
+    await this.postAgendaService.executeTrainingSimilarPostJob(post);
+
+    return post;
   }
 
   public async addClipPost({
@@ -381,6 +376,9 @@ class PostService {
                 audioName,
               },
             });
+
+            await this.postAgendaService.executeTrainingSimilarPostJob(post);
+
             resolve(post);
           },
           onError: async error => {
@@ -472,6 +470,9 @@ class PostService {
                 thumbnailUrl: thumbnailFileUrl,
               },
             });
+
+            await this.postAgendaService.executeTrainingSimilarPostJob(post);
+
             resolve(post);
           },
           onError: async error => {
@@ -595,6 +596,24 @@ class PostService {
       default:
         break;
     }
+  }
+
+  private createPostTrainingContent(post: Post): IDocument {
+    const id = post.id;
+    const caption = post.caption || "";
+    const metaTags = post.metaTags as Prisma.JsonArray;
+
+    const tagsString = post.tags?.map(tag => tag.name).join(" ");
+    const metaTagsString = metaTags
+      ?.map((metaTag: IMetaTag) => metaTag.tag)
+      .join(" ");
+
+    const content = `${caption} ${tagsString} ${metaTagsString}`;
+
+    return {
+      id,
+      content,
+    };
   }
 }
 

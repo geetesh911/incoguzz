@@ -28,7 +28,8 @@ import ContextHelper from "./common/helpers/context.helper";
 import PrismaService from "./common/services/prisma.service";
 import { createSchema } from "./utils/create-schema.util";
 import { graphqlUploadExpress } from "graphql-upload";
-
+import { PostAgendaService } from "./post/services/post-agenda.service";
+import Agendash from "agendash";
 @Service()
 class App {
   public app: express.Application;
@@ -37,6 +38,7 @@ class App {
   public env: string;
   private readonly contextHelper = Container.get(ContextHelper);
   private readonly prisma = Container.get(PrismaService);
+  private readonly postAgendaService = Container.get(PostAgendaService);
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -45,6 +47,7 @@ class App {
     this.env = process.env.NODE_ENV || "development";
 
     this.connectToDatabase();
+    this.initializeAgendaEvents();
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
     this.initializeSwagger();
@@ -95,9 +98,14 @@ class App {
 
     const conn = await connect(mongodbConnection.url);
 
-    console.log(
+    logger.info(
       `MongoDB ${conn.connection.readyState === 1 ? "connected" : "error"}`,
     );
+  }
+
+  private async initializeAgendaEvents() {
+    this.postAgendaService.createPostTrainingJob();
+    await this.postAgendaService.agenda.start();
   }
 
   private initializeMiddlewares() {
@@ -120,6 +128,8 @@ class App {
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
     this.app.use(graphqlUploadExpress());
+    process.env.NODE_ENV === "development" &&
+      this.app.use("/dash", Agendash(this.postAgendaService.agenda));
   }
 
   private initializePassport() {
