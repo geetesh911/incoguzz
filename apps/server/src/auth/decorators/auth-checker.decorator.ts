@@ -1,12 +1,12 @@
 import { createMethodDecorator } from "type-graphql";
-import Container from "typedi";
 import { Context } from "@/common/interfaces/context.interface";
 import UserHelper from "@/user/helpers/user.helper";
 import { AuthenticationError } from "apollo-server-errors";
 import JWTHelper from "@/common/helpers/jwt.helper";
+import { container } from "tsyringe";
 
-const userHelper = Container.get(UserHelper);
-const jwtHelper = Container.get(JWTHelper);
+const userHelper = container.resolve(UserHelper);
+const jwtHelper = container.resolve(JWTHelper);
 
 export function Authorized(roles: string[] = []) {
   return createMethodDecorator<Context>(async ({ context }, next) => {

@@ -1,5 +1,4 @@
 import { Resolver, Query, Arg, Mutation, Ctx } from "type-graphql";
-import { Service } from "typedi";
 import { SignUpInput } from "@/user/inputs/signup.input";
 import GoogleStrategy from "@/auth/strategies/google.strategy";
 import UserService from "@/user/user.service";
@@ -26,8 +25,9 @@ import { AzureContainersEnum } from "./enums/file.enum";
 import StorageService from "@/common/services/storage.service";
 import CloudinaryStorageService from "@/common/services/cloudinary-storage.service";
 import AzureStorageService from "@/common/services/azure-storage.service";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 @Resolver(() => User)
 export class UserResolver {
   constructor(

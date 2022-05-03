@@ -1,11 +1,11 @@
-import { Service } from "typedi";
 import JSONStream from "JSONStream";
 import fs, { ReadStream } from "fs";
 import { PassThrough, Readable } from "stream";
 import JsonStreamStringify from "json-stream-stringify";
 import { IChunk, JsonType } from "../interfaces/json.interface";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 export class JsonHelper {
   public parse<T = object>(
     stream: ReadStream | Readable,

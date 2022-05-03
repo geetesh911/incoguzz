@@ -2,9 +2,9 @@ import passportLocal, { VerifyFunction } from "passport-local";
 import { logger } from "@/utils/logger";
 import passport from "passport";
 import { Request, Response } from "express";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class LocalStrategy {
   private LocalStrategyCallback: VerifyFunction = (email, password, done) => {
     try {

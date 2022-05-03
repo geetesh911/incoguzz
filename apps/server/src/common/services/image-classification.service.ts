@@ -2,9 +2,9 @@ import * as mobilenet from "@tensorflow-models/mobilenet";
 import * as tfnode from "@tensorflow/tfjs-node";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import path from "path";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 export class ImageClassificationService {
   mobilenetModel: mobilenet.MobileNet | undefined;
   cocoSsdModel: cocoSsd.ObjectDetection | undefined;

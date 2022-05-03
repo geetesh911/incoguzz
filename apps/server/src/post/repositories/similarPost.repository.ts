@@ -1,4 +1,3 @@
-import { Service } from "typedi";
 import {
   IExport,
   ISingleDocumentEntry,
@@ -7,6 +6,7 @@ import {
 import { DocVectorModel } from "../models/DocVector";
 import { TrainedDataModel } from "../models/TrainedData";
 import { ProcessedDocModel } from "../models/ProcessedDoc";
+import { injectable } from "tsyringe";
 
 interface IReader {
   getTrainingData: () => Promise<IExport>;
@@ -21,7 +21,7 @@ interface IWriter {
 
 type TSimilarPostRepository = IReader & IWriter;
 
-@Service()
+@injectable()
 export class SimilarPostRepository implements TSimilarPostRepository {
   public async getTrainingData(): Promise<IExport> {
     const [docVectors, processedDocs, trainedData] = await Promise.all([

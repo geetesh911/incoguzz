@@ -1,7 +1,7 @@
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 import { IFutureDateParms } from "../interfaces/date.interface";
 
-@Service()
+@injectable()
 class DateHelper {
   public compareDates(date1: Date, date2: Date): number {
     // With Date object we can compare dates them using the >, <, <= or >=.

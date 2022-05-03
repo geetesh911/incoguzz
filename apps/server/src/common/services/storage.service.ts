@@ -1,12 +1,12 @@
 import { AzureContainersEnum } from "@/user/enums/file.enum";
 import { FileUpload } from "graphql-upload";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 import { fileOptionsDefaults } from "../defaults/azure-storage.defaults";
 import { IFileOptions } from "../interfaces/storage.interface";
 import AzureStorageService from "./azure-storage.service";
 import CloudinaryStorageService from "./cloudinary-storage.service";
 
-@Service()
+@injectable()
 class StorageService {
   constructor(
     private readonly azureStorageService: AzureStorageService,

@@ -1,4 +1,3 @@
-import { Service } from "typedi";
 import ffmpeg, { FfprobeData } from "fluent-ffmpeg";
 import { createWriteStream, createReadStream } from "fs";
 import { FileUpload } from "graphql-upload";
@@ -23,8 +22,9 @@ import {
 } from "../lists/media.list";
 import { ImageClassificationService } from "./image-classification.service";
 import { IMetaTag } from "../interfaces/storage.interface";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class MediaService {
   private static readonly offsets = [1000];
   constructor(

@@ -15,13 +15,13 @@ import {
   TrainedData,
   ISingleDocumentEntry,
 } from "../interfaces/similar-post-recommender.interface";
-import { Service } from "typedi";
 import { logger } from "@/utils/logger";
+import { injectable } from "tsyringe";
 
 const { TfIdf, PorterStemmer, NGrams } = natural;
 const tokenizer = new natural.WordTokenizer();
 
-@Service()
+@injectable()
 export class SimilarPostsRecommenderService {
   private data: IData = {};
   private trainedData: ITrainedData = [];

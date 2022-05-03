@@ -3,7 +3,6 @@ import {
   ILoginJwtPayload,
   IUserVerificationJwtPayload,
 } from "@/auth/interfaces/auth.interface";
-import { Service } from "typedi";
 import Cryptr from "cryptr";
 import { getClientIp } from "request-ip";
 import { Request } from "express";
@@ -17,8 +16,9 @@ import {
 import { TokenType } from "@/prisma/generated/type-graphql/enums/TokenType";
 import { ILoginTokens } from "@/user/interfaces/login.interface";
 import DateHelper from "@/common/helpers/date.helper";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class AuthService {
   private cryptr: Cryptr;
 

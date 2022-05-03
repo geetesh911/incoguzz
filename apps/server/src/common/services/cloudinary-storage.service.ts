@@ -1,5 +1,4 @@
 import { FileUpload } from "graphql-upload";
-import { Service } from "typedi";
 import { fileOptionsDefaults } from "../defaults/azure-storage.defaults";
 import {
   IFileOptions,
@@ -12,8 +11,9 @@ import { logger } from "@/utils/logger";
 import MediaHelper from "../helpers/media.helper";
 import MediaService from "./media.service";
 import { Readable } from "stream";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class CloudinaryStorageService {
   cloudinaryv2 = cloudinary.v2;
 

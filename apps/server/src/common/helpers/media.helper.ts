@@ -1,10 +1,10 @@
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 import {
   optimizedImageExtensions,
   validImageExtensions,
 } from "../lists/media.list";
 
-@Service()
+@injectable()
 class MediaHelper {
   public getFileExtension(filename: string): string {
     return filename.slice(((filename.lastIndexOf(".") - 1) >>> 0) + 2);

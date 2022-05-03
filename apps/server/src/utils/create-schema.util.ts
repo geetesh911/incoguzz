@@ -5,8 +5,8 @@ import { PostResolver } from "@/post/post.resolver";
 import { buildSchema } from "type-graphql";
 import { AuthResolver } from "@/auth/auth.resolver";
 import path from "path";
-import Container from "typedi";
 import { BotMiddleware } from "@/common/middlewares/bot.middleware";
+import { container } from "tsyringe";
 
 export const createSchema = async () =>
   buildSchema({
@@ -20,5 +20,9 @@ export const createSchema = async () =>
     ],
     // use ObjectId scalar mapping
     scalarsMap: [],
-    container: Container,
+    container: {
+      get(someClass) {
+        return container.resolve(someClass);
+      },
+    },
   });

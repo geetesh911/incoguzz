@@ -1,5 +1,4 @@
 import { Resolver, Arg, Mutation, Ctx, Query, Args } from "type-graphql";
-import { Service } from "typedi";
 import { Post } from "@/prisma/generated/type-graphql";
 import { Authorized } from "@/auth/decorators/auth-checker.decorator";
 import { Context } from "@/common/interfaces/context.interface";
@@ -13,30 +12,21 @@ import PostReactionInput from "./inputs/post-reaction.input";
 import ReactionOutput from "./outputs/reaction.output";
 import BookmarksOutput, { BookmarkPostOutput } from "./outputs/bookmark.output";
 import GetRelatedPostsArgs from "./args/get-post.args";
-import { PostAgendaService } from "./services/post-agenda.service";
 import PostRepository from "./repositories/post.repository";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 @Resolver(() => Post)
 export class PostResolver {
   constructor(
     private readonly postService: PostService,
     private readonly postRepository: PostRepository,
-    private readonly postAgendaService: PostAgendaService,
   ) {}
 
   @Authorized()
   @Query(() => Boolean)
-  async trainSimilarPostRecommender(
-    @Ctx() { user }: Context,
-  ): Promise<boolean> {
-    const post = await this.postRepository.getPost({
-      userId: user.userId,
-      postId: "cl2egulib1300vctqyjuz5wlz",
-    });
-    this.postAgendaService.executeTrainingSimilarPostJob(post);
-    return true;
-    // return this.postService.trainSimilarPostRecommender();
+  async trainSimilarPostRecommender(): Promise<boolean> {
+    return this.postService.trainSimilarPostRecommender();
   }
 
   @Authorized()

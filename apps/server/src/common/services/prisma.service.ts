@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
-import { Service } from "typedi";
 import bcrypt from "bcrypt";
 import { logger } from "@/utils/logger";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class PrismaService extends PrismaClient {
   constructor() {
     super({ log: ["query", "info", "warn", "error"] });

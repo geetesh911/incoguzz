@@ -4,14 +4,14 @@ import { logger } from "@utils/logger";
 import LocalStrategy from "@/auth/strategies/local-auth.strategy";
 import JWTStrategy from "@/auth/strategies/jwt-auth.strategy";
 import GoogleStrategy from "@/auth/strategies/google.strategy";
-import Container, { Service } from "typedi";
 import PrismaService from "@/common/services/prisma.service";
+import { container, injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class Passport {
-  private readonly localStrategy = Container.get(LocalStrategy);
-  private readonly googleStrategy = Container.get(GoogleStrategy);
-  private readonly prisma = Container.get(PrismaService);
+  private readonly localStrategy = container.resolve(LocalStrategy);
+  private readonly googleStrategy = container.resolve(GoogleStrategy);
+  private readonly prisma = container.resolve(PrismaService);
 
   private initializeStrategies() {
     try {

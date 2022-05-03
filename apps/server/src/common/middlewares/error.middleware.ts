@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from "express";
-import { Service } from "typedi";
 import { MiddlewareInterface, NextFn, ResolverData } from "type-graphql";
 import { HttpException } from "@/common/exceptions/HttpException";
 import { logger } from "@utils/logger";
 import { Context } from "@/common/interfaces/context.interface";
+import { injectable } from "tsyringe";
 
 export const errorMiddleware = (
   error: HttpException,
@@ -24,7 +24,7 @@ export const errorMiddleware = (
   }
 };
 
-@Service()
+@injectable()
 export class GraphQLErrorLoggerMiddleware
   implements MiddlewareInterface<Context>
 {

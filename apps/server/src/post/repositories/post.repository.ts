@@ -6,7 +6,6 @@ import {
   PostType,
   Reaction,
 } from "@/prisma/generated/type-graphql";
-import { Service } from "typedi";
 import {
   IAddClipPostParams,
   IAddMediaPostParams,
@@ -28,6 +27,7 @@ import {
 } from "../interfaces/get-post.interface";
 import PaginationInput from "@/common/inputs/pagination.input";
 import { IMetaTag } from "@/common/interfaces/storage.interface";
+import { injectable } from "tsyringe";
 
 interface IReader {
   getAllPosts: () => Promise<Post[]>;
@@ -52,7 +52,7 @@ interface IWriter {
 
 type TUserRepository = IReader & IWriter;
 
-@Service()
+@injectable()
 class PostRepository extends BaseRepository implements TUserRepository {
   constructor(
     private readonly prisma: PrismaService,
@@ -263,7 +263,10 @@ class PostRepository extends BaseRepository implements TUserRepository {
         create: { text: text },
       },
     };
-    return this.prisma.post.create({ data: postCreateInput });
+    return this.prisma.post.create({
+      data: postCreateInput,
+      include: { textual: true },
+    });
   }
 
   public addPollPost({

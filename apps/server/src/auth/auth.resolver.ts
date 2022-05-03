@@ -1,13 +1,13 @@
 import { Resolver, Arg, Mutation, Ctx } from "type-graphql";
-import { Service } from "typedi";
 import UserService from "@/user/user.service";
 import { Context } from "@/common/interfaces/context.interface";
 import { LoginInput } from "@/user/inputs/login.input";
 import { LoginOutput } from "@/user/outputs/login.output";
 import { User } from "@/prisma/generated/type-graphql";
 import PrismaService from "@/common/services/prisma.service";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 @Resolver(() => User)
 export class AuthResolver {
   constructor(

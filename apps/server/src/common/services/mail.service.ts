@@ -1,7 +1,6 @@
 import config from "@/configs";
 import { logger } from "../../utils/logger";
 import { MailConfig, MailOptions } from "@/common/interfaces/mail.interface";
-import { Service } from "typedi";
 import {
   TransactionalEmailsApiApiKeys,
   TransactionalEmailsApi,
@@ -10,8 +9,9 @@ import {
 import pug from "pug";
 import path from "path";
 import { IncomingMessage } from "http";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class MailingService {
   private getHtmlFromPath(htmlPath: string, locals: object) {
     const htmlFn = pug.compileFile(

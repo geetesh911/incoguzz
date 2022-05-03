@@ -1,7 +1,7 @@
 import { existsSync, unlink } from "fs";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class FileService {
   public async removeFile(path: string): Promise<boolean> {
     return new Promise<boolean>((resolve, reject) => {

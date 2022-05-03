@@ -10,7 +10,6 @@ import { Token } from "@/prisma/generated/type-graphql/models/Token";
 import { UserInputError } from "apollo-server-errors";
 import { addHours } from "date-fns";
 import { Request } from "express";
-import { Service } from "typedi";
 import { v4 } from "uuid";
 import { Constants } from "../enums/constants.enum";
 import UserHelper from "../helpers/user.helper";
@@ -20,6 +19,7 @@ import { UpdateUserInput } from "../inputs/update-user.input";
 import { IUpdateUserLoginInfoPramas } from "../interfaces/login.interface";
 import { Prisma } from "@prisma/client";
 import { IUpsertTokenParams } from "../interfaces/token.interface";
+import { injectable } from "tsyringe";
 
 interface IReader {
   findAll: () => Promise<User[]>;
@@ -94,7 +94,7 @@ interface IWriter {
 
 type TUserRepository = IReader & IWriter;
 
-@Service()
+@injectable()
 class UserRepository extends BaseRepository implements TUserRepository {
   constructor(
     private readonly prisma: PrismaService,

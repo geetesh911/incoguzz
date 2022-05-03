@@ -1,7 +1,7 @@
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 import { IGetCursorParams } from "../interfaces/pagination.interface";
 
-@Service()
+@injectable()
 class PaginationHelper {
   public getCursor<TResult>({
     results,

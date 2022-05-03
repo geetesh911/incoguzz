@@ -1,4 +1,3 @@
-import { Service } from "typedi";
 import {
   AccountSASPermissions,
   AccountSASResourceTypes,
@@ -20,8 +19,9 @@ import { AzureContainersEnum } from "@/user/enums/file.enum";
 import MediaHelper from "../helpers/media.helper";
 import MediaService from "./media.service";
 import { ImageClassificationService } from "./image-classification.service";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class AzureStorageService {
   private readonly blobServiceClient = BlobServiceClient.fromConnectionString(
     config.get("azure.azureConnectionString"),

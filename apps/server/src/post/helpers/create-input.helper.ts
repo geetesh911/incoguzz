@@ -1,12 +1,12 @@
 import { Prisma } from "@prisma/client";
 import { nanoid } from "nanoid";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 import {
   BasicMediaPostCreateInput,
   BasicPostCreateInput,
 } from "../interfaces/add-post.interface";
 
-@Service()
+@injectable()
 class CreateBasicPostInputHelper {
   public createBasicPostInput(
     basicInput: BasicPostCreateInput,

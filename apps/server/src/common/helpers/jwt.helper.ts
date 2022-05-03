@@ -1,10 +1,10 @@
-import { Service } from "typedi";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "@/configs";
 import { Request } from "express";
 import Cryptr from "cryptr";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class JWTHelper {
   public generateJwtToken<Type extends string | Buffer | object>(
     dataStoredInToken: Type,

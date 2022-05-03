@@ -1,6 +1,6 @@
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class ValidationHelper {
   validateEmail(email: string) {
     return String(email)

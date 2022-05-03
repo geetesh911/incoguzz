@@ -1,11 +1,11 @@
-import { Service } from "typedi";
 import PrismaService from "@/common/services/prisma.service";
 import JWTHelper from "@/common/helpers/jwt.helper";
 import { ILoginJwtPayload } from "@/auth/interfaces/auth.interface";
 import { AuthenticationError } from "apollo-server-errors";
 import { User } from "@/prisma/generated/type-graphql";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class UserHelper {
   constructor(
     private readonly prisma: PrismaService,

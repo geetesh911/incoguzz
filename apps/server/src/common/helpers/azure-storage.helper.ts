@@ -1,7 +1,7 @@
 import config from "@/configs";
-import { Service } from "typedi";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class AzureStorageHelper {
   public getFileAndContainerNameFromUrl(url: string): string[] {
     // https://incoguzz.blob.core.windows.net/profile/62f3589a-585d-4e14-a4a6-48a6b6adfa44_result image.png

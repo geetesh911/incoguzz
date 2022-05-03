@@ -22,7 +22,6 @@ import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { UserInputError } from "apollo-server-errors";
 import { FfprobeData } from "fluent-ffmpeg";
 import { FileUpload } from "graphql-upload";
-import { Service } from "typedi";
 import { AddPollPostInput, AddTextualPostInput } from "./inputs/add-post.input";
 import {
   IAddClipPostServiceParams,
@@ -48,8 +47,9 @@ import { IDocument } from "./interfaces/similar-post-recommender.interface";
 import { Prisma } from "@prisma/client";
 import { SimilarPostRepository } from "./repositories/similarPost.repository";
 import { PostAgendaService } from "./services/post-agenda.service";
+import { delay, inject, injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class PostService {
   constructor(
     private readonly postRepository: PostRepository,
@@ -59,6 +59,7 @@ class PostService {
     private readonly mediaHelper: MediaHelper,
     private readonly paginationHelper: PaginationHelper,
     private readonly similarPostsRecommenderService: SimilarPostsRecommenderService,
+    @inject(delay(() => PostAgendaService))
     private readonly postAgendaService: PostAgendaService,
   ) {}
 
@@ -283,6 +284,8 @@ class PostService {
       userId,
       addTextualPostInput,
     });
+
+    console.log(this.postAgendaService.executeTrainingSimilarPostJob, post);
 
     await this.postAgendaService.executeTrainingSimilarPostJob(post);
 
@@ -600,7 +603,9 @@ class PostService {
 
   private createPostTrainingContent(post: Post): IDocument {
     const id = post.id;
-    const caption = post.caption || "";
+    const caption =
+      (post.type === PostType.TEXTUAL ? post?.textual?.text : post.caption) ||
+      "";
     const metaTags = post.metaTags as Prisma.JsonArray;
 
     const tagsString = post.tags?.map(tag => tag.name).join(" ");
@@ -609,6 +614,8 @@ class PostService {
       .join(" ");
 
     const content = `${caption} ${tagsString} ${metaTagsString}`;
+
+    console.log("content", content);
 
     return {
       id,

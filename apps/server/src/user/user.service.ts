@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { Service } from "typedi";
 import { Request } from "express";
 import { addHours } from "date-fns";
 import { SignUpInput } from "@/user/inputs/signup.input";
@@ -52,8 +51,9 @@ import { AzureContainersEnum } from "./enums/file.enum";
 import AzureStorageHelper from "@/common/helpers/azure-storage.helper";
 import StorageService from "@/common/services/storage.service";
 import { Prisma } from "@prisma/client";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class UserService {
   constructor(
     private readonly mailingService: MailingService,

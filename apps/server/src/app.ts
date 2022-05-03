@@ -23,22 +23,25 @@ import { Routes } from "@/common/interfaces/routes.interface";
 import { errorMiddleware } from "@/common/middlewares/error.middleware";
 import { logger, stream } from "@utils/logger";
 import PassportProvider from "@/auth/providers/passport.provider";
-import Container, { Service } from "typedi";
 import ContextHelper from "./common/helpers/context.helper";
 import PrismaService from "./common/services/prisma.service";
 import { createSchema } from "./utils/create-schema.util";
 import { graphqlUploadExpress } from "graphql-upload";
 import { PostAgendaService } from "./post/services/post-agenda.service";
 import Agendash from "agendash";
-@Service()
+import { container, injectable } from "tsyringe";
+import { BaseAgendaService } from "./common/services/agenda.service";
+
+@injectable()
 class App {
   public app: express.Application;
   public httpServer: Server;
   public port: string | number;
   public env: string;
-  private readonly contextHelper = Container.get(ContextHelper);
-  private readonly prisma = Container.get(PrismaService);
-  private readonly postAgendaService = Container.get(PostAgendaService);
+  private readonly contextHelper = container.resolve(ContextHelper);
+  private readonly prisma = container.resolve(PrismaService);
+  private readonly postAgendaService = container.resolve(PostAgendaService);
+  private readonly baseAgendaService = container.resolve(BaseAgendaService);
 
   constructor(routes: Routes[]) {
     this.app = express();
@@ -105,7 +108,10 @@ class App {
 
   private async initializeAgendaEvents() {
     this.postAgendaService.createPostTrainingJob();
-    await this.postAgendaService.agenda.start();
+
+    this.baseAgendaService.agenda.on("ready", async () => {
+      await this.baseAgendaService.agenda.start();
+    });
   }
 
   private initializeMiddlewares() {
@@ -129,7 +135,7 @@ class App {
     this.app.use(cookieParser());
     this.app.use(graphqlUploadExpress());
     process.env.NODE_ENV === "development" &&
-      this.app.use("/dash", Agendash(this.postAgendaService.agenda));
+      this.app.use("/dash", Agendash(this.baseAgendaService.agenda));
   }
 
   private initializePassport() {

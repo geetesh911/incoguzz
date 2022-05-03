@@ -1,15 +1,15 @@
 import passport from "passport";
 import { Strategy as GoogleTokenStrategy } from "passport-google-token";
 import config from "@/configs";
-import { Service } from "typedi";
 import { Request, Response } from "express";
 import {
   IGoogleAuthResponse,
   IGoogleUserData,
   IProfile,
 } from "../interfaces/google.interface";
+import { injectable } from "tsyringe";
 
-@Service()
+@injectable()
 class GoogleStrategy {
   private GoogleTokenStrategyCallback(
     accessToken: string,

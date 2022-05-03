@@ -1,7 +1,9 @@
 import Agenda from "agenda";
 import config from "@/configs";
+import { singleton } from "tsyringe";
 
-export abstract class BaseAgendaService {
+@singleton()
+export class BaseAgendaService {
   public agenda = new Agenda({
     db: {
       address: config.get("dbConfig.connectionString"),
