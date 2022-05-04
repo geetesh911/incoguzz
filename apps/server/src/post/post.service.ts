@@ -28,6 +28,8 @@ import {
   IAddMediaPostServiceParams,
   IAddPollPostParams,
   IAddTextualPostParams,
+  IUpdateMediaPostParams,
+  IUpdateTextualPostParams,
   IUploadThumbnailResponse,
   IValidateAddMediaPostInputParams,
 } from "./interfaces/add-post.interface";
@@ -123,11 +125,64 @@ class PostService {
     return true;
   }
 
+  public async removePostFromSimilarPostRecommenderData(
+    postId: string,
+  ): Promise<boolean> {
+    const { trainedData } = await this.similarPostRepository.deleteEntry(
+      postId,
+    );
+
+    const ids = trainedData.similarPosts.map(similarPost => similarPost.id);
+
+    const entries = await this.similarPostRepository.getTrainingDataEntries(
+      ids,
+    );
+
+    const updatedEntries = entries.map(entry => ({
+      id: entry.id,
+      similarPosts: entry.similarPosts?.filter(
+        similarPost => similarPost.id !== trainedData.id,
+      ),
+    }));
+
+    await this.similarPostRepository.updateExistingEntries(updatedEntries);
+
+    return true;
+  }
+
   public async getPost({
     userId,
     postId,
   }: IGetPostParams): Promise<PostOutput> {
     return this.postRepository.getPost({ userId, postId });
+  }
+
+  public async getSimilarPosts({
+    userId,
+    postId,
+  }: IGetPostParams): Promise<PostOutput[]> {
+    const limit = 5;
+
+    let postIds = await this.getSimilarPostIds(postId);
+
+    if (postIds.length < limit) {
+      const morePostIds = await this.getSimilarPostIds(
+        postIds[postIds.length - 1],
+      );
+      postIds = [...postIds, ...morePostIds];
+    } else if (postIds.length === 0) {
+      return (
+        await this.getRelatedPosts({
+          userId,
+          postId,
+          paginationInput: { take: limit, firstQueryResult: true },
+        })
+      ).data;
+    }
+
+    postIds = postIds.slice(0, limit);
+
+    return this.postRepository.getPosts({ userId, postIds });
   }
 
   public async getUserPosts({
@@ -284,8 +339,6 @@ class PostService {
       userId,
       addTextualPostInput,
     });
-
-    console.log(this.postAgendaService.executeTrainingSimilarPostJob, post);
 
     await this.postAgendaService.executeTrainingSimilarPostJob(post);
 
@@ -487,6 +540,36 @@ class PostService {
     });
   }
 
+  public async updateTextualPost({
+    postId,
+    updatePostInput,
+  }: IUpdateTextualPostParams) {
+    await this.postRepository.updateTextualPost({
+      postId,
+      updatePostInput,
+    });
+    return true;
+  }
+
+  public async updateMediaPost({
+    postId,
+    updatePostInput,
+  }: IUpdateMediaPostParams) {
+    await this.postRepository.updateMediaPost({
+      postId,
+      updatePostInput,
+    });
+    return true;
+  }
+
+  public async deletePost(postId: string) {
+    await this.postRepository.deletePost(postId);
+
+    await this.postAgendaService.executeDeletePostJob(postId);
+
+    return true;
+  }
+
   private compressVideoMedia(
     originalMediaFiles: Promise<FileUpload>[],
     mediaFiles: FileUpload[],
@@ -615,12 +698,18 @@ class PostService {
 
     const content = `${caption} ${tagsString} ${metaTagsString}`;
 
-    console.log("content", content);
-
     return {
       id,
       content,
     };
+  }
+
+  private async getSimilarPostIds(postId: string): Promise<string[]> {
+    const trainedData = await this.similarPostRepository.getTrainingDataEntry(
+      postId,
+    );
+
+    return trainedData.similarPosts.map(similarPost => similarPost.id);
   }
 }
 

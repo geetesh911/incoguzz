@@ -29,7 +29,7 @@ export class SimilarPostsRecommenderService {
   private docVectors: IDocumentVector[] = [];
   private options: IOptions = {
     maxVectorSize: 100,
-    maxSimilarDocs: Number.MAX_SAFE_INTEGER,
+    maxSimilarDocs: 100,
     minScore: 0.1,
     debug: true,
   };

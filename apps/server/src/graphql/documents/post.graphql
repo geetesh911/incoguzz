@@ -54,11 +54,22 @@ fragment PostCommonFields on PostOutput {
     url
     thumbnailUrl
   }
-  metaTags
   views
   _count {
     reactions
     comments
+  }
+}
+
+query GetPost($postId: String!) {
+  getPost(postId: $postId) {
+    ...PostCommonFields
+  }
+}
+
+query GetSimilarPosts($postId: String!) {
+  getSimilarPosts(postId: $postId) {
+    ...PostCommonFields
   }
 }
 
@@ -88,6 +99,17 @@ query GetBookmarkedPosts($paginationInput: PaginationInput!) {
 
 query GetExplorePosts($paginationInput: PaginationInput!) {
   getExplorePosts(paginationInput: $paginationInput) {
+    data {
+      ...PostCommonFields
+    }
+    pagination {
+      cursor
+    }
+  }
+}
+
+query GetRelatedPosts($postId: String!, $paginationInput: PaginationInput!) {
+  getRelatedPosts(postId: $postId, paginationInput: $paginationInput) {
     data {
       ...PostCommonFields
     }
@@ -194,6 +216,28 @@ mutation AddPollPost($addPollPostInput: AddPollPostInput!) {
   }
 }
 
+mutation UpdateMediaPost(
+  $postId: String!
+  $updateMediaPostInput: UpdateMediaPostInput!
+) {
+  updateMediaPost(postId: $postId, updatePostInput: $updateMediaPostInput)
+}
+
+mutation UpdateTextualPost(
+  $postId: String!
+  $updateTextualPostInput: UpdateTextualPostInput!
+) {
+  updateTextualPost(postId: $postId, updatePostInput: $updateTextualPostInput)
+}
+
+mutation DeletePost($postId: String!) {
+  deletePost(postId: $postId)
+}
+
 query GenerateMediaAccessToken {
   getMediaAccessToken
+}
+
+query TrainSimilarPostRecommender {
+  trainSimilarPostRecommender
 }

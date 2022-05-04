@@ -172,6 +172,7 @@ type Mutation {
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
   changeProfilePicture(picture: Upload!): Boolean!
   deactivateUser: Boolean!
+  deletePost(postId: String!): Boolean!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): ForgotPasswordOutput!
   googleAuth(googleAuthInput: GoogleAuthInput!): GoogleAuthOutput!
   incrementPostView(postId: String!): Boolean!
@@ -183,7 +184,9 @@ type Mutation {
   resetPassword(resetPasswordInput: ResetPasswordInput!): ForgotPasswordOutput!
   signUp(signUpInput: SignUpInput!): SignUpOutput!
   singleUpload(picture: Upload!): Boolean!
+  updateMediaPost(postId: String!, updatePostInput: UpdateMediaPostInput!): Boolean!
   updateProfile(profileInput: ProfileInput!): ProfileOutput!
+  updateTextualPost(postId: String!, updatePostInput: UpdateTextualPostInput!): Boolean!
   updateUser(updateUserInput: UpdateUserInput!): UpdateUserOutput!
   verifyForgotPassword(verificationToken: String!): ForgotPasswordOutput
   verifyUserEmail(verificationToken: String!): Boolean
@@ -351,6 +354,7 @@ type Query {
   getMediaAccessToken: String!
   getPost(postId: String!): PostOutput!
   getRelatedPosts(paginationInput: PaginationInput!, postId: String!): GetPostsOutput!
+  getSimilarPosts(postId: String!): [PostOutput!]!
   getUser: UserOutput
   getUserPosts(paginationInput: PaginationInput!): GetPostsOutput!
   isUsernameAvailable(username: String!): Boolean
@@ -437,6 +441,16 @@ type Textual {
   id: String!
   postId: String!
   text: String!
+}
+
+input UpdateMediaPostInput {
+  caption: String
+  tags: [String!]
+}
+
+input UpdateTextualPostInput {
+  tags: [String!]
+  text: String
 }
 
 input UpdateUserInput {

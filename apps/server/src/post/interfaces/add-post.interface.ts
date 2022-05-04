@@ -8,6 +8,10 @@ import {
   AddPollPostInput,
   AddTextualPostInput,
 } from "../inputs/add-post.input";
+import {
+  UpdateMediaPostInput,
+  UpdateTextualPostInput,
+} from "../inputs/update-post.input";
 import PlaceInput from "../inputs/place.input";
 
 export interface IAddMediaPostExtraOptions {
@@ -56,6 +60,16 @@ export interface IAddClipPostParams {
   urls: string[];
   metaData?: IMetaData;
   extraOptions?: IAddClipPostExtraOptions;
+}
+
+export interface IUpdateMediaPostParams {
+  postId: string;
+  updatePostInput: UpdateMediaPostInput;
+}
+
+export interface IUpdateTextualPostParams {
+  postId: string;
+  updatePostInput: UpdateTextualPostInput;
 }
 
 export interface IAddClipPostServiceParams {

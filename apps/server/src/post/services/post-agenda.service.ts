@@ -31,4 +31,20 @@ export class PostAgendaService {
       { post },
     );
   }
+
+  public deletePostJob() {
+    this.baseAgendaService.agenda.define(
+      PostJobs.DeletePost,
+      { priority: JobPriority.highest },
+      async (job: Job) => {
+        await this.postService.removePostFromSimilarPostRecommenderData(
+          job.attrs.data.postId,
+        );
+      },
+    );
+  }
+
+  public async executeDeletePostJob(postId: string) {
+    await this.baseAgendaService.agenda.now(PostJobs.DeletePost, { postId });
+  }
 }

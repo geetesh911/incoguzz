@@ -12,6 +12,10 @@ import PostReactionInput from "./inputs/post-reaction.input";
 import ReactionOutput from "./outputs/reaction.output";
 import BookmarksOutput, { BookmarkPostOutput } from "./outputs/bookmark.output";
 import GetRelatedPostsArgs from "./args/get-post.args";
+import {
+  UpdateMediaPostArgs,
+  UpdateTextualPostArgs,
+} from "./args/update-post.args";
 import PostRepository from "./repositories/post.repository";
 import { injectable } from "tsyringe";
 
@@ -37,6 +41,16 @@ export class PostResolver {
     postId: string,
   ): Promise<PostOutput> {
     return this.postService.getPost({ userId: user.userId, postId });
+  }
+
+  @Authorized()
+  @Query(() => [PostOutput])
+  async getSimilarPosts(
+    @Ctx() { user }: Context,
+    @Arg("postId", () => String)
+    postId: string,
+  ): Promise<PostOutput[]> {
+    return this.postService.getSimilarPosts({ userId: user.userId, postId });
   }
 
   @Authorized()
@@ -183,5 +197,33 @@ export class PostResolver {
       userId: user.userId,
       addPollPostInput,
     });
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async updateTextualPost(
+    @Args() { postId, updatePostInput }: UpdateTextualPostArgs,
+  ): Promise<boolean> {
+    return this.postService.updateTextualPost({
+      postId,
+      updatePostInput,
+    });
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async updateMediaPost(
+    @Args() { postId, updatePostInput }: UpdateMediaPostArgs,
+  ): Promise<boolean> {
+    return this.postService.updateMediaPost({
+      postId,
+      updatePostInput,
+    });
+  }
+
+  @Authorized()
+  @Mutation(() => Boolean)
+  async deletePost(@Arg("postId") postId: string): Promise<boolean> {
+    return this.postService.deletePost(postId);
   }
 }

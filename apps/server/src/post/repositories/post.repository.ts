@@ -11,6 +11,8 @@ import {
   IAddMediaPostParams,
   IAddPollPostParams,
   IAddTextualPostParams,
+  IUpdateMediaPostParams,
+  IUpdateTextualPostParams,
 } from "../interfaces/add-post.interface";
 import { Prisma } from "@prisma/client";
 import CreateBasicPostInputHelper from "../helpers/create-input.helper";
@@ -24,6 +26,7 @@ import {
   IGetPostParams,
   IGetPostsParams,
   IGetRelatedPostsRepoParams,
+  IGetSimilarPostsParams,
 } from "../interfaces/get-post.interface";
 import PaginationInput from "@/common/inputs/pagination.input";
 import { IMetaTag } from "@/common/interfaces/storage.interface";
@@ -32,6 +35,7 @@ import { injectable } from "tsyringe";
 interface IReader {
   getAllPosts: () => Promise<Post[]>;
   getPost: (params: IGetPostParams) => Promise<Post>;
+  getPosts: (params: IGetSimilarPostsParams) => Promise<Post[]>;
   getUserPosts: (params: IGetPostsParams) => Promise<Post[]>;
   getExplorePosts: (params: IGetPostsParams) => Promise<Post[]>;
   getRelatedPosts: (params: IGetRelatedPostsRepoParams) => Promise<Post[]>;
@@ -44,9 +48,12 @@ interface IWriter {
   addMediaPost: (params: IAddMediaPostParams) => Promise<Post>;
   addClipPost: (params: IAddClipPostParams) => Promise<Post>;
   addPostReaction: (params: IAddPostReactionParams) => Promise<Reaction>;
-  deletePostReaction: (params: IDeletePostReactionParams) => Promise<Reaction>;
   addPostBookmark: (params: IBookmarkPostParams) => Promise<void>;
+  deletePostReaction: (params: IDeletePostReactionParams) => Promise<Reaction>;
   deletePostBookmark: (params: IBookmarkPostParams) => Promise<void>;
+  deletePost: (postId: string) => Promise<void>;
+  updateMediaPost: (params: IUpdateMediaPostParams) => Promise<void>;
+  updateTextualPost: (params: IUpdateTextualPostParams) => Promise<void>;
   incrementPostView: (postId: string) => Promise<void>;
 }
 
@@ -93,6 +100,16 @@ class PostRepository extends BaseRepository implements TUserRepository {
   public async getPost({ postId, userId }: IGetPostParams): Promise<Post> {
     return this.prisma.post.findUnique({
       where: { id: postId },
+      include: this.getPostsIncludeArgs(userId),
+    });
+  }
+
+  public async getPosts({
+    postIds,
+    userId,
+  }: IGetSimilarPostsParams): Promise<Post[]> {
+    return this.prisma.post.findMany({
+      where: { id: { in: postIds } },
       include: this.getPostsIncludeArgs(userId),
     });
   }
@@ -401,6 +418,56 @@ class PostRepository extends BaseRepository implements TUserRepository {
     };
 
     return this.prisma.post.create({ data: postCreateInput });
+  }
+
+  public async deletePost(postId: string): Promise<void> {
+    await this.prisma.post.delete({ where: { id: postId } });
+  }
+
+  public async updateMediaPost({
+    postId,
+    updatePostInput,
+  }: IUpdateMediaPostParams): Promise<void> {
+    const { tags, caption } = updatePostInput;
+    await this.prisma.post.update({
+      where: { id: postId },
+      data: {
+        tags: {
+          set: [],
+          connectOrCreate:
+            tags &&
+            tags?.map(tag => ({
+              where: { name: tag },
+              create: { name: tag },
+            })),
+        },
+        caption,
+      },
+    });
+  }
+
+  public async updateTextualPost({
+    postId,
+    updatePostInput,
+  }: IUpdateTextualPostParams): Promise<void> {
+    const { tags, text } = updatePostInput;
+    await this.prisma.post.update({
+      where: { id: postId },
+      data: {
+        tags: {
+          set: [],
+          connectOrCreate:
+            tags &&
+            tags?.map(tag => ({
+              where: { name: tag },
+              create: { name: tag },
+            })),
+        },
+        textual: {
+          update: { text },
+        },
+      },
+    });
   }
 }
 

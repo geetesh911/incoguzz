@@ -6,6 +6,11 @@ export interface IGetPostParams {
   postId: string;
 }
 
+export interface IGetSimilarPostsParams {
+  userId: string;
+  postIds: string[];
+}
+
 export interface IGetPostsParams {
   paginationInput: PaginationInput;
   userId: string;

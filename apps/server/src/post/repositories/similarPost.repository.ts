@@ -2,6 +2,7 @@ import {
   IExport,
   ISingleDocumentEntry,
   ITrainedData,
+  TrainedData,
 } from "../interfaces/similar-post-recommender.interface";
 import { DocVectorModel } from "../models/DocVector";
 import { TrainedDataModel } from "../models/TrainedData";
@@ -37,19 +38,24 @@ export class SimilarPostRepository implements TSimilarPostRepository {
       docVectors,
     };
   }
+
   public async getTrainingDataEntries(ids: string[]): Promise<ITrainedData> {
     return TrainedDataModel.find()
       .where({ id: { $in: ids } })
       .select(["-_id", "-__v"]);
   }
 
+  public async getTrainingDataEntry(id: string): Promise<TrainedData> {
+    return TrainedDataModel.findOne().where({ id }).select(["-_id", "-__v"]);
+  }
+
   public async saveTrainingExportedData(exportedData: IExport) {
     const { trainedData, processedDocs, docVectors } = exportedData;
 
     await Promise.all([
-      await DocVectorModel.insertMany(docVectors),
-      await ProcessedDocModel.insertMany(processedDocs),
-      await TrainedDataModel.insertMany(trainedData),
+      DocVectorModel.insertMany(docVectors),
+      ProcessedDocModel.insertMany(processedDocs),
+      TrainedDataModel.insertMany(trainedData),
     ]);
   }
 
@@ -59,9 +65,9 @@ export class SimilarPostRepository implements TSimilarPostRepository {
     const { trainedDataEntry, processedDoc, docVector } = data;
 
     await Promise.all([
-      await DocVectorModel.insertMany([docVector]),
-      await ProcessedDocModel.insertMany([processedDoc]),
-      await TrainedDataModel.insertMany([trainedDataEntry]),
+      DocVectorModel.insertMany([docVector]),
+      ProcessedDocModel.insertMany([processedDoc]),
+      TrainedDataModel.insertMany([trainedDataEntry]),
     ]);
   }
 
@@ -76,5 +82,14 @@ export class SimilarPostRepository implements TSimilarPostRepository {
         ),
       ),
     );
+  }
+
+  public async deleteEntry(id: string) {
+    const [docVector, processedDoc, trainedData] = await Promise.all([
+      DocVectorModel.findOneAndDelete({ id }),
+      ProcessedDocModel.findOneAndDelete({ id }),
+      TrainedDataModel.findOneAndDelete({ id }),
+    ]);
+    return { docVector, processedDoc, trainedData };
   }
 }

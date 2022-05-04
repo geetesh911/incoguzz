@@ -108,6 +108,7 @@ class App {
 
   private async initializeAgendaEvents() {
     this.postAgendaService.createPostTrainingJob();
+    this.postAgendaService.deletePostJob();
 
     this.baseAgendaService.agenda.on("ready", async () => {
       await this.baseAgendaService.agenda.start();
