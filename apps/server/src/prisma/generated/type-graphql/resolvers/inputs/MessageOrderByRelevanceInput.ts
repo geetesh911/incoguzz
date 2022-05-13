@@ -16,6 +16,7 @@ export class MessageOrderByRelevanceInput {
     | "id"
     | "message"
     | "mediaUrl"
+    | "mediaThumbnailUrl"
     | "postId"
     | "storyId"
     | "sourceUserId"

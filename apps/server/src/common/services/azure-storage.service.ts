@@ -43,13 +43,16 @@ class AzureStorageService {
     filename: string,
     containerName: AzureContainersEnum = AzureContainersEnum.misc,
     folder = "",
+    options: IFileOptions = fileOptionsDefaults,
   ): Promise<IBlobUploadCommonResponse> {
     const extension = this.mediaHelper.getFileExtension(filename);
 
     const newFileName = this.mediaHelper.getFileName(filename);
 
     file = await this.mediaService.compressImage(file as Buffer, extension);
-    const metaTags = await this.mediaService.getMetaTags(file, extension);
+    const metaTags = options.disableMetaTags
+      ? []
+      : await this.mediaService.getMetaTags(file, extension);
 
     const containerClient =
       this.blobServiceClient.getContainerClient(containerName);
@@ -129,6 +132,7 @@ class AzureStorageService {
           filename,
           containerName,
           folder,
+          options,
         );
 
         const fileUrl = this.createFileUrl(
@@ -165,6 +169,7 @@ class AzureStorageService {
               filename,
               containerName,
               folder,
+              options,
             );
 
             const fileUrl = this.createFileUrl(

@@ -385,23 +385,24 @@ model FollowRequest {
 }
 
 model Message {
-  id             String           @id @unique @default(cuid())
-  message        String?          @db.LongText
-  mediaUrl       String?          @db.Text
-  post           Post?            @relation(fields: [postId], references: [id], onUpdate: SetNull, onDelete: SetNull)
-  postId         String?
-  story          Story?           @relation(fields: [storyId], references: [id], onUpdate: SetNull, onDelete: SetNull)
-  storyId        String?
-  sourceUser     User             @relation(name: "messageSourceUser", fields: [sourceUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  sourceUserId   String
-  targetUser     User             @relation(name: "messageTargetUser", fields: [targetUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  targetUserId   String
-  replyToId      String?
-  replyTo        Message?         @relation(name: "replyTo", fields: [replyToId], references: [id], onUpdate: NoAction, onDelete: NoAction)
-  replyToMessage Message[]        @relation("replyTo")
-  mediaType      MessageMediaType
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now()) @updatedAt
+  id                String           @id @unique @default(cuid())
+  message           String?          @db.LongText
+  mediaUrl          String?          @db.Text
+  mediaThumbnailUrl String?          @db.Text
+  post              Post?            @relation(fields: [postId], references: [id], onUpdate: SetNull, onDelete: SetNull)
+  postId            String?
+  story             Story?           @relation(fields: [storyId], references: [id], onUpdate: SetNull, onDelete: SetNull)
+  storyId           String?
+  sourceUser        User             @relation(name: "messageSourceUser", fields: [sourceUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  sourceUserId      String
+  targetUser        User             @relation(name: "messageTargetUser", fields: [targetUserId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  targetUserId      String
+  replyToId         String?
+  replyTo           Message?         @relation(name: "replyTo", fields: [replyToId], references: [id], onUpdate: NoAction, onDelete: NoAction)
+  replyToMessage    Message[]        @relation("replyTo")
+  mediaType         MessageMediaType
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @default(now()) @updatedAt
 }
 
 model Story {

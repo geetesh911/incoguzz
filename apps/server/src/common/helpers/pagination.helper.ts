@@ -7,7 +7,7 @@ class PaginationHelper {
     results,
     key,
   }: IGetCursorParams<TResult>): string {
-    return results[results?.length - 1][key];
+    return results[results?.length - 1]?.[key];
   }
 }
 

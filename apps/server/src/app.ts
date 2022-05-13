@@ -25,12 +25,18 @@ import { logger, stream } from "@utils/logger";
 import PassportProvider from "@/auth/providers/passport.provider";
 import ContextHelper from "./common/helpers/context.helper";
 import PrismaService from "./common/services/prisma.service";
-import { createSchema } from "./utils/create-schema.util";
+import { createSchema, pubSub } from "./utils/create-schema.util";
 import { graphqlUploadExpress } from "graphql-upload";
 import { PostAgendaService } from "./post/services/post-agenda.service";
 import Agendash from "agendash";
 import { container, injectable } from "tsyringe";
 import { BaseAgendaService } from "./common/services/agenda.service";
+import { WebSocketServer } from "ws";
+import { Extra, useServer } from "graphql-ws/lib/use/ws";
+import { userIsAuthenticated } from "./auth/decorators/auth-checker.decorator";
+import { Context } from "graphql-ws/lib/server";
+import { ISubscriptionRequest } from "./auth/interfaces/auth.interface";
+import { ISubscriptionContext } from "./common/interfaces/context.interface";
 
 @injectable()
 class App {
@@ -61,17 +67,59 @@ class App {
   public async listen() {
     const schema = await createSchema();
 
+    // Creating the WebSocket server
+    const wsServer = new WebSocketServer({
+      // This is the `httpServer` we created in a previous step.
+      server: this.httpServer,
+      // Pass a different path here if your ApolloServer serves at
+      // a different path.
+      path: "/graphql",
+    });
+
+    // Hand in the schema we just created and have the
+    // WebSocketServer start listening.
+    const serverCleanup = useServer(
+      {
+        schema,
+        context: async (
+          ctx: Context<{ authorization: string }, Extra>,
+        ): Promise<ISubscriptionContext> => {
+          const subscriptionRequest: ISubscriptionRequest = {
+            ...ctx.extra.request,
+            headers: { ...ctx.connectionParams },
+          };
+          const { isAuthenticated, user } = await userIsAuthenticated(
+            subscriptionRequest,
+          );
+
+          return { ...ctx, isAuthenticated, user, pubSub };
+        },
+      },
+      wsServer,
+    );
+
     const server = new ApolloServer({
       schema,
       plugins: [
         ApolloServerPluginLandingPageGraphQLPlayground(),
         ApolloServerPluginDrainHttpServer({ httpServer: this.httpServer }),
+        // Proper shutdown for the WebSocket server.
+        {
+          async serverWillStart() {
+            return {
+              async drainServer() {
+                await serverCleanup.dispose();
+              },
+            };
+          },
+        },
       ],
-      context: async ({ req, res }) => {
+      context: async contextParams => {
         return this.contextHelper.buildContext({
           prisma: this.prisma,
-          req,
-          res,
+          req: contextParams?.req,
+          res: contextParams?.res,
+          pubSub,
         });
       },
     });

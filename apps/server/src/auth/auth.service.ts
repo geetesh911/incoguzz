@@ -117,11 +117,11 @@ class AuthService {
   }
 
   public getBrowserInfo(req: Request): string {
-    return req.header["user-agent"] || "XX";
+    return req?.header["user-agent"] || "XX";
   }
 
   public getCountry(req: Request): string {
-    return req.header["cf-ipcountry"] ? req.header["cf-ipcountry"] : "XX";
+    return req?.header["cf-ipcountry"] ? req?.header["cf-ipcountry"] : "XX";
   }
 
   public encryptText(text: string): string {

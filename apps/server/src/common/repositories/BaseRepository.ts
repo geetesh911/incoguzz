@@ -1,3 +1,9 @@
+import PaginationInput from "../inputs/pagination.input";
+import {
+  IGetPagination,
+  IPaginationCursor,
+} from "../interfaces/repository.interface";
+
 export interface IBaseRepository {
   modelName: string;
 }
@@ -9,6 +15,18 @@ abstract class BaseRepository implements TBaseRepository {
 
   constructor(modelName: string) {
     this.modelName = modelName;
+  }
+
+  public getPaginationArgs<T = IPaginationCursor>(
+    paginationInput: PaginationInput,
+  ): IGetPagination<T> {
+    const { take, firstQueryResult, cursor } = paginationInput;
+
+    return {
+      take,
+      skip: firstQueryResult ? 0 : 1,
+      cursor: cursor && ({ id: cursor } as T),
+    };
   }
 }
 

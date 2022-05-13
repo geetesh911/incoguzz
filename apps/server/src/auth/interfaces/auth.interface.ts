@@ -1,5 +1,6 @@
 import { User } from "@/prisma/generated/type-graphql";
 import { Request } from "express";
+import { Extra } from "graphql-ws/lib/use/ws";
 import { ObjectId } from "mongodb";
 
 export interface DataStoredInToken {
@@ -38,3 +39,16 @@ export interface IUserVerificationData {
   email: string;
   userId: ObjectId;
 }
+
+export interface IUserAuthenticationData {
+  isAuthenticated: boolean;
+  user: ILoginJwtPayload;
+}
+
+export type ISubscriptionRequest = Partial<Extra["request"]> & {
+  header?: (key: string) => string;
+  get?: (key: string) => string;
+  body?: { token: string };
+  query?: { token: string };
+  headers?: { [key: string]: string };
+};

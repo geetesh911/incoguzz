@@ -286,6 +286,7 @@ Table Message {
   id String [pk, unique]
   message String
   mediaUrl String
+  mediaThumbnailUrl String
   post Post
   postId String
   story Story

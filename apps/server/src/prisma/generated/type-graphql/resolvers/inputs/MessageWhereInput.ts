@@ -46,6 +46,11 @@ export class MessageWhereInput {
   })
   mediaUrl?: StringNullableFilter | undefined;
 
+  @TypeGraphQL.Field(_type => StringNullableFilter, {
+    nullable: true,
+  })
+  mediaThumbnailUrl?: StringNullableFilter | undefined;
+
   @TypeGraphQL.Field(_type => PostRelationFilter, {
     nullable: true,
   })

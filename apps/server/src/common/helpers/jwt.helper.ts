@@ -3,6 +3,7 @@ import config from "@/configs";
 import { Request } from "express";
 import Cryptr from "cryptr";
 import { injectable } from "tsyringe";
+import { ISubscriptionRequest } from "@/auth/interfaces/auth.interface";
 
 @injectable()
 class JWTHelper {
@@ -21,18 +22,18 @@ class JWTHelper {
   public verifyJwtToken<Type extends JwtPayload | string>(token: string): Type {
     return jwt.verify(token, config.get("secretKey")) as Type;
   }
-  public jwtExtractor(request: Request) {
+  public jwtExtractor(request: Request | ISubscriptionRequest) {
     let token = null;
-    if (request.header("x-token")) {
-      token = request.get("x-token");
-    } else if (request.headers.authorization) {
+    if (request?.header?.("x-token")) {
+      token = request?.get?.("x-token");
+    } else if (request?.headers?.authorization) {
       token = request.headers.authorization
         .replace("Bearer ", "")
         .replace(" ", "");
-    } else if (request.body.token) {
+    } else if (request?.body?.token) {
       token = request.body.token.replace(" ", "");
     }
-    if (request.query.token) {
+    if (request?.query?.token) {
       token = request.body.token.replace(" ", "");
     }
 

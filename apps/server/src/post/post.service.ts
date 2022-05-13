@@ -570,7 +570,7 @@ class PostService {
     return true;
   }
 
-  private compressVideoMedia(
+  public compressVideoMedia(
     originalMediaFiles: Promise<FileUpload>[],
     mediaFiles: FileUpload[],
   ): Promise<Partial<FileUpload>>[] {
@@ -582,7 +582,7 @@ class PostService {
       : originalMediaFiles;
   }
 
-  private async uploadThumbnail(
+  public async uploadThumbnail(
     thumbnailInput: IGetVideoThumbnail,
   ): Promise<IUploadThumbnailResponse> {
     const { thumbnailReadStream, thumbnailFilename, containerName } =

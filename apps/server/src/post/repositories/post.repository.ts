@@ -28,7 +28,6 @@ import {
   IGetRelatedPostsRepoParams,
   IGetSimilarPostsParams,
 } from "../interfaces/get-post.interface";
-import PaginationInput from "@/common/inputs/pagination.input";
 import { IMetaTag } from "@/common/interfaces/storage.interface";
 import { injectable } from "tsyringe";
 
@@ -85,18 +84,6 @@ class PostRepository extends BaseRepository implements TUserRepository {
     };
   }
 
-  private getPaginationArgs(
-    paginationInput: PaginationInput,
-  ): Pick<Prisma.PostFindManyArgs, "take" | "skip" | "cursor"> {
-    const { take, firstQueryResult, cursor } = paginationInput;
-
-    return {
-      take,
-      skip: firstQueryResult ? 0 : 1,
-      cursor: cursor && { id: cursor },
-    };
-  }
-
   public async getPost({ postId, userId }: IGetPostParams): Promise<Post> {
     return this.prisma.post.findUnique({
       where: { id: postId },
@@ -126,7 +113,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
     paginationInput,
   }: IGetPostsParams): Promise<Post[]> {
     return this.prisma.post.findMany({
-      ...this.getPaginationArgs(paginationInput),
+      ...this.getPaginationArgs<Prisma.PostWhereUniqueInput>(paginationInput),
       where: { userId, archive: false },
       include: this.getPostsIncludeArgs(userId),
       orderBy: { createdAt: "desc" },
@@ -138,7 +125,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
     paginationInput,
   }: IGetPostsParams): Promise<Post[]> {
     return this.prisma.post.findMany({
-      ...this.getPaginationArgs(paginationInput),
+      ...this.getPaginationArgs<Prisma.PostWhereUniqueInput>(paginationInput),
       where: {},
       include: this.getPostsIncludeArgs(userId),
       orderBy: { createdAt: "desc" },
@@ -154,7 +141,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
     metaTags = metaTags as IMetaTag[];
 
     return this.prisma.post.findMany({
-      ...this.getPaginationArgs(paginationInput),
+      ...this.getPaginationArgs<Prisma.PostWhereUniqueInput>(paginationInput),
       where: {
         OR: [
           ...tags.map(tag => ({ tags: { some: { name: tag.name } } })),
@@ -178,7 +165,7 @@ class PostRepository extends BaseRepository implements TUserRepository {
     paginationInput,
   }: IGetPostsParams): Promise<Bookmark[]> {
     return this.prisma.bookmark.findMany({
-      ...this.getPaginationArgs(paginationInput),
+      ...this.getPaginationArgs<Prisma.PostWhereUniqueInput>(paginationInput),
       where: { userId },
       include: {
         post: { include: this.getPostsIncludeArgs(userId) },

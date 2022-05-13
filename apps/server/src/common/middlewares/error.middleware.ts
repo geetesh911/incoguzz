@@ -16,9 +16,9 @@ export const errorMiddleware = (
     const message: string = error.message || "Something went wrong";
 
     logger.error(
-      `[${req.method}] ${req.path} >> StatusCode:: ${status}, Message:: ${message}`,
+      `[${req?.method}] ${req?.path} >> StatusCode:: ${status}, Message:: ${message}`,
     );
-    res.status(status).json({ message });
+    res?.status(status).json({ message });
   } catch (err) {
     next(err);
   }
@@ -37,6 +37,7 @@ export class GraphQLErrorLoggerMiddleware
         operation: info.operation.operation,
         fieldName: info.fieldName,
       };
+      console.log("error data", err);
       logger.debug(information);
       logger.error(err?.code);
       logger.error(err);

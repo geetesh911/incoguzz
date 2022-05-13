@@ -26,6 +26,11 @@ export class MessageCreateManySourceUserInput {
   @TypeGraphQL.Field(_type => String, {
     nullable: true,
   })
+  mediaThumbnailUrl?: string | undefined;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
   postId?: string | undefined;
 
   @TypeGraphQL.Field(_type => String, {

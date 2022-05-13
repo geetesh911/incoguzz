@@ -10,13 +10,13 @@ import userModel from "@models/users.model";
 
 const authMiddleware = async (
   req: RequestWithUser,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   try {
     const Authorization =
-      req.cookies["Authorization"] ||
-      req.header("Authorization").split("Bearer ")[1] ||
+      req?.cookies?.["Authorization"] ||
+      req?.header("Authorization")?.split("Bearer ")[1] ||
       null;
 
     if (Authorization) {

@@ -28,6 +28,11 @@ export class MessageCreateWithoutTargetUserInput {
   })
   mediaUrl?: string | undefined;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  mediaThumbnailUrl?: string | undefined;
+
   @TypeGraphQL.Field(_type => PostCreateNestedOneWithoutMessageInput, {
     nullable: true,
   })

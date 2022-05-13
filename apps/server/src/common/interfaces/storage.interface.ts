@@ -24,6 +24,7 @@ export interface IFileOptions {
   resourceType?: ResourceType;
   folder?: string;
   containerName?: AzureContainersEnum;
+  disableMetaTags?: boolean;
   onSuccess?: (
     uploadResponse: IBlobUploadCommonResponse | IUploadApiResponse,
     fileUrl: string,

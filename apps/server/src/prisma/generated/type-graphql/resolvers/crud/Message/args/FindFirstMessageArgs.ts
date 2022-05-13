@@ -43,6 +43,7 @@ export class FindFirstMessageArgs {
         | "id"
         | "message"
         | "mediaUrl"
+        | "mediaThumbnailUrl"
         | "postId"
         | "storyId"
         | "sourceUserId"

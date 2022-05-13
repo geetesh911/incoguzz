@@ -120,6 +120,11 @@ enum Gender {
   MALE
 }
 
+type GetMessagesOuput {
+  data: [MessageOutput!]!
+  pagination: PaginationOutput!
+}
+
 type GetPostsOutput {
   data: [PostOutput!]!
   pagination: PaginationOutput!
@@ -163,9 +168,55 @@ type LoginOutput {
   username: String!
 }
 
+type Message {
+  _count: MessageCount
+  createdAt: DateTime!
+  id: String!
+  mediaThumbnailUrl: String
+  mediaType: MessageMediaType!
+  mediaUrl: String
+  message: String
+  postId: String
+  replyToId: String
+  sourceUserId: String!
+  storyId: String
+  targetUserId: String!
+  updatedAt: DateTime!
+}
+
+type MessageCount {
+  replyToMessage: Int!
+}
+
+enum MessageMediaType {
+  AUDIO
+  DOCUMENT
+  IMAGE
+  POST
+  STORY
+  TEXT
+  VIDEO
+}
+
+type MessageOutput {
+  createdAt: DateTime!
+  id: String!
+  mediaThumbnailUrl: String
+  mediaType: MessageMediaType!
+  mediaUrl: String
+  message: String
+  post: Post
+  replyTo: Message!
+  sourceUser: User!
+  story: Story
+  targetUser: User!
+  updatedAt: DateTime!
+}
+
 type Mutation {
   addClipPost(addClipPostInput: AddClipPostInput!, clipAudioMedia: Upload!, clipMedia: Upload!): Post!
   addMediaPost(addMediaPostInput: AddMediaPostInput!, media: [Upload!]!, mediaThumbnail: Upload): Post!
+  addMessage(media: Upload, newMessageInput: NewMessageInput!): MessageOutput!
   addPollPost(addPollPostInput: AddPollPostInput!): Post!
   addTextualPost(addTextualPostInput: AddTextualPostInput!): Post!
   bookmarkPost(postId: String!): BookmarkPostOutput!
@@ -192,6 +243,15 @@ type Mutation {
   verifyUserEmail(verificationToken: String!): Boolean
 }
 
+input NewMessageInput {
+  mediaType: MessageMediaType
+  message: String!
+  postId: String
+  replyToId: String
+  storyId: String
+  targetUserId: String
+}
+
 input PaginationInput {
   cursor: String
   firstQueryResult: Boolean!
@@ -199,7 +259,7 @@ input PaginationInput {
 }
 
 type PaginationOutput {
-  cursor: String!
+  cursor: String
 }
 
 type Photo {
@@ -352,6 +412,7 @@ type Query {
   getBookmarkedPosts(paginationInput: PaginationInput!): BookmarksOutput!
   getExplorePosts(paginationInput: PaginationInput!): GetPostsOutput!
   getMediaAccessToken: String!
+  getMessages(paginationInput: PaginationInput!, targetUserId: String!): GetMessagesOuput!
   getPost(postId: String!): PostOutput!
   getRelatedPosts(paginationInput: PaginationInput!, postId: String!): GetPostsOutput!
   getSimilarPosts(postId: String!): [PostOutput!]!
@@ -427,6 +488,24 @@ type SignUpOutput {
   username: String!
 }
 
+type Story {
+  _count: StoryCount
+  createdAt: DateTime!
+  id: String!
+  link: String
+  mediaUrl: String!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type StoryCount {
+  message: Int!
+}
+
+type Subscription {
+  newMessage: MessageOutput!
+}
+
 type Tag {
   _count: TagCount
   id: String!
@@ -465,6 +544,45 @@ type UpdateUserOutput {
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload
+
+type User {
+  _count: UserCount
+  accountType: AccountType!
+  active: Boolean!
+  blockExpires: DateTime!
+  createdAt: DateTime!
+  email: String!
+  googleUserId: String
+  id: String!
+  isVerified: Boolean!
+  lastLogin: DateTime!
+  loginAttempts: Int!
+  password: String
+  role: Role!
+  updatedAt: DateTime!
+  username: String!
+  verificationExpires: DateTime!
+}
+
+type UserCount {
+  activities: Int!
+  blocked: Int!
+  blockedBy: Int!
+  bookmarks: Int!
+  commentReplies: Int!
+  comments: Int!
+  followers: Int!
+  followings: Int!
+  pollAnswers: Int!
+  posts: Int!
+  reactions: Int!
+  receivedFollowRequests: Int!
+  receivedMessages: Int!
+  sentFollowRequests: Int!
+  sentMessages: Int!
+  stories: Int!
+  tokens: Int!
+}
 
 type UserOutput {
   accountType: AccountType!

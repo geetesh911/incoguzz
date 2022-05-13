@@ -26,6 +26,11 @@ export class MessageUpdateManyMutationInput {
   })
   mediaUrl?: NullableStringFieldUpdateOperationsInput | undefined;
 
+  @TypeGraphQL.Field(_type => NullableStringFieldUpdateOperationsInput, {
+    nullable: true,
+  })
+  mediaThumbnailUrl?: NullableStringFieldUpdateOperationsInput | undefined;
+
   @TypeGraphQL.Field(_type => EnumMessageMediaTypeFieldUpdateOperationsInput, {
     nullable: true,
   })

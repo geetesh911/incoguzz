@@ -43,6 +43,7 @@ export class FindManyMessageArgs {
         | "id"
         | "message"
         | "mediaUrl"
+        | "mediaThumbnailUrl"
         | "postId"
         | "storyId"
         | "sourceUserId"

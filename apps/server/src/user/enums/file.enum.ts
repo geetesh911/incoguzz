@@ -2,6 +2,7 @@ export enum AzureContainersEnum {
   profile = "profile",
   misc = "misc",
   audio = "audio",
+  message = "message",
   POLL = "poll",
   PHOTO = "photo",
   VIDEO = "video",

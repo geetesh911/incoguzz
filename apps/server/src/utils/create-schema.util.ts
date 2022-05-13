@@ -7,10 +7,13 @@ import { AuthResolver } from "@/auth/auth.resolver";
 import path from "path";
 import { BotMiddleware } from "@/common/middlewares/bot.middleware";
 import { container } from "tsyringe";
+import { ChatResolver } from "@/chat/chat.resolver";
+import { PubSub } from "graphql-subscriptions";
 
+export const pubSub = new PubSub();
 export const createSchema = async () =>
   buildSchema({
-    resolvers: [UserResolver, AuthResolver, PostResolver],
+    resolvers: [UserResolver, AuthResolver, PostResolver, ChatResolver],
     emitSchemaFile: path.join(__dirname, "../schema.gql"),
     // use document converting middleware
     globalMiddlewares: [
@@ -25,4 +28,5 @@ export const createSchema = async () =>
         return container.resolve(someClass);
       },
     },
+    pubSub,
   });

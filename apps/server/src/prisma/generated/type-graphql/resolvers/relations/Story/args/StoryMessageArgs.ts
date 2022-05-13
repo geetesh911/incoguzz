@@ -43,6 +43,7 @@ export class StoryMessageArgs {
         | "id"
         | "message"
         | "mediaUrl"
+        | "mediaThumbnailUrl"
         | "postId"
         | "storyId"
         | "sourceUserId"

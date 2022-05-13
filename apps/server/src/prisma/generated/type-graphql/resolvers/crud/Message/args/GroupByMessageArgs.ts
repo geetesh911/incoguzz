@@ -24,6 +24,7 @@ export class GroupByMessageArgs {
     | "id"
     | "message"
     | "mediaUrl"
+    | "mediaThumbnailUrl"
     | "postId"
     | "storyId"
     | "sourceUserId"

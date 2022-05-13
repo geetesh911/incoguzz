@@ -26,6 +26,11 @@ export class MessageCreateManyPostInput {
   @TypeGraphQL.Field(_type => String, {
     nullable: true,
   })
+  mediaThumbnailUrl?: string | undefined;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
   storyId?: string | undefined;
 
   @TypeGraphQL.Field(_type => String, {

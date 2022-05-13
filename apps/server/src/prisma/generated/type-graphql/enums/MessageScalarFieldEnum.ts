@@ -4,6 +4,7 @@ export enum MessageScalarFieldEnum {
   id = "id",
   message = "message",
   mediaUrl = "mediaUrl",
+  mediaThumbnailUrl = "mediaThumbnailUrl",
   postId = "postId",
   storyId = "storyId",
   sourceUserId = "sourceUserId",

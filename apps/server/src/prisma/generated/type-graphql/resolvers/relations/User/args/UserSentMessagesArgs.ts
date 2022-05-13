@@ -43,6 +43,7 @@ export class UserSentMessagesArgs {
         | "id"
         | "message"
         | "mediaUrl"
+        | "mediaThumbnailUrl"
         | "postId"
         | "storyId"
         | "sourceUserId"

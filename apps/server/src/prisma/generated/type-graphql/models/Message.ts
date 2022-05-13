@@ -27,6 +27,11 @@ export class Message {
   })
   mediaUrl?: string | null;
 
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
+  mediaThumbnailUrl?: string | null;
+
   post?: Post | null;
 
   @TypeGraphQL.Field(_type => String, {

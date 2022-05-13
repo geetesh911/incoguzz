@@ -28,6 +28,11 @@ export class MessageOrderByWithRelationAndSearchRelevanceInput {
   })
   mediaUrl?: "asc" | "desc" | undefined;
 
+  @TypeGraphQL.Field(_type => SortOrder, {
+    nullable: true,
+  })
+  mediaThumbnailUrl?: "asc" | "desc" | undefined;
+
   @TypeGraphQL.Field(_type => PostOrderByWithRelationAndSearchRelevanceInput, {
     nullable: true,
   })

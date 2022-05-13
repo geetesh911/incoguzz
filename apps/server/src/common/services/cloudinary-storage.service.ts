@@ -51,7 +51,9 @@ class CloudinaryStorageService {
             extension,
           );
 
-          const metaTags = await this.mediaService.getMetaTags(file, extension);
+          const metaTags = options.disableMetaTags
+            ? []
+            : await this.mediaService.getMetaTags(file, extension);
 
           const stream = this.cloudinaryv2.uploader.upload_stream(
             {

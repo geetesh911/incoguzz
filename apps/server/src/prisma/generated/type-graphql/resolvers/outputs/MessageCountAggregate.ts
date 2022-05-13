@@ -25,6 +25,11 @@ export class MessageCountAggregate {
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
     nullable: false,
   })
+  mediaThumbnailUrl!: number;
+
+  @TypeGraphQL.Field(_type => TypeGraphQL.Int, {
+    nullable: false,
+  })
   postId!: number;
 
   @TypeGraphQL.Field(_type => TypeGraphQL.Int, {

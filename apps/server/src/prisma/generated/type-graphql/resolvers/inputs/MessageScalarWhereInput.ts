@@ -44,6 +44,11 @@ export class MessageScalarWhereInput {
   @TypeGraphQL.Field(_type => StringNullableFilter, {
     nullable: true,
   })
+  mediaThumbnailUrl?: StringNullableFilter | undefined;
+
+  @TypeGraphQL.Field(_type => StringNullableFilter, {
+    nullable: true,
+  })
   postId?: StringNullableFilter | undefined;
 
   @TypeGraphQL.Field(_type => StringNullableFilter, {

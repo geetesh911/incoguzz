@@ -29,6 +29,11 @@ export class MessageGroupBy {
   @TypeGraphQL.Field(_type => String, {
     nullable: true,
   })
+  mediaThumbnailUrl!: string | null;
+
+  @TypeGraphQL.Field(_type => String, {
+    nullable: true,
+  })
   postId!: string | null;
 
   @TypeGraphQL.Field(_type => String, {
