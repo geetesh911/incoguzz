@@ -8,6 +8,7 @@ import {
   Publisher,
   Ctx,
   Query,
+  Arg,
 } from "type-graphql";
 import { injectable } from "tsyringe";
 import { withFilter } from "graphql-subscriptions";
@@ -41,6 +42,14 @@ export class ChatResolver {
   }
 
   @Authorized()
+  @Mutation(() => Boolean)
+  async deleteMessage(
+    @Arg("messageId", () => String) messageId: string,
+  ): Promise<boolean> {
+    return this.chatService.deleteMessage(messageId);
+  }
+
+  @Authorized()
   @Mutation(() => MessageOutput)
   async addMessage(
     @Ctx() { user }: Context,
@@ -68,6 +77,22 @@ export class ChatResolver {
     ),
   })
   newMessage(@Root() messagePayload: MessageOutput): MessageOutput {
+    return messagePayload;
+  }
+
+  @Subscription({
+    subscribe: withFilter(
+      (_root, _args, context: ISubscriptionContext) => {
+        return context.pubSub.asyncIterator(
+          ChatSubscriptions.NEW_MESSAGE_NOTIFICATION,
+        );
+      },
+      (_payload, _args, context: ISubscriptionContext) => {
+        return context.isAuthenticated;
+      },
+    ),
+  })
+  newMessageNotification(@Root() messagePayload: MessageOutput): MessageOutput {
     return messagePayload;
   }
 }

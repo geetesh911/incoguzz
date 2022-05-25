@@ -29,10 +29,18 @@ async function main() {
     );
   });
 
-  for (const userInfo of usersData) {
-    const user = await prisma.user.create({ data: userInfo });
-    users.push(user);
-  }
+  const userPromises = usersData.map(async userInfo => {
+    return new Promise<User>(async resolve => {
+      try {
+        const user = await prisma.user.create({ data: userInfo });
+        users.push(user);
+        resolve(user);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  });
+  await Promise.all(userPromises);
 
   const postsData = await new Promise<IPosts[]>(resolve => {
     fs.readFile(
@@ -48,57 +56,63 @@ async function main() {
   console.log(users.length);
 
   console.log(users[getRandomInt(0, 99)].id);
-  for (const postInfo of postsData) {
-    const postData: Prisma.PostCreateInput = {
-      user: { connect: { id: users[getRandomInt(0, 99)].id } },
-      caption: postInfo.caption,
-      slug: `${Math.random()}-${faker.helpers.slugify(faker.random.words(2))}`,
-      type: postInfo.type as any,
-      tags: {
-        connectOrCreate: postInfo.tags.map(tag => ({
-          where: { name: tag },
-          create: { name: tag },
-        })),
-      },
-      metaTags: postInfo.metaTags || [],
-      photos:
-        postInfo.type === "PHOTO"
-          ? { createMany: { data: { url: postInfo.url } } }
-          : undefined,
-      video:
-        postInfo.type === "VIDEO"
-          ? {
-              create: {
-                url: postInfo.url,
-                thumbnailUrl: postInfo.thumbnail,
-              },
-            }
-          : undefined,
-      textual:
-        postInfo.type === "TEXTUAL"
-          ? {
-              create: {
-                text: postInfo.text,
-              },
-            }
-          : undefined,
-      audio:
-        postInfo.type === "AUDIO"
-          ? {
-              create: {
-                url: postInfo.url,
-                thumbnailUrl: postInfo.thumbnail,
-              },
-            }
-          : undefined,
-    };
-    try {
-      const post = await prisma.post.create({ data: postData });
-      posts.push(post);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const postPromises = postsData?.map(async postInfo => {
+    return new Promise<Post>(async resolve => {
+      const postData: Prisma.PostCreateInput = {
+        user: { connect: { id: users[getRandomInt(0, 99)].id } },
+        caption: postInfo.caption,
+        slug: `${Math.random()}-${faker.helpers.slugify(
+          faker.random.words(2),
+        )}`,
+        type: postInfo.type as any,
+        tags: {
+          connectOrCreate: postInfo.tags.map(tag => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
+        },
+        metaTags: postInfo.metaTags || [],
+        photos:
+          postInfo.type === "PHOTO"
+            ? { createMany: { data: { url: postInfo.url } } }
+            : undefined,
+        video:
+          postInfo.type === "VIDEO"
+            ? {
+                create: {
+                  url: postInfo.url,
+                  thumbnailUrl: postInfo.thumbnail,
+                },
+              }
+            : undefined,
+        textual:
+          postInfo.type === "TEXTUAL"
+            ? {
+                create: {
+                  text: postInfo.text,
+                },
+              }
+            : undefined,
+        audio:
+          postInfo.type === "AUDIO"
+            ? {
+                create: {
+                  url: postInfo.url,
+                  thumbnailUrl: postInfo.thumbnail,
+                },
+              }
+            : undefined,
+      };
+      try {
+        const post = await prisma.post.create({ data: postData });
+        posts.push(post);
+        resolve(post);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  });
+  await Promise.all(postPromises);
 }
 
 main()

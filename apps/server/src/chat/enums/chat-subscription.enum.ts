@@ -1,3 +1,4 @@
 export enum ChatSubscriptions {
   NEW_MESSAGE = "NEW_MESSAGE",
+  NEW_MESSAGE_NOTIFICATION = "NEW_MESSAGE_NOTIFICATION",
 }

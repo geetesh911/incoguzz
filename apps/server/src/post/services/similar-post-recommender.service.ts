@@ -446,6 +446,8 @@ export class SimilarPostsRecommenderService {
 
       if (similarPosts.length > options.maxSimilarDocs)
         arr[index].similarPosts = similarPosts.slice(0, options.maxSimilarDocs);
+
+      arr[index].similarPosts = _.uniqBy(arr[index].similarPosts, "id");
     });
   }
 

@@ -12,6 +12,7 @@ interface IReader {
 
 interface IWriter {
   addMessage: (params: IAddMessageRepoParams) => Promise<Message>;
+  deleteMessage: (messageId: string) => Promise<void>;
 }
 
 type TChatRepository = IReader & IWriter;
@@ -75,5 +76,8 @@ export class ChatRepository extends BaseRepository implements TChatRepository {
         ...this.getMessagesIncludeArgs(),
       },
     });
+  }
+  public async deleteMessage(messageId: string): Promise<void> {
+    await this.prisma.message.delete({ where: { id: messageId } });
   }
 }

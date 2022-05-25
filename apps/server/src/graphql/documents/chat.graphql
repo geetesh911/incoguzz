@@ -1,0 +1,56 @@
+fragment MessageCommonFields on MessageOutput {
+  id
+  message
+  mediaUrl
+  mediaThumbnailUrl
+  mediaType
+  createdAt
+  post {
+    id
+    type
+  }
+  sourceUser {
+    id
+  }
+  targetUser {
+    id
+  }
+}
+
+query GetMessages($paginationInput: PaginationInput!, $targetUserId: String!) {
+  getMessages(paginationInput: $paginationInput, targetUserId: $targetUserId) {
+    data {
+      ...MessageCommonFields
+    }
+    pagination {
+      cursor
+    }
+  }
+}
+
+mutation AddMessage($newMessageInput: NewMessageInput!, $media: Upload) {
+  addMessage(newMessageInput: $newMessageInput, media: $media) {
+    ...MessageCommonFields
+  }
+}
+
+subscription NewMessage {
+  newMessage {
+    id
+    message
+    mediaUrl
+    mediaThumbnailUrl
+    mediaType
+    createdAt
+    post {
+      id
+      type
+    }
+    sourceUser {
+      id
+    }
+    targetUser {
+      id
+    }
+  }
+}

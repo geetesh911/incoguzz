@@ -223,6 +223,7 @@ type Mutation {
   changePassword(changePasswordInput: ChangePasswordInput!): Boolean!
   changeProfilePicture(picture: Upload!): Boolean!
   deactivateUser: Boolean!
+  deleteMessage(messageId: String!): Boolean!
   deletePost(postId: String!): Boolean!
   forgotPassword(forgotPasswordInput: ForgotPasswordInput!): ForgotPasswordOutput!
   googleAuth(googleAuthInput: GoogleAuthInput!): GoogleAuthOutput!
@@ -244,12 +245,12 @@ type Mutation {
 }
 
 input NewMessageInput {
-  mediaType: MessageMediaType
-  message: String!
+  mediaType: MessageMediaType!
+  message: String
   postId: String
   replyToId: String
   storyId: String
-  targetUserId: String
+  targetUserId: String!
 }
 
 input PaginationInput {
@@ -504,6 +505,7 @@ type StoryCount {
 
 type Subscription {
   newMessage: MessageOutput!
+  newMessageNotification: MessageOutput!
 }
 
 type Tag {

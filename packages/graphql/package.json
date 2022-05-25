@@ -8,19 +8,13 @@
   "files": [
     "dist/**"
   ],
-  "workspaces": {
-    "nohoist": [
-      "react"
-    ]
-  },
   "scripts": {
-    "build": "tsc && npx tsc-alias"
+    "build": "npx tsc && npx tsc-alias"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
     "@graphql-typed-document-node/core": "^3.1.1",
     "graphql": "^16.2.0",
-    "graphql-tag": "^2.12.6",
-    "react": "17.0.2"
+    "graphql-tag": "^2.12.6"
   }
 }

@@ -54,6 +54,11 @@ export class ChatService {
     };
   }
 
+  public async deleteMessage(messageId: string): Promise<boolean> {
+    await this.chatRepository.deleteMessage(messageId);
+    return true;
+  }
+
   public async addMessage({
     messageInput,
     media,

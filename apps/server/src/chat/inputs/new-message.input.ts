@@ -1,17 +1,16 @@
 import { MessageMediaType } from "@/prisma/generated/type-graphql";
-import { IsString, MaxLength } from "class-validator";
+import { IsString } from "class-validator";
 import { Field, InputType } from "type-graphql";
 
 @InputType()
 export class NewMessageInput {
-  @Field(() => String)
-  @IsString()
-  @MaxLength(2000)
-  message?: string;
-
   @Field(() => String, { nullable: true })
   @IsString()
-  targetUserId?: string;
+  message?: string;
+
+  @Field(() => String)
+  @IsString()
+  targetUserId: string;
 
   @Field(() => String, { nullable: true })
   @IsString()
@@ -25,7 +24,7 @@ export class NewMessageInput {
   @IsString()
   replyToId?: string;
 
-  @Field(() => MessageMediaType, { nullable: true })
+  @Field(() => MessageMediaType)
   @IsString()
   mediaType: MessageMediaType;
 }

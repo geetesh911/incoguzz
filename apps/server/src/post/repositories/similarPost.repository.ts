@@ -8,6 +8,7 @@ import { DocVectorModel } from "../models/DocVector";
 import { TrainedDataModel } from "../models/TrainedData";
 import { ProcessedDocModel } from "../models/ProcessedDoc";
 import { injectable } from "tsyringe";
+import { JsonHelper } from "@/common/helpers/json.helper";
 
 interface IReader {
   getTrainingData: () => Promise<IExport>;
@@ -24,6 +25,8 @@ type TSimilarPostRepository = IReader & IWriter;
 
 @injectable()
 export class SimilarPostRepository implements TSimilarPostRepository {
+  constructor(private readonly jsonHelper: JsonHelper) {}
+
   public async getTrainingData(): Promise<IExport> {
     const [docVectors, processedDocs, trainedData] = await Promise.all([
       DocVectorModel.find({}),
@@ -51,6 +54,8 @@ export class SimilarPostRepository implements TSimilarPostRepository {
 
   public async saveTrainingExportedData(exportedData: IExport) {
     const { trainedData, processedDocs, docVectors } = exportedData;
+
+    await this.jsonHelper.stringfyFs(trainedData, "./trainedData.json");
 
     await Promise.all([
       DocVectorModel.insertMany(docVectors),

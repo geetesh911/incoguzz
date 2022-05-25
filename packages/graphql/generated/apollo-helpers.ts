@@ -59,6 +59,11 @@ export type ForgotPasswordOutputFieldPolicy = {
 	verificationTokenId?: FieldPolicy<any> | FieldReadFunction<any>,
 	verificationUuid?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type GetMessagesOuputKeySpecifier = ('data' | 'pagination' | GetMessagesOuputKeySpecifier)[];
+export type GetMessagesOuputFieldPolicy = {
+	data?: FieldPolicy<any> | FieldReadFunction<any>,
+	pagination?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type GetPostsOutputKeySpecifier = ('data' | 'pagination' | GetPostsOutputKeySpecifier)[];
 export type GetPostsOutputFieldPolicy = {
 	data?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -82,16 +87,54 @@ export type LoginOutputFieldPolicy = {
 	refreshToken?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addPollPost' | 'addTextualPost' | 'bookmarkPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'forgotPassword' | 'googleAuth' | 'incrementPostView' | 'login' | 'logout' | 'multipleUploadFile' | 'postReaction' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateProfile' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
+export type MessageKeySpecifier = ('_count' | 'createdAt' | 'id' | 'mediaThumbnailUrl' | 'mediaType' | 'mediaUrl' | 'message' | 'postId' | 'replyToId' | 'sourceUserId' | 'storyId' | 'targetUserId' | 'updatedAt' | MessageKeySpecifier)[];
+export type MessageFieldPolicy = {
+	_count?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaThumbnailUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaType?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	message?: FieldPolicy<any> | FieldReadFunction<any>,
+	postId?: FieldPolicy<any> | FieldReadFunction<any>,
+	replyToId?: FieldPolicy<any> | FieldReadFunction<any>,
+	sourceUserId?: FieldPolicy<any> | FieldReadFunction<any>,
+	storyId?: FieldPolicy<any> | FieldReadFunction<any>,
+	targetUserId?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type MessageCountKeySpecifier = ('replyToMessage' | MessageCountKeySpecifier)[];
+export type MessageCountFieldPolicy = {
+	replyToMessage?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type MessageOutputKeySpecifier = ('createdAt' | 'id' | 'mediaThumbnailUrl' | 'mediaType' | 'mediaUrl' | 'message' | 'post' | 'replyTo' | 'sourceUser' | 'story' | 'targetUser' | 'updatedAt' | MessageOutputKeySpecifier)[];
+export type MessageOutputFieldPolicy = {
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaThumbnailUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaType?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	message?: FieldPolicy<any> | FieldReadFunction<any>,
+	post?: FieldPolicy<any> | FieldReadFunction<any>,
+	replyTo?: FieldPolicy<any> | FieldReadFunction<any>,
+	sourceUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	story?: FieldPolicy<any> | FieldReadFunction<any>,
+	targetUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type MutationKeySpecifier = ('addClipPost' | 'addMediaPost' | 'addMessage' | 'addPollPost' | 'addTextualPost' | 'bookmarkPost' | 'changePassword' | 'changeProfilePicture' | 'deactivateUser' | 'deleteMessage' | 'deletePost' | 'forgotPassword' | 'googleAuth' | 'incrementPostView' | 'login' | 'logout' | 'multipleUploadFile' | 'postReaction' | 'removeProfilePicture' | 'resetPassword' | 'signUp' | 'singleUpload' | 'updateMediaPost' | 'updateProfile' | 'updateTextualPost' | 'updateUser' | 'verifyForgotPassword' | 'verifyUserEmail' | MutationKeySpecifier)[];
 export type MutationFieldPolicy = {
 	addClipPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addMediaPost?: FieldPolicy<any> | FieldReadFunction<any>,
+	addMessage?: FieldPolicy<any> | FieldReadFunction<any>,
 	addPollPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	addTextualPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	bookmarkPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	changePassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	changeProfilePicture?: FieldPolicy<any> | FieldReadFunction<any>,
 	deactivateUser?: FieldPolicy<any> | FieldReadFunction<any>,
+	deleteMessage?: FieldPolicy<any> | FieldReadFunction<any>,
+	deletePost?: FieldPolicy<any> | FieldReadFunction<any>,
 	forgotPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	googleAuth?: FieldPolicy<any> | FieldReadFunction<any>,
 	incrementPostView?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -103,7 +146,9 @@ export type MutationFieldPolicy = {
 	resetPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	signUp?: FieldPolicy<any> | FieldReadFunction<any>,
 	singleUpload?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateMediaPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateProfile?: FieldPolicy<any> | FieldReadFunction<any>,
+	updateTextualPost?: FieldPolicy<any> | FieldReadFunction<any>,
 	updateUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyForgotPassword?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyUserEmail?: FieldPolicy<any> | FieldReadFunction<any>
@@ -147,13 +192,14 @@ export type PollOutputFieldPolicy = {
 	postId?: FieldPolicy<any> | FieldReadFunction<any>,
 	question?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type PostKeySpecifier = ('_count' | 'archive' | 'caption' | 'createdAt' | 'id' | 'placeId' | 'published' | 'slug' | 'type' | 'updatedAt' | 'userId' | 'views' | PostKeySpecifier)[];
+export type PostKeySpecifier = ('_count' | 'archive' | 'caption' | 'createdAt' | 'id' | 'metaTags' | 'placeId' | 'published' | 'slug' | 'type' | 'updatedAt' | 'userId' | 'views' | PostKeySpecifier)[];
 export type PostFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
 	archive?: FieldPolicy<any> | FieldReadFunction<any>,
 	caption?: FieldPolicy<any> | FieldReadFunction<any>,
 	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
 	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	metaTags?: FieldPolicy<any> | FieldReadFunction<any>,
 	placeId?: FieldPolicy<any> | FieldReadFunction<any>,
 	published?: FieldPolicy<any> | FieldReadFunction<any>,
 	slug?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -222,15 +268,20 @@ export type ProfileOutputFieldPolicy = {
 	relationshipStatus?: FieldPolicy<any> | FieldReadFunction<any>,
 	website?: FieldPolicy<any> | FieldReadFunction<any>
 };
-export type QueryKeySpecifier = ('getBookmarkedPosts' | 'getExplorePosts' | 'getMediaAccessToken' | 'getUser' | 'getUserPosts' | 'isUsernameAvailable' | 'test' | 'verifyAccessToken' | QueryKeySpecifier)[];
+export type QueryKeySpecifier = ('getBookmarkedPosts' | 'getExplorePosts' | 'getMediaAccessToken' | 'getMessages' | 'getPost' | 'getRelatedPosts' | 'getSimilarPosts' | 'getUser' | 'getUserPosts' | 'isUsernameAvailable' | 'test' | 'trainSimilarPostRecommender' | 'verifyAccessToken' | QueryKeySpecifier)[];
 export type QueryFieldPolicy = {
 	getBookmarkedPosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	getExplorePosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	getMediaAccessToken?: FieldPolicy<any> | FieldReadFunction<any>,
+	getMessages?: FieldPolicy<any> | FieldReadFunction<any>,
+	getPost?: FieldPolicy<any> | FieldReadFunction<any>,
+	getRelatedPosts?: FieldPolicy<any> | FieldReadFunction<any>,
+	getSimilarPosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUser?: FieldPolicy<any> | FieldReadFunction<any>,
 	getUserPosts?: FieldPolicy<any> | FieldReadFunction<any>,
 	isUsernameAvailable?: FieldPolicy<any> | FieldReadFunction<any>,
 	test?: FieldPolicy<any> | FieldReadFunction<any>,
+	trainSimilarPostRecommender?: FieldPolicy<any> | FieldReadFunction<any>,
 	verifyAccessToken?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type ReactionKeySpecifier = ('createdAt' | 'id' | 'postId' | 'reaction' | 'updatedAt' | 'userId' | ReactionKeySpecifier)[];
@@ -259,6 +310,25 @@ export type SignUpOutputFieldPolicy = {
 	isVerified?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
 };
+export type StoryKeySpecifier = ('_count' | 'createdAt' | 'id' | 'link' | 'mediaUrl' | 'updatedAt' | 'userId' | StoryKeySpecifier)[];
+export type StoryFieldPolicy = {
+	_count?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	link?: FieldPolicy<any> | FieldReadFunction<any>,
+	mediaUrl?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	userId?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type StoryCountKeySpecifier = ('message' | StoryCountKeySpecifier)[];
+export type StoryCountFieldPolicy = {
+	message?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type SubscriptionKeySpecifier = ('newMessage' | 'newMessageNotification' | SubscriptionKeySpecifier)[];
+export type SubscriptionFieldPolicy = {
+	newMessage?: FieldPolicy<any> | FieldReadFunction<any>,
+	newMessageNotification?: FieldPolicy<any> | FieldReadFunction<any>
+};
 export type TagKeySpecifier = ('_count' | 'id' | 'name' | TagKeySpecifier)[];
 export type TagFieldPolicy = {
 	_count?: FieldPolicy<any> | FieldReadFunction<any>,
@@ -279,6 +349,45 @@ export type UpdateUserOutputKeySpecifier = ('profile' | 'username' | UpdateUserO
 export type UpdateUserOutputFieldPolicy = {
 	profile?: FieldPolicy<any> | FieldReadFunction<any>,
 	username?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type UserKeySpecifier = ('_count' | 'accountType' | 'active' | 'blockExpires' | 'createdAt' | 'email' | 'googleUserId' | 'id' | 'isVerified' | 'lastLogin' | 'loginAttempts' | 'password' | 'role' | 'updatedAt' | 'username' | 'verificationExpires' | UserKeySpecifier)[];
+export type UserFieldPolicy = {
+	_count?: FieldPolicy<any> | FieldReadFunction<any>,
+	accountType?: FieldPolicy<any> | FieldReadFunction<any>,
+	active?: FieldPolicy<any> | FieldReadFunction<any>,
+	blockExpires?: FieldPolicy<any> | FieldReadFunction<any>,
+	createdAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	email?: FieldPolicy<any> | FieldReadFunction<any>,
+	googleUserId?: FieldPolicy<any> | FieldReadFunction<any>,
+	id?: FieldPolicy<any> | FieldReadFunction<any>,
+	isVerified?: FieldPolicy<any> | FieldReadFunction<any>,
+	lastLogin?: FieldPolicy<any> | FieldReadFunction<any>,
+	loginAttempts?: FieldPolicy<any> | FieldReadFunction<any>,
+	password?: FieldPolicy<any> | FieldReadFunction<any>,
+	role?: FieldPolicy<any> | FieldReadFunction<any>,
+	updatedAt?: FieldPolicy<any> | FieldReadFunction<any>,
+	username?: FieldPolicy<any> | FieldReadFunction<any>,
+	verificationExpires?: FieldPolicy<any> | FieldReadFunction<any>
+};
+export type UserCountKeySpecifier = ('activities' | 'blocked' | 'blockedBy' | 'bookmarks' | 'commentReplies' | 'comments' | 'followers' | 'followings' | 'pollAnswers' | 'posts' | 'reactions' | 'receivedFollowRequests' | 'receivedMessages' | 'sentFollowRequests' | 'sentMessages' | 'stories' | 'tokens' | UserCountKeySpecifier)[];
+export type UserCountFieldPolicy = {
+	activities?: FieldPolicy<any> | FieldReadFunction<any>,
+	blocked?: FieldPolicy<any> | FieldReadFunction<any>,
+	blockedBy?: FieldPolicy<any> | FieldReadFunction<any>,
+	bookmarks?: FieldPolicy<any> | FieldReadFunction<any>,
+	commentReplies?: FieldPolicy<any> | FieldReadFunction<any>,
+	comments?: FieldPolicy<any> | FieldReadFunction<any>,
+	followers?: FieldPolicy<any> | FieldReadFunction<any>,
+	followings?: FieldPolicy<any> | FieldReadFunction<any>,
+	pollAnswers?: FieldPolicy<any> | FieldReadFunction<any>,
+	posts?: FieldPolicy<any> | FieldReadFunction<any>,
+	reactions?: FieldPolicy<any> | FieldReadFunction<any>,
+	receivedFollowRequests?: FieldPolicy<any> | FieldReadFunction<any>,
+	receivedMessages?: FieldPolicy<any> | FieldReadFunction<any>,
+	sentFollowRequests?: FieldPolicy<any> | FieldReadFunction<any>,
+	sentMessages?: FieldPolicy<any> | FieldReadFunction<any>,
+	stories?: FieldPolicy<any> | FieldReadFunction<any>,
+	tokens?: FieldPolicy<any> | FieldReadFunction<any>
 };
 export type UserOutputKeySpecifier = ('accountType' | 'active' | 'createdAt' | 'email' | 'id' | 'isVerified' | 'lastLogin' | 'profile' | 'role' | 'updatedAt' | 'username' | UserOutputKeySpecifier)[];
 export type UserOutputFieldPolicy = {
@@ -338,6 +447,10 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | ForgotPasswordOutputKeySpecifier | (() => undefined | ForgotPasswordOutputKeySpecifier),
 		fields?: ForgotPasswordOutputFieldPolicy,
 	},
+	GetMessagesOuput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | GetMessagesOuputKeySpecifier | (() => undefined | GetMessagesOuputKeySpecifier),
+		fields?: GetMessagesOuputFieldPolicy,
+	},
 	GetPostsOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | GetPostsOutputKeySpecifier | (() => undefined | GetPostsOutputKeySpecifier),
 		fields?: GetPostsOutputFieldPolicy,
@@ -349,6 +462,18 @@ export type StrictTypedTypePolicies = {
 	LoginOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | LoginOutputKeySpecifier | (() => undefined | LoginOutputKeySpecifier),
 		fields?: LoginOutputFieldPolicy,
+	},
+	Message?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | MessageKeySpecifier | (() => undefined | MessageKeySpecifier),
+		fields?: MessageFieldPolicy,
+	},
+	MessageCount?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | MessageCountKeySpecifier | (() => undefined | MessageCountKeySpecifier),
+		fields?: MessageCountFieldPolicy,
+	},
+	MessageOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | MessageOutputKeySpecifier | (() => undefined | MessageOutputKeySpecifier),
+		fields?: MessageOutputFieldPolicy,
 	},
 	Mutation?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | MutationKeySpecifier | (() => undefined | MutationKeySpecifier),
@@ -418,6 +543,18 @@ export type StrictTypedTypePolicies = {
 		keyFields?: false | SignUpOutputKeySpecifier | (() => undefined | SignUpOutputKeySpecifier),
 		fields?: SignUpOutputFieldPolicy,
 	},
+	Story?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | StoryKeySpecifier | (() => undefined | StoryKeySpecifier),
+		fields?: StoryFieldPolicy,
+	},
+	StoryCount?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | StoryCountKeySpecifier | (() => undefined | StoryCountKeySpecifier),
+		fields?: StoryCountFieldPolicy,
+	},
+	Subscription?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | SubscriptionKeySpecifier | (() => undefined | SubscriptionKeySpecifier),
+		fields?: SubscriptionFieldPolicy,
+	},
 	Tag?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | TagKeySpecifier | (() => undefined | TagKeySpecifier),
 		fields?: TagFieldPolicy,
@@ -433,6 +570,14 @@ export type StrictTypedTypePolicies = {
 	UpdateUserOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UpdateUserOutputKeySpecifier | (() => undefined | UpdateUserOutputKeySpecifier),
 		fields?: UpdateUserOutputFieldPolicy,
+	},
+	User?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UserKeySpecifier | (() => undefined | UserKeySpecifier),
+		fields?: UserFieldPolicy,
+	},
+	UserCount?: Omit<TypePolicy, "fields" | "keyFields"> & {
+		keyFields?: false | UserCountKeySpecifier | (() => undefined | UserCountKeySpecifier),
+		fields?: UserCountFieldPolicy,
 	},
 	UserOutput?: Omit<TypePolicy, "fields" | "keyFields"> & {
 		keyFields?: false | UserOutputKeySpecifier | (() => undefined | UserOutputKeySpecifier),
