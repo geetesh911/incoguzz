@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./reducers";
 import { appSlice } from "./reducers/app";
 import { authSlice } from "./reducers/auth";
+import { cameraSlice } from "./reducers/camera";
 import { postSlice } from "./reducers/post";
 import { themeSlice } from "./reducers/themes";
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     [postSlice.name]: postSlice.reducer,
     [userSlice.name]: userSlice.reducer,
     [authSlice.name]: authSlice.reducer,
+    [cameraSlice.name]: cameraSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
 });

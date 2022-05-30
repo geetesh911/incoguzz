@@ -12,7 +12,7 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setIsTokenReceived: (state, action: PayloadAction<boolean>) => {
+    setIsTokenReceived: (state: IAuthState, action: PayloadAction<boolean>) => {
       state.isTokenReceived = action.payload;
     },
   },

@@ -10,7 +10,6 @@ import { useAppSelector } from "../../../redux/hooks";
 
 export const BottomMenu: FC<BottomTabBarProps> = ({
   state: navigationState,
-  descriptors,
   navigation,
 }) => {
   const bottomSheetIds = useAppSelector(state => state.app.bottomSheetIds);

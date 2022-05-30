@@ -4883,9 +4883,9 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "17.0.41"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.41.tgz#6e179590d276394de1e357b3f89d05d7d3da8b85"
-  integrity sha512-chYZ9ogWUodyC7VUTRBfblysKLjnohhFY9bGLwvnUFFy48+vB9DikmB3lW0qTFmBcKSzmdglcvkHK71IioOlDA==
+  version "17.0.45"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.45.tgz#9b3d5b661fd26365fefef0e766a1c6c30ccf7b3f"
+  integrity sha512-YfhQ22Lah2e3CHPsb93tRwIGNiSwkuz1/blk4e6QrWS0jQzCSNbGLtOEYhPg02W0yGTTmpajp7dCTbBAMN3qsg==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -18127,6 +18127,11 @@ react-native-video@^5.2.0:
     keymirror "^0.1.1"
     prop-types "^15.7.2"
     shaka-player "^2.5.9"
+
+react-native-vision-camera@^2.13.3:
+  version "2.13.3"
+  resolved "https://registry.yarnpkg.com/react-native-vision-camera/-/react-native-vision-camera-2.13.3.tgz#cacd20b7f3fd777691496f007a47a34c02be93be"
+  integrity sha512-aikp6kNmb9b8lsVFKEKCBgch5h93Cs8Qqw/bSZsn/dO+Qa4uktpe89WIO1VTs88d40vJiLeYFlbyWe589E/UuA==
 
 react-native@0.67.2:
   version "0.67.2"
