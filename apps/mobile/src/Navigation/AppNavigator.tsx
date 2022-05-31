@@ -12,14 +12,23 @@ const Tab = createBottomTabNavigator();
 
 export const AppNavigator: FC = () => {
   const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
+  const hideBottomMenu = useAppSelector(state => state.app.hideBottomMenu);
+
+  const hideBottomMenuRoutesIndex = [2];
 
   return (
     <Tab.Navigator
       initialRouteName={RouteNames.User}
       screenOptions={{ headerShown: false }}
-      tabBar={props =>
-        !videoPlayerState.isFullScreen && <BottomMenu {...props} />
-      }
+      tabBar={props => {
+        return (
+          !(
+            videoPlayerState.isFullScreen ||
+            hideBottomMenu ||
+            hideBottomMenuRoutesIndex.includes(props.state.index)
+          ) && <BottomMenu {...props} />
+        );
+      }}
     >
       <Tab.Screen
         component={MessagesScreen}

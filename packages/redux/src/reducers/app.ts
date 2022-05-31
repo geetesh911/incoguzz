@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface IAppState {
   bottomSheetIds: { [key: string]: string };
   videoPlayerState: { [key: string]: any };
+  hideBottomMenu: boolean;
 }
 
 const initialState: IAppState = {
@@ -11,6 +12,7 @@ const initialState: IAppState = {
     caption: "caption",
   },
   videoPlayerState: {},
+  hideBottomMenu: false,
 };
 
 export const appSlice = createSlice({
@@ -23,9 +25,12 @@ export const appSlice = createSlice({
     ) => {
       state.videoPlayerState = action.payload;
     },
+    setHideBottomMenu: (state: IAppState, action: PayloadAction<boolean>) => {
+      state.hideBottomMenu = action.payload;
+    },
   },
 });
 
-export const { setVideoPlayerState } = appSlice.actions;
+export const { setVideoPlayerState, setHideBottomMenu } = appSlice.actions;
 
 export default appSlice.reducer;

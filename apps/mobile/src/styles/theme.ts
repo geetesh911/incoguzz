@@ -35,6 +35,7 @@ declare module "styled-components" {
     primary: string;
     secondary: string;
     error: string;
+    inactive: string;
   }
 
   export interface DefaultTheme {
@@ -74,6 +75,7 @@ export const dark: DefaultTheme = {
     primary: "#00DD88",
     secondary: "#3f3f46",
     error: "#DD4A48",
+    inactive: "#999999",
   },
   hoverColors: {
     primary: "#FAA61E",
@@ -85,6 +87,7 @@ export const dark: DefaultTheme = {
     primary: "#FFFFFF",
     secondary: "#FFFFFF",
     error: "#FFFFFF",
+    inactive: "#999999",
   },
 };
 
@@ -112,6 +115,7 @@ export const light: DefaultTheme = {
     primary: "#00DD88",
     secondary: "#3f3f46",
     error: "#DD4A48",
+    inactive: "#999999",
   },
   hoverColors: {
     primary: "#FAA61E",
@@ -123,6 +127,7 @@ export const light: DefaultTheme = {
     primary: "#262626",
     secondary: "#FFFFFF",
     error: "#FFFFFF",
+    inactive: "#999999",
   },
 };
 

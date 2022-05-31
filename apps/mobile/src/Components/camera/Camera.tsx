@@ -1,5 +1,6 @@
 import { StyleSheet, Linking } from "react-native";
 import React, {
+  FC,
   useCallback,
   useEffect,
   useMemo,
@@ -53,7 +54,7 @@ Reanimated.addWhitelistedNativeProps({
 
 const SCALE_FULL_ZOOM = 3;
 
-export const Camera = () => {
+export const Camera: FC = () => {
   const dispatch = useAppDispatch();
 
   const camera = useRef<RNCamera>(null);
@@ -260,6 +261,21 @@ export const Camera = () => {
     },
   });
 
+  const icons = {
+    flash: {
+      on: "flash",
+      off: "flash-off",
+    },
+    hdr: {
+      true: "hdr",
+      false: "hdr-off",
+    },
+    nightMode: {
+      true: "moon",
+      false: "moon-outline",
+    },
+  };
+
   return (
     <StyledCameraContainer>
       <If
@@ -309,11 +325,7 @@ export const Camera = () => {
           </If>
           <If condition={supportsFlash}>
             <StyledControlButton onPress={onFlashPressed}>
-              <IonIcon
-                name={flash === "on" ? "flash" : "flash-off"}
-                color="white"
-                size={24}
-              />
+              <IonIcon name={icons.flash[flash]} color="white" size={24} />
             </StyledControlButton>
           </If>
           <If condition={supports60Fps}>
@@ -327,7 +339,7 @@ export const Camera = () => {
           <If condition={supportsHdr}>
             <StyledControlButton onPress={() => setEnableHdr(h => !h)}>
               <MaterialIcon
-                name={enableHdr ? "hdr" : "hdr-off"}
+                name={icons.hdr[enableHdr.toString() as "true" | "false"]}
                 color="white"
                 size={24}
               />
@@ -338,7 +350,11 @@ export const Camera = () => {
               onPress={() => setEnableNightMode(!enableNightMode)}
             >
               <IonIcon
-                name={enableNightMode ? "moon" : "moon-outline"}
+                name={
+                  icons.nightMode[
+                    enableNightMode.toString() as "true" | "false"
+                  ]
+                }
                 color="white"
                 size={24}
               />
