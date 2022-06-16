@@ -14,7 +14,7 @@ export const AppNavigator: FC = () => {
   const videoPlayerState = useAppSelector(state => state.app.videoPlayerState);
   const hideBottomMenu = useAppSelector(state => state.app.hideBottomMenu);
 
-  const hideBottomMenuRoutesIndex = [2];
+  const hideBottomMenuRoutesIndex: number[] = [];
 
   return (
     <Tab.Navigator

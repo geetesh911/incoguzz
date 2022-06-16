@@ -17,7 +17,7 @@ import {
 
 interface IPostImageProps {
   imgUrl: string;
-  onPress: () => void;
+  onPress?: () => void;
 }
 
 const windowWidth = Dimensions.get("window").width;

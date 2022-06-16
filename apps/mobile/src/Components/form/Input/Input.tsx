@@ -6,6 +6,7 @@ import {
 } from "./styled";
 import { ShowError } from "./ShowError";
 import { useTheme } from "../../../styles/theme";
+import { StyleProp, TextStyle } from "react-native";
 
 export interface IInputProps {
   value: unknown;
@@ -13,6 +14,10 @@ export interface IInputProps {
   onChange: (value: string) => void;
   placeholder?: string;
   error?: string;
+  multiline?: boolean;
+  disableFocus?: boolean;
+  style?: StyleProp<TextStyle>;
+  textAlignVertical?: "auto" | "top" | "bottom" | "center";
 }
 
 export const Input: FC<IInputProps> = ({
@@ -20,6 +25,10 @@ export const Input: FC<IInputProps> = ({
   onChange,
   placeholder,
   error,
+  multiline,
+  style,
+  disableFocus,
+  textAlignVertical,
 }) => {
   const [focused, setFocused] = useState<boolean>(false);
   const theme = useTheme();
@@ -32,11 +41,14 @@ export const Input: FC<IInputProps> = ({
     <StyledInputUpperContainer>
       <StyledInputInnerContainer>
         <StyledInput
+          style={style}
+          multiline={multiline}
           value={value as string}
-          focused={focused}
+          focused={disableFocus ? false : focused}
           error={!!error}
           placeholder={placeholder}
           onChangeText={onChange}
+          textAlignVertical={textAlignVertical}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           underlineColorAndroid="transparent"
