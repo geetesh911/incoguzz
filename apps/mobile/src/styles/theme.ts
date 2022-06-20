@@ -78,7 +78,7 @@ export const dark: DefaultTheme = {
     inactive: "#999999",
   },
   hoverColors: {
-    primary: "#FAA61E",
+    primary: "#00b36e",
     light: "#8c8c8c",
     secondary: "#303036",
     error: "#D72A28",
@@ -118,7 +118,7 @@ export const light: DefaultTheme = {
     inactive: "#999999",
   },
   hoverColors: {
-    primary: "#FAA61E",
+    primary: "#00b36e",
     light: "#f2f2f2",
     secondary: "#303036",
     error: "#D72A28",

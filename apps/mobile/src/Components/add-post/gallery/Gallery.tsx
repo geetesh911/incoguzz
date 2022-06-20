@@ -1,7 +1,6 @@
 import CameraRoll from "@react-native-community/cameraroll";
 import React, { createRef, FC, useEffect, useState } from "react";
 import { IOption } from "../../form";
-import { GalleryHeader } from "./GalleryHeader";
 import { GalleryToolbar } from "./GalleryToolbar";
 import LocalMasonryList, {
   LocalMasonryListProps,
@@ -18,6 +17,7 @@ import { StyleSheet } from "react-native";
 import { TapAndLongPressGesture } from "../../shared";
 import { useTheme } from "../../../styles/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { GalleryImageCarousel } from "./GalleryImageCarousel";
 
 export const Gallery: FC = () => {
   const [albums, setAlbums] = useState<IOption[]>([]);
@@ -25,6 +25,9 @@ export const Gallery: FC = () => {
   const [selectedAlbum, setSelectedAlbum] = useState<IOption>();
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImageObjects, setSelectedImageObjects] = useState<
+    CameraRoll.PhotoIdentifier[]
+  >([]);
 
   const getAlbums = async () => {
     const galleryAlbums = await CameraRoll.getAlbums({ assetType: "All" });
@@ -81,17 +84,21 @@ export const Gallery: FC = () => {
               fillColor={theme.colors.primary}
               onPress={(isChecked: boolean) => {
                 const images = [...selectedImages];
+                const imageObjects = [...selectedImageObjects];
 
                 if (isChecked) {
                   images.push(item.node.image.uri);
+                  imageObjects.push(item);
                 } else {
                   const imageIndex = images.findIndex(
                     image => image === item.node.image.uri,
                   );
                   images.splice(imageIndex, 1);
+                  imageObjects.splice(imageIndex, 1);
                 }
 
                 setSelectedImages(images);
+                setSelectedImageObjects(imageObjects);
               }}
               size={20}
             />
@@ -103,13 +110,16 @@ export const Gallery: FC = () => {
   return (
     <StyledGalleryContainer>
       <StyledImagesContainer>
-        <StyledBigImage
-          source={{
-            uri:
-              selectedImages[selectedImages.length - 1] ||
-              photos?.edges?.[0]?.node?.image?.uri,
-          }}
-          style={{ borderWidth: 1 }}
+        <GalleryImageCarousel
+          media={photos?.edges?.[0]}
+          selectedMedia={selectedImages[selectedImages.length - 1]}
+          selectedMediaType={
+            selectedImageObjects?.[
+              selectedImageObjects.length - 1
+            ]?.node.type.includes("video")
+              ? "video"
+              : "image"
+          }
         />
       </StyledImagesContainer>
       <GalleryToolbar

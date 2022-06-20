@@ -20,7 +20,7 @@ export const StyledBottomTabContainer = styled.View`
   justify-content: center;
   flex-direction: row;
   position: absolute;
-  bottom: 20px;
+  bottom: 5px;
   /* background-color: ${({ theme }) => theme.backgrounds.primary}; */
 `;
 

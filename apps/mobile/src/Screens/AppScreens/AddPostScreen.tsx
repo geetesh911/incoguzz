@@ -1,7 +1,11 @@
 import React, { FC, useState } from "react";
-import { BottomTabs, Gallery, AddPostHeader } from "../../Components/add-post";
+import {
+  BottomTabs,
+  Gallery,
+  AddPostHeader,
+  AudioRecorder,
+} from "../../Components/add-post";
 import { TextualPostInput } from "../../Components/add-post/text";
-import { Camera } from "../../Components/camera/Camera";
 
 interface IData {
   id: string;
@@ -15,7 +19,7 @@ export const AddPostScreen: FC = () => {
       case "media":
         return <Gallery />;
       case "audio":
-        return <Camera />;
+        return <AudioRecorder />;
       case "text":
         return <TextualPostInput />;
       default:

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { GestureResponderEvent } from "react-native";
+import { GestureResponderEvent, StyleProp, ViewStyle } from "react-native";
 import {
   GestureEvent,
   TapGestureHandler,
@@ -18,9 +18,10 @@ import { StyledButtonText, StyledButtonContainer } from "./styled";
 
 export interface IButtonProps {
   title: string;
-  color?: keyof DefaultTheme["colors"];
+  color?: keyof DefaultTheme["hoverColors"] | keyof DefaultTheme["colors"];
   isLoading?: boolean;
   onPress: (e?: GestureResponderEvent) => void;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const Button: FC<IButtonProps> = ({
@@ -28,6 +29,7 @@ export const Button: FC<IButtonProps> = ({
   color,
   isLoading,
   onPress,
+  style,
 }) => {
   const theme = useTheme();
   const pressed = useSharedValue(false);
@@ -45,8 +47,10 @@ export const Button: FC<IButtonProps> = ({
   const animatedStyle = useAnimatedStyle(() => {
     return {
       backgroundColor: pressed.value
-        ? theme.hoverColors[color || "primary"]
-        : theme.colors[color || "primary"],
+        ? theme.hoverColors[
+            (color as keyof DefaultTheme["hoverColors"]) || "primary"
+          ]
+        : theme.colors[(color as keyof DefaultTheme["colors"]) || "primary"],
       transform: [{ scale: withSpring(pressed.value ? 0.95 : 1) }],
     };
   });
@@ -56,6 +60,7 @@ export const Button: FC<IButtonProps> = ({
       customAnimatedStyle={animatedStyle}
       customEventHandler={eventHandler}
       onPress={onPress}
+      style={style}
     >
       <>
         {isLoading ? (

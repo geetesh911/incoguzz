@@ -104,6 +104,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   };
 
   const onError = (data: LoadError) => {
+    console.log(data);
     setPlayerState({ ...playerState, isLoading: false, isError: true });
   };
 

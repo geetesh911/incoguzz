@@ -1,10 +1,7 @@
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/FontAwesome5";
-import Animated from "react-native-reanimated";
 import { Pressable } from "react-native";
 import { TapView } from "../../shared/Utility";
-
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const StyledButtonContainer = styled(TapView)`
   margin: 10px 0;
