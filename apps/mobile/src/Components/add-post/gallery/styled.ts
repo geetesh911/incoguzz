@@ -9,6 +9,7 @@ import { PagerView } from "react-native-pager-view";
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
 
 const WINDOW_WIDTH = Dimensions.get("window").width;
+const RATIO = 1;
 
 export const StyledGalleryContainer = styled.View`
   flex: 1;
@@ -42,7 +43,7 @@ export const StyledHeaderForwardIcon = styled(Icon)`
 `;
 
 export const StyledImagesContainer = styled.View`
-  height: 45%;
+  height: ${WINDOW_WIDTH * 0.9 * 1}px;
   background-color: ${({ theme }) => theme.backgrounds.primary};
 `;
 
@@ -81,7 +82,7 @@ export const StyledImageContainer = styled.View`
 
 export const StyledBouncyCheckbox = styled(BouncyCheckbox)`
   position: absolute;
-  bottom: 5px;
+  top: 5px;
   right: 5px;
   width: 20px;
 `;
@@ -91,6 +92,8 @@ export const StyledGalleryImageCarouselPagerView = styled(AnimatedPagerView)`
 `;
 
 export const StyledBigImage = styled.Image`
-  height: 100%;
-  width: 100%;
+  height: ${() => WINDOW_WIDTH * 0.9 * RATIO}px;
+  max-height: ${() => WINDOW_WIDTH * 0.9 * RATIO}px;
+  max-width: 100%;
+  resize-mode: contain;
 `;

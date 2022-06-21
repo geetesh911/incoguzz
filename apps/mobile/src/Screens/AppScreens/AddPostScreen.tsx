@@ -23,7 +23,7 @@ export const AddPostScreen: FC = () => {
       case "text":
         return <TextualPostInput />;
       default:
-        return <></>;
+        return null;
     }
   };
   const data: IData[] = [{ id: "media" }, { id: "text" }, { id: "audio" }];

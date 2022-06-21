@@ -44,8 +44,13 @@ import {
 import IonIcon from "react-native-vector-icons/Ionicons";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { If } from "../shared";
-import { useAppDispatch } from "../../redux/hooks";
-import { addCapturedMedia } from "@incoguzz/redux/dist/reducers/camera";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { setCapturedMedia } from "@incoguzz/redux/dist/reducers/camera";
+import MediaPage from "./MediaPage";
+
+interface ICameraProps {
+  onClose?: () => void;
+}
 
 const ReanimatedCamera = Reanimated.createAnimatedComponent(RNCamera);
 Reanimated.addWhitelistedNativeProps({
@@ -54,8 +59,10 @@ Reanimated.addWhitelistedNativeProps({
 
 const SCALE_FULL_ZOOM = 3;
 
-export const Camera: FC = () => {
+export const Camera: FC<ICameraProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
+
+  const capturedMedia = useAppSelector(state => state.camera.capturedMedia);
 
   const camera = useRef<RNCamera>(null);
 
@@ -227,7 +234,7 @@ export const Camera: FC = () => {
   const onMediaCaptured = useCallback(
     (media: PhotoFile | VideoFile, type: "photo" | "video") => {
       console.log(`Media captured! ${JSON.stringify(media)}`, type);
-      dispatch(addCapturedMedia({ path: media.path, type }));
+      dispatch(setCapturedMedia({ path: media.path, type }));
     },
     [],
   );
@@ -276,6 +283,8 @@ export const Camera: FC = () => {
     },
   };
 
+  if (capturedMedia) return <MediaPage />;
+
   return (
     <StyledCameraContainer>
       <If
@@ -318,6 +327,11 @@ export const Camera: FC = () => {
           setIsPressingButton={setIsPressingButton}
         />
         <StyledRightButtonRow>
+          <If condition={!!onClose}>
+            <StyledControlButton onPress={onClose}>
+              <IonIcon name="close" color="white" size={24} />
+            </StyledControlButton>
+          </If>
           <If condition={supportsCameraFlipping}>
             <StyledControlButton onPress={onFlipCameraPressed}>
               <IonIcon name="camera-reverse" color="white" size={24} />

@@ -19,12 +19,13 @@ import AudioRecorderPlayer, {
   PlayBackType,
   RecordBackType,
 } from "react-native-audio-recorder-player";
-import { Dimensions, PermissionsAndroid, Platform } from "react-native";
+import { Dimensions } from "react-native";
 import React, { Component } from "react";
 import Slider from "@react-native-community/slider";
 import { useTheme } from "../../../styles/theme";
 import { If } from "../../shared";
 import DocumentPicker from "react-native-document-picker";
+import { PermissionUtility } from "../../../utils/permission.util";
 
 interface State {
   isLoggingIn: boolean;
@@ -177,34 +178,13 @@ export class AudioRecorder extends Component<{}, State> {
   };
 
   private onStartRecord = async () => {
-    if (Platform.OS === "android") {
-      try {
-        const grants = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        ]);
+    const permissionsGranted = await PermissionUtility.grantPermissions([
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.RECORD_AUDIO",
+    ]);
 
-        console.log("write external stroage", grants);
-
-        if (
-          grants["android.permission.WRITE_EXTERNAL_STORAGE"] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants["android.permission.READ_EXTERNAL_STORAGE"] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          grants["android.permission.RECORD_AUDIO"] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          console.log("permissions granted");
-        } else {
-          console.log("All required permissions not granted");
-          return;
-        }
-      } catch (err) {
-        console.warn(err);
-        return;
-      }
-    }
+    if (!permissionsGranted) return;
 
     const audioSet: AudioSet = {
       AudioEncoderAndroid: AudioEncoderAndroidType.AAC,
@@ -227,6 +207,7 @@ export class AudioRecorder extends Component<{}, State> {
         ),
       });
     });
+
     this.setState({
       isRecording: true,
       recordingStarted: true,

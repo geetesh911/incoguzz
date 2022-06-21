@@ -8,11 +8,13 @@ const windowHeight = Dimensions.get("window").height;
 
 export interface IImageAspectRatio {
   aspectRatio: number;
+  ratio?: number;
 }
 export interface IMediaProperties {
   height: number;
   width: number;
   isFullScreen?: boolean;
+  ratio?: number;
 }
 interface IStyledFeedImageProps {
   height: number;

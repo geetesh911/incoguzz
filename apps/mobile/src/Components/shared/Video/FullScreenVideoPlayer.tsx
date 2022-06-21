@@ -1,4 +1,3 @@
-import { View } from "react-native";
 import React, { FC } from "react";
 import { VideoPlayer } from "./VideoPlayer";
 import { useAppSelector } from "../../../redux/hooks";
@@ -13,7 +12,6 @@ export const FullScreenVideoPlayer: FC = () => {
       <VideoPlayer
         resizeMode={"contain"}
         style={{ flex: 1 }}
-        // onLoad={onVideoLoad}
         poster={
           "https://res.cloudinary.com/geeteshpp/image/upload/v1647496797/Screenshot_2022-03-17_112932_dytkzv.png"
         }

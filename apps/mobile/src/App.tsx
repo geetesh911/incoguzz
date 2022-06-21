@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SplashScreen from "react-native-splash-screen";
 import { ApolloProvider } from "@apollo/client";
 import makeApolloClient from "../apollo";
@@ -9,8 +9,9 @@ import { useTheme } from "./styles/theme";
 import { useAppSelector } from "./redux/hooks";
 import { Routes } from "./Navigation/Routes";
 import { AuthHelper } from "./Components/auth";
+import { PermissionUtility } from "./utils/permission.util";
 
-const App = () => {
+const App: FC = () => {
   const isTokenReceived = useAppSelector(state => state.auth.isTokenReceived);
 
   const theme = useTheme();
@@ -19,6 +20,19 @@ const App = () => {
 
   useEffect(() => {
     SplashScreen.hide();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const permissionsGranted = await PermissionUtility.grantPermissions([
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+      ]);
+
+      if (permissionsGranted) console.log("Permissions granted");
+    })();
   }, []);
 
   useEffect(() => {

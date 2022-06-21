@@ -41,6 +41,9 @@ import { FullScreenHelper } from "../../../helpers/fullScreen.helper";
 type IVideoPlayerProps = VideoProperties & {
   showFullScreenButton?: boolean;
   defaultState?: IVideoPlayerState;
+  disableControls?: boolean;
+  hideErrorText?: boolean;
+  disableSoundButton?: boolean;
 };
 
 const AnimatedBackwardTenSecIcon =
@@ -87,6 +90,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
       currentTime: props.defaultState ? props.defaultState?.currentTime : 0,
       isLoading: false,
       isPaused: props.paused || false,
+      isError: false,
     });
   };
 
@@ -131,7 +135,7 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
   };
 
   const handleShowControls = () => {
-    setShowControls(!showControls);
+    setShowControls(props.disableControls ? false : !showControls);
   };
 
   const handleForwardTenSeconds = () => {
@@ -315,7 +319,9 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
 
   const ErrorComponent = playerState.isError && (
     <StyledErrorTextContainer>
-      <StyledErrorText>Some error occured</StyledErrorText>
+      <StyledErrorText>
+        {props.hideErrorText ? "" : "Some error occured"}
+      </StyledErrorText>
     </StyledErrorTextContainer>
   );
 
@@ -343,21 +349,23 @@ export const VideoPlayer: FC<IVideoPlayerProps> = props => {
         {!showControls && ForwardGesture}
         {LoadingComponent}
         {ErrorComponent}
-        <StyledSoundButtonContainer onPress={handleMute}>
-          {playerState?.isMuted ? (
-            <MuteIcon
-              height={15}
-              width={15}
-              color={theme?.textColors?.primary}
-            />
-          ) : (
-            <SoundIcon
-              height={15}
-              width={15}
-              color={theme?.textColors?.primary}
-            />
-          )}
-        </StyledSoundButtonContainer>
+        {!props.disableSoundButton && (
+          <StyledSoundButtonContainer onPress={handleMute}>
+            {playerState?.isMuted ? (
+              <MuteIcon
+                height={15}
+                width={15}
+                color={theme?.textColors?.primary}
+              />
+            ) : (
+              <SoundIcon
+                height={15}
+                width={15}
+                color={theme?.textColors?.primary}
+              />
+            )}
+          </StyledSoundButtonContainer>
+        )}
       </>
     </StyledVideoPlayerContainer>
   );

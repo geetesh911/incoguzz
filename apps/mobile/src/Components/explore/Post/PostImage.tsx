@@ -18,11 +18,12 @@ import {
 interface IPostImageProps {
   imgUrl: string;
   onPress?: () => void;
+  ratio?: number;
 }
 
 const windowWidth = Dimensions.get("window").width;
 
-export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
+export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress, ratio }) => {
   const theme = useTheme();
   const [aspectRatio, setAspectRatio] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
@@ -30,6 +31,10 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
   const onImageLoad = (event: NativeSyntheticEvent<ImageLoadEventData>) => {
     const { height, width } = event?.nativeEvent?.source;
     setAspectRatio(height / width);
+    setLoading(false);
+  };
+
+  const onImageLoadEnd = () => {
     setLoading(false);
   };
 
@@ -42,15 +47,17 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
   };
 
   return (
-    <StyledImageContainer>
+    <StyledImageContainer ratio={ratio}>
       <PinchableImage
         imageComponent={
           aspectRatio > 1 ? (
             <Pressable onPress={onPress}>
               <StyledPotraitMedia
+                ratio={ratio}
                 aspectRatio={aspectRatio}
                 source={{ uri: imgUrl }}
                 onLoad={onImageLoad}
+                onLoadEnd={onImageLoadEnd}
                 onLoadStart={onImageLoadStart}
                 onError={onError}
               />
@@ -58,13 +65,18 @@ export const PostImage: FC<IPostImageProps> = ({ imgUrl, onPress }) => {
           ) : (
             <StyledImageContainer
               onPress={onPress}
+              ratio={ratio}
               style={styles.landscapeImageContainer}
             >
               <StyledLandscapeMedia
+                ratio={ratio}
                 style={styles.landscapeImage}
                 aspectRatio={aspectRatio}
                 source={{ uri: imgUrl }}
                 onLoad={onImageLoad}
+                onLoadEnd={onImageLoadEnd}
+                onLoadStart={onImageLoadStart}
+                onError={onError}
               />
             </StyledImageContainer>
           )

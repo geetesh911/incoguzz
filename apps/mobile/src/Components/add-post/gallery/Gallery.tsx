@@ -1,4 +1,4 @@
-import CameraRoll from "@react-native-community/cameraroll";
+import CameraRoll, { AssetType } from "@react-native-community/cameraroll";
 import React, { createRef, FC, useEffect, useState } from "react";
 import { IOption } from "../../form";
 import { GalleryToolbar } from "./GalleryToolbar";
@@ -6,7 +6,6 @@ import LocalMasonryList, {
   LocalMasonryListProps,
 } from "../../shared/List/MasonryList";
 import {
-  StyledBigImage,
   StyledBouncyCheckbox,
   StyledGalleryContainer,
   StyledImage,
@@ -17,20 +16,32 @@ import { StyleSheet } from "react-native";
 import { TapAndLongPressGesture } from "../../shared";
 import { useTheme } from "../../../styles/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { GalleryImageCarousel } from "./GalleryImageCarousel";
+import { GalleryMediaViewer } from "./GalleryMediaViewer";
+import { Camera } from "../../camera/Camera";
 
 export const Gallery: FC = () => {
+  const MAX_PHOTO_COUNT = 4;
+
+  const [mediaType, setMediaType] = useState<IOption>({
+    label: "Photos",
+    value: "Photos",
+  });
   const [albums, setAlbums] = useState<IOption[]>([]);
   const [photos, setPhotos] = useState<CameraRoll.PhotoIdentifiersPage>();
   const [selectedAlbum, setSelectedAlbum] = useState<IOption>();
   const [showCheckboxes, setShowCheckboxes] = useState<boolean>(false);
+  const [selectedImageObject, setSelectedImageObject] =
+    useState<CameraRoll.PhotoIdentifier>();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [selectedImageObjects, setSelectedImageObjects] = useState<
     CameraRoll.PhotoIdentifier[]
   >([]);
+  const [isCameraRunning, setIsCameraRunning] = useState<boolean>(false);
 
   const getAlbums = async () => {
-    const galleryAlbums = await CameraRoll.getAlbums({ assetType: "All" });
+    const galleryAlbums = await CameraRoll.getAlbums({
+      assetType: mediaType.value as AssetType,
+    });
     const initialAlbum = { label: "Recent", value: undefined };
     setAlbums([
       initialAlbum,
@@ -45,39 +56,65 @@ export const Gallery: FC = () => {
 
   const getPhotos = async (endCursor?: string) => {
     const albumPhotos = await CameraRoll.getPhotos({
-      assetType: "All",
+      assetType: mediaType.value as AssetType,
       first: endCursor ? parseInt(endCursor) + 100 : 100,
       groupName: selectedAlbum?.value,
     });
 
+    if (!selectedImageObject) {
+      setSelectedImageObject(albumPhotos.edges[0]);
+    }
     setPhotos(albumPhotos);
   };
 
   useEffect(() => {
     getAlbums();
-  }, []);
+  }, [mediaType]);
 
   useEffect(() => {
     getPhotos();
-  }, [selectedAlbum]);
+  }, [selectedAlbum, mediaType]);
 
   const renderItem: LocalMasonryListProps<CameraRoll.PhotoIdentifier>["renderItem"] =
     ({ item, i }) => {
       const theme = useTheme();
       const checkboxRef = createRef<BouncyCheckbox>();
+      const maxCountCondition =
+        selectedImageObjects.length < MAX_PHOTO_COUNT ||
+        selectedImages?.includes(item.node.image.uri);
 
       return (
         <StyledImageContainer key={`${item.node.image.uri}${i}`}>
           <TapAndLongPressGesture
-            onLongPress={() => setShowCheckboxes(true)}
-            onPress={() => checkboxRef?.current?.onPress?.()}
+            onLongPress={() => {
+              if (mediaType.value === "Videos") return;
+
+              setShowCheckboxes(true);
+              setSelectedImages([item.node.image.uri]);
+              setSelectedImageObjects([item]);
+              setSelectedImageObject(item);
+            }}
+            onPress={() => {
+              if (showCheckboxes && maxCountCondition) {
+                checkboxRef?.current?.onPress?.();
+                return;
+              }
+              (maxCountCondition || item.node.type.includes("video")) &&
+                setSelectedImageObject(item);
+            }}
           >
             <StyledImage
               source={{ uri: item.node.image.uri }}
-              style={{ borderWidth: 1 }}
+              style={{
+                borderWidth: 1,
+                opacity:
+                  item.node.image.uri === selectedImageObject?.node.image.uri
+                    ? 0.2
+                    : 1,
+              }}
             />
           </TapAndLongPressGesture>
-          {showCheckboxes && (
+          {showCheckboxes && maxCountCondition && (
             <StyledBouncyCheckbox
               ref={checkboxRef}
               isChecked={selectedImages?.includes(item.node.image.uri)}
@@ -86,7 +123,7 @@ export const Gallery: FC = () => {
                 const images = [...selectedImages];
                 const imageObjects = [...selectedImageObjects];
 
-                if (isChecked) {
+                if (isChecked && maxCountCondition) {
                   images.push(item.node.image.uri);
                   imageObjects.push(item);
                 } else {
@@ -97,8 +134,9 @@ export const Gallery: FC = () => {
                   imageObjects.splice(imageIndex, 1);
                 }
 
-                setSelectedImages(images);
                 setSelectedImageObjects(imageObjects);
+                setSelectedImages(images);
+                setSelectedImageObject(imageObjects[imageObjects.length - 1]);
               }}
               size={20}
             />
@@ -107,32 +145,44 @@ export const Gallery: FC = () => {
       );
     };
 
+  if (isCameraRunning)
+    return <Camera onClose={() => setIsCameraRunning(false)} />;
+
   return (
     <StyledGalleryContainer>
       <StyledImagesContainer>
-        <GalleryImageCarousel
-          media={photos?.edges?.[0]}
-          selectedMedia={selectedImages[selectedImages.length - 1]}
-          selectedMediaType={
-            selectedImageObjects?.[
-              selectedImageObjects.length - 1
-            ]?.node.type.includes("video")
-              ? "video"
-              : "image"
-          }
+        <GalleryMediaViewer
+          media={selectedImageObject as CameraRoll.PhotoIdentifier}
         />
       </StyledImagesContainer>
       <GalleryToolbar
         albums={albums}
         selectedAlbum={selectedAlbum}
         setSelectedAlbum={setSelectedAlbum}
-        onAlbumChange={() => setSelectedImages([])}
+        mediaType={mediaType}
+        setMediaType={setMediaType}
+        onAlbumChange={() => {
+          setSelectedImages([]);
+          setSelectedImageObjects([]);
+          setShowCheckboxes(false);
+        }}
         onMultiplePageClick={() => {
           setShowCheckboxes(!showCheckboxes);
+          setSelectedImageObjects([
+            selectedImageObject as CameraRoll.PhotoIdentifier,
+          ]);
+          setSelectedImages([selectedImageObject?.node.image.uri as string]);
 
           if (!!showCheckboxes) {
             setSelectedImages([]);
+            setSelectedImageObjects([]);
           }
+        }}
+        onCameraClick={() => {
+          setSelectedImages([]);
+          setSelectedImageObjects([]);
+          setShowCheckboxes(false);
+          setIsCameraRunning(true);
         }}
         isMultiplePageClickActive={showCheckboxes}
       />

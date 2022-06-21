@@ -2,26 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICapturedMedia } from "../interfaces";
 
 export interface ICameraState {
-  capturedMedia: ICapturedMedia[];
+  capturedMedia: ICapturedMedia;
 }
 
 const initialState: ICameraState = {
-  capturedMedia: [],
+  capturedMedia: undefined,
 };
 
 export const cameraSlice = createSlice({
   name: "camera",
   initialState,
   reducers: {
-    addCapturedMedia: (
+    setCapturedMedia: (
       state: ICameraState,
       action: PayloadAction<ICapturedMedia>
     ) => {
-      state.capturedMedia = [...state.capturedMedia, action.payload];
+      state.capturedMedia = action.payload;
     },
   },
 });
 
-export const { addCapturedMedia } = cameraSlice.actions;
+export const { setCapturedMedia } = cameraSlice.actions;
 
 export default cameraSlice.reducer;

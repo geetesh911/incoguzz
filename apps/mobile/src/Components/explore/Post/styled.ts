@@ -8,6 +8,8 @@ import LinearGradient from "react-native-linear-gradient";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
+const RATIO = 4 / 3;
+
 export const AnimatedLazyPagerView =
   Animated.createAnimatedComponent(LazyPagerView);
 const AnimatedPagerView = Animated.createAnimatedComponent(PagerView);
@@ -36,9 +38,12 @@ export const StyledPostComponentContainer = styled.View`
   height: ${windowHeight - 60}px;
 `;
 
-export const StyledPostContainer = styled.View<{ isFullScreen: boolean }>`
-  height: ${({ isFullScreen }) =>
-    isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
+export const StyledPostContainer = styled.View<{
+  isFullScreen: boolean;
+  ratio?: number;
+}>`
+  height: ${({ isFullScreen, ratio }) =>
+    isFullScreen ? windowWidth : windowWidth * 0.9 * (ratio || RATIO)}px;
   width: ${({ isFullScreen }) =>
     isFullScreen ? "100%" : windowWidth * 0.9 + "px"};
   border-top-right-radius: 40px;
@@ -55,13 +60,13 @@ export const StyledPostContainer = styled.View<{ isFullScreen: boolean }>`
 
 export const StyledMediaContainer = styled.View<Partial<IMediaProperties>>`
   width: 100%;
-  height: ${({ isFullScreen }) =>
-    isFullScreen ? windowWidth : windowWidth * 0.9 * (4 / 3)}px;
+  height: ${({ isFullScreen, ratio }) =>
+    isFullScreen ? windowWidth : windowWidth * 0.9 * (ratio || RATIO)}px;
 `;
 
 export const StyledImageContainer = styled.Pressable<Partial<IMediaProperties>>`
   width: 100%;
-  height: ${windowWidth * 0.9 * (4 / 3)}px;
+  height: ${({ ratio }) => windowWidth * 0.9 * (ratio || RATIO)}px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,8 +107,8 @@ export const StyledCaptionText = styled.Text`
 `;
 
 export const StyledPotraitMedia = styled.Image<IImageAspectRatio>`
-  height: ${windowWidth * 0.9 * (4 / 3)}px;
-  max-height: ${windowWidth * 0.9 * (4 / 3)}px;
+  height: ${({ ratio }) => windowWidth * 0.9 * (ratio || RATIO)}px;
+  max-height: ${({ ratio }) => windowWidth * 0.9 * (ratio || RATIO)}px;
   max-width: 100%;
   resize-mode: contain;
 `;
@@ -116,8 +121,10 @@ export const StyledPostImageCarousel = styled.Image<IImageAspectRatio>`
   resize-mode: contain;
 `;
 
-export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)`
-  height: ${windowWidth * 0.9 * (4 / 3)}px;
+export const StyledPostImageCarouselPagerView = styled(AnimatedPagerView)<{
+  ratio?: number;
+}>`
+  height: ${({ ratio }) => windowWidth * 0.9 * (ratio || RATIO)}px;
   width: ${windowWidth * 0.9}px;
   flex: 1;
   display: flex;
