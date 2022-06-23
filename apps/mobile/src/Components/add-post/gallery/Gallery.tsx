@@ -175,9 +175,9 @@ export const Gallery = forwardRef<IGalleryRef, {}>((_props, ref) => {
       getMediaType: () => mediaType.value as "Photos" | "Videos",
       getImages: () =>
         selectedImageObjects.map(imageObject => imageObject?.node?.image?.uri),
-      getVideo: () => selectedImageObjects?.[0]?.node?.image?.uri,
+      getVideo: () => selectedImageObject?.node?.image?.uri as string,
     }),
-    [mediaType, selectedImageObjects],
+    [mediaType, selectedImageObject, selectedImageObjects],
   );
 
   if (isCameraRunning)

@@ -3,6 +3,9 @@ import { useAppSelector } from "../../redux/hooks";
 import { FileUtil } from "../../utils/file.util";
 import { useMutation } from "@apollo/client";
 import {
+  AddAudioPostDocument,
+  AddAudioPostMutation,
+  AddAudioPostMutationVariables,
   AddPhotoPostDocument,
   AddPhotoPostMutation,
   AddPhotoPostMutationVariables,
@@ -35,10 +38,16 @@ const PostUploadScreen: FC = () => {
     AddVideoPostMutation,
     AddVideoPostMutationVariables
   >(AddVideoPostDocument);
+  const [uploadAudioPost, { loading: audioLoading, error }] = useMutation<
+    AddAudioPostMutation,
+    AddAudioPostMutationVariables
+  >(AddAudioPostDocument);
   const [uploadTextualPost, { loading: textualLoading }] = useMutation<
     AddTextualPostMutation,
     AddTextualPostMutationVariables
   >(AddTextualPostDocument);
+
+  console.log(postUrl, JSON.stringify(error));
 
   const media =
     postUrl?.map(url =>
@@ -73,6 +82,18 @@ const PostUploadScreen: FC = () => {
           },
         });
         break;
+      case PostType.Audio:
+        await uploadAudioPost({
+          variables: {
+            addMediaPostInput: {
+              type: PostType.Audio,
+              caption,
+              tags,
+            },
+            media,
+          },
+        });
+        break;
       case PostType.Textual:
         await uploadTextualPost({
           variables: {
@@ -87,7 +108,7 @@ const PostUploadScreen: FC = () => {
     <>
       <AddPostHeader
         onSubmit={uploadPost}
-        loading={photoLoading || videoLoading || textualLoading}
+        loading={photoLoading || videoLoading || textualLoading || audioLoading}
       />
       <CaptionInput ref={captionInputRef} />
     </>

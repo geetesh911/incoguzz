@@ -68,7 +68,7 @@ export const StyledPlayerContainer = styled.View`
 `;
 
 export const StyledFileSelectButton = styled(Button)`
-  margin-top: 100px;
+  margin-top: 50px;
   width: auto;
   padding: 0 15px;
 `;

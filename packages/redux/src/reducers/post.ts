@@ -43,10 +43,20 @@ export const postSlice = createSlice({
     ) => {
       state.postType = action.payload;
     },
+    clearPostUploadData: (state: IPostState) => {
+      state.postType = null;
+      state.postText = "";
+      state.postUrl = [];
+    },
   },
 });
 
-export const { setSelectedPost, setPostUrl, setPostText, setPostType } =
-  postSlice.actions;
+export const {
+  setSelectedPost,
+  setPostUrl,
+  setPostText,
+  setPostType,
+  clearPostUploadData,
+} = postSlice.actions;
 
 export default postSlice.reducer;

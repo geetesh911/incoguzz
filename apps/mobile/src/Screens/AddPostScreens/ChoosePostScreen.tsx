@@ -6,9 +6,10 @@ import {
   BottomTabs,
   Gallery,
   AddPostHeader,
-  AudioRecorder,
+  // AudioRecorder,
   IGalleryRef,
 } from "../../Components/add-post";
+import AudioRecorder from "../../Components/add-post/audio/AudioRecorder";
 import {
   ITextualPostInputRef,
   TextualPostInput,
@@ -57,7 +58,6 @@ export const ChoosePostScreen: FC = () => {
         break;
 
       case "audio":
-        <AudioRecorder />;
         dispatch(setPostType(PostType.Audio));
         break;
 

@@ -1,4 +1,6 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { FC } from "react";
+import { Pressable } from "react-native";
 import { useTheme } from "../../../styles/theme";
 import { LoadingIcon } from "../../shared";
 import {
@@ -18,10 +20,14 @@ export const AddPostHeader: FC<IAddPostHeaderProps> = ({
   onSubmit,
   loading,
 }) => {
+  const navigation = useNavigation();
+
   const theme = useTheme();
   return (
     <StyledHeaderContainer>
-      <StyledHeaderCloseIcon name="close" />
+      <Pressable onPress={() => navigation.goBack()}>
+        <StyledHeaderCloseIcon name="close" />
+      </Pressable>
       <StyledHeaderText>New Post</StyledHeaderText>
       {loading ? (
         <LoadingIcon size={25} color={theme.textColors.primary} />

@@ -42,7 +42,7 @@ export const CaptionInput = forwardRef<ICaptionInputRef, {}>((_props, ref) => {
       getTags: () =>
         captionText
           .match(PATTERN_HASHTAG)
-          ?.map(hashtag => hashtag.replace("\n", "").replace("#", "")),
+          ?.map(hashtag => hashtag?.trim().replace("\n", "").replace("#", "")),
     }),
     [caption],
   );
