@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/Ionicons";
+import { TapView } from "../../shared";
 
 export const StyledHeaderContainer = styled.View`
   display: flex;
@@ -22,6 +23,8 @@ export const StyledHeaderText = styled.Text`
   flex: 1;
   padding: 0 15px;
 `;
+
+export const StyledHeaderForwardButton = styled.Pressable``;
 
 export const StyledHeaderForwardIcon = styled(Icon)`
   color: ${({ theme }) => theme?.colors?.primary};

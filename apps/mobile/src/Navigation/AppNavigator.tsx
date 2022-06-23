@@ -1,12 +1,12 @@
 import React, { FC } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MessagesScreen } from "../Screens/AppScreens/MessagesScreen";
-import { AddPostScreen } from "../Screens/AppScreens/AddPostScreen";
 import { BottomMenu } from "../Components/layout/BottomMenu";
 import { RouteNames } from "./constants";
 import { ExploreNavigator } from "./ExploreNavigator";
 import { useAppSelector } from "../redux/hooks";
 import { UserNavigator } from "./UserNavigator";
+import { AddPostNavigator } from "./AddPostNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +39,7 @@ export const AppNavigator: FC = () => {
         name={RouteNames.Explore}
       ></Tab.Screen>
       <Tab.Screen
-        component={AddPostScreen}
+        component={AddPostNavigator}
         name={RouteNames.AddPost}
       ></Tab.Screen>
       <Tab.Screen

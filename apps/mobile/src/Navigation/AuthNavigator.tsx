@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RouteNames } from "./constants";
-import { LoginScreen } from "../Screens/AuthScreen/LoginScreen";
-import { SignUpScreen } from "../Screens/AuthScreen/SignUpScreen";
-import { AuthHomeScreen } from "../Screens/AuthScreen/AuthHomeScreen";
+import { LoginScreen } from "../Screens/AuthScreens/LoginScreen";
+import { SignUpScreen } from "../Screens/AuthScreens/SignUpScreen";
+import { AuthHomeScreen } from "../Screens/AuthScreens/AuthHomeScreen";
 
 const Stack = createNativeStackNavigator();
 

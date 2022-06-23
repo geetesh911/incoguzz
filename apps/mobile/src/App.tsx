@@ -9,7 +9,7 @@ import { useTheme } from "./styles/theme";
 import { useAppSelector } from "./redux/hooks";
 import { Routes } from "./Navigation/Routes";
 import { AuthHelper } from "./Components/auth";
-import { PermissionUtility } from "./utils/permission.util";
+import { PermissionUtil } from "./utils/permission.util";
 
 const App: FC = () => {
   const isTokenReceived = useAppSelector(state => state.auth.isTokenReceived);
@@ -24,7 +24,7 @@ const App: FC = () => {
 
   useEffect(() => {
     (async () => {
-      const permissionsGranted = await PermissionUtility.grantPermissions([
+      const permissionsGranted = await PermissionUtil.grantPermissions([
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO",

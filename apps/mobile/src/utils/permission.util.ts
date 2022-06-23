@@ -1,6 +1,6 @@
 import { Permission, PermissionsAndroid, Platform } from "react-native";
 
-export class PermissionUtility {
+export class PermissionUtil {
   static async grantPermissions(
     permissionGrants: Permission[],
   ): Promise<boolean> {

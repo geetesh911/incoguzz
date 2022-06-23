@@ -2,9 +2,8 @@ import {
   ApolloClient,
   InMemoryCache,
   NormalizedCacheObject,
-  createHttpLink,
 } from "@apollo/client";
-
+import { createUploadLink } from "apollo-upload-client";
 interface IMakeApolloClient {
   token?: string;
 }
@@ -13,7 +12,7 @@ export function makeApolloClient({
   token,
 }: IMakeApolloClient): ApolloClient<NormalizedCacheObject> {
   // create an apollo link instance, a network interface for apollo client
-  const link = createHttpLink({
+  const link = createUploadLink({
     uri: `http://localhost:5000/graphql`,
     headers: {
       Authorization: `Bearer ${token}`,
@@ -23,6 +22,7 @@ export function makeApolloClient({
   const cache = new InMemoryCache();
   // instantiate apollo client with apollo link instance and cache instance
   return new ApolloClient({
+    //@ts-ignore
     link,
     cache,
   });

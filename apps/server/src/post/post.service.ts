@@ -670,6 +670,7 @@ class PostService {
         break;
 
       case PostType.PHOTO:
+        console.log(extension);
         if (!validImageExtensions.includes(extension))
           throw new UserInputError("Invalid image type");
         break;

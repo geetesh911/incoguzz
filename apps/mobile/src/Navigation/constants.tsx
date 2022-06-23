@@ -25,6 +25,8 @@ export enum RouteNames {
   UserEdit = "UserEdit",
   Settings = "Settings",
   AddPost = "AddPost",
+  ChoosePost = "ChoosePost",
+  PostUpload = "PostUpload",
   AuthHome = "AuthHome",
   Login = "Login",
   SignUp = "SignUp",

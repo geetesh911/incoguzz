@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RouteNames } from "./constants";
-import { PostScreen } from "../Screens/AppScreens/PostScreen";
-import { UserInfoScreen } from "../Screens/AppScreens/UserInfoScreen";
-import { UserPostsScreen } from "../Screens/AppScreens/UserPostsScreen";
+import { PostScreen } from "../Screens/ExploreScreens/PostScreen";
+import { UserInfoScreen } from "../Screens/UserScreens/UserInfoScreen";
+import { UserPostsScreen } from "../Screens/UserScreens/UserPostsScreen";
 import { UserBookmarks } from "../Components/user";
-import { UserEditScreen } from "../Screens/AppScreens/UserEditScreen";
+import { UserEditScreen } from "../Screens/UserScreens/UserEditScreen";
 
 const Stack = createNativeStackNavigator();
 

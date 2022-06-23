@@ -25,7 +25,7 @@ import Slider from "@react-native-community/slider";
 import { useTheme } from "../../../styles/theme";
 import { If } from "../../shared";
 import DocumentPicker from "react-native-document-picker";
-import { PermissionUtility } from "../../../utils/permission.util";
+import { PermissionUtil } from "../../../utils/permission.util";
 
 interface State {
   isLoggingIn: boolean;
@@ -178,7 +178,7 @@ export class AudioRecorder extends Component<{}, State> {
   };
 
   private onStartRecord = async () => {
-    const permissionsGranted = await PermissionUtility.grantPermissions([
+    const permissionsGranted = await PermissionUtil.grantPermissions([
       "android.permission.WRITE_EXTERNAL_STORAGE",
       "android.permission.READ_EXTERNAL_STORAGE",
       "android.permission.RECORD_AUDIO",

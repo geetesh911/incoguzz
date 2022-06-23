@@ -1,5 +1,11 @@
 import CameraRoll, { AssetType } from "@react-native-community/cameraroll";
-import React, { createRef, FC, useEffect, useState } from "react";
+import React, {
+  createRef,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from "react";
 import { IOption } from "../../form";
 import { GalleryToolbar } from "./GalleryToolbar";
 import LocalMasonryList, {
@@ -18,9 +24,19 @@ import { useTheme } from "../../../styles/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { GalleryMediaViewer } from "./GalleryMediaViewer";
 import { Camera } from "../../camera/Camera";
+import { setPostUrl } from "@incoguzz/redux";
+import { useAppDispatch } from "../../../redux/hooks";
 
-export const Gallery: FC = () => {
-  const MAX_PHOTO_COUNT = 4;
+const MAX_PHOTO_COUNT = 4;
+
+export interface IGalleryRef {
+  getMediaType(): "Photos" | "Videos";
+  getImages(): string[];
+  getVideo(): string;
+}
+
+export const Gallery = forwardRef<IGalleryRef, {}>((_props, ref) => {
+  const dispatch = useAppDispatch();
 
   const [mediaType, setMediaType] = useState<IOption>({
     label: "Photos",
@@ -145,6 +161,25 @@ export const Gallery: FC = () => {
       );
     };
 
+  useEffect(() => {
+    dispatch(
+      setPostUrl(
+        selectedImageObjects?.map(imageObject => imageObject?.node?.image?.uri),
+      ),
+    );
+  }, [selectedImageObjects]);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getMediaType: () => mediaType.value as "Photos" | "Videos",
+      getImages: () =>
+        selectedImageObjects.map(imageObject => imageObject?.node?.image?.uri),
+      getVideo: () => selectedImageObjects?.[0]?.node?.image?.uri,
+    }),
+    [mediaType, selectedImageObjects],
+  );
+
   if (isCameraRunning)
     return <Camera onClose={() => setIsCameraRunning(false)} />;
 
@@ -203,7 +238,7 @@ export const Gallery: FC = () => {
       )}
     </StyledGalleryContainer>
   );
-};
+});
 
 const masonaryListStyles = StyleSheet.create({
   masonryList: {

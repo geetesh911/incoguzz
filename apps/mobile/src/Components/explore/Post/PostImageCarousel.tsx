@@ -31,7 +31,7 @@ export const PostImageCarousel: FC<IPostImageCarouselProps> = ({ imgUrls }) => {
           <PostImage
             key={`${imageUrl}${index}`}
             imgUrl={imageUrl}
-            onPress={() => setIsFullScreenModal(true)}
+            // onPress={() => setIsFullScreenModal(true)}
           />
         ))}
       </StyledPostImageCarouselPagerView>

@@ -19,10 +19,12 @@ class CreateBasicPostInputHelper {
       slug: nanoid(),
       metaTags: metaTags || [],
       tags: {
-        connectOrCreate: tags.map(tag => ({
-          where: { name: tag },
-          create: { name: tag },
-        })),
+        connectOrCreate:
+          tags &&
+          tags?.map(tag => ({
+            where: { name: tag },
+            create: { name: tag },
+          })),
       },
     };
   }
