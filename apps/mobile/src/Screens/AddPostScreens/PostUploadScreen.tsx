@@ -22,8 +22,12 @@ import {
   CaptionInput,
   ICaptionInputRef,
 } from "../../Components/add-post";
+import { useNavigation } from "@react-navigation/native";
+import { RouteNames, UserPostsScreenNavigationProp } from "../../Navigation";
 
 const PostUploadScreen: FC = () => {
+  const navigation = useNavigation<UserPostsScreenNavigationProp>();
+
   const captionInputRef = useRef<ICaptionInputRef>(null);
 
   const postUrl = useAppSelector(state => state.post.postUrl);
@@ -38,7 +42,7 @@ const PostUploadScreen: FC = () => {
     AddVideoPostMutation,
     AddVideoPostMutationVariables
   >(AddVideoPostDocument);
-  const [uploadAudioPost, { loading: audioLoading, error }] = useMutation<
+  const [uploadAudioPost, { loading: audioLoading }] = useMutation<
     AddAudioPostMutation,
     AddAudioPostMutationVariables
   >(AddAudioPostDocument);
@@ -46,8 +50,6 @@ const PostUploadScreen: FC = () => {
     AddTextualPostMutation,
     AddTextualPostMutationVariables
   >(AddTextualPostDocument);
-
-  console.log(postUrl, JSON.stringify(error));
 
   const media =
     postUrl?.map(url =>
@@ -58,7 +60,7 @@ const PostUploadScreen: FC = () => {
     ) || undefined;
 
   const uploadPost = async () => {
-    const tags = captionInputRef.current?.getTags();
+    const tags = captionInputRef.current?.getTags() || [];
     const caption = captionInputRef.current?.getCaption();
 
     switch (postType) {
@@ -102,6 +104,8 @@ const PostUploadScreen: FC = () => {
         });
         break;
     }
+
+    navigation.navigate(RouteNames.UserPosts);
   };
 
   return (

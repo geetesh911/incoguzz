@@ -50,6 +50,7 @@ import MediaPage from "./MediaPage";
 
 interface ICameraProps {
   onClose?: () => void;
+  onCapture?: (path: string, type: "photo" | "video") => void;
 }
 
 const ReanimatedCamera = Reanimated.createAnimatedComponent(RNCamera);
@@ -59,7 +60,7 @@ Reanimated.addWhitelistedNativeProps({
 
 const SCALE_FULL_ZOOM = 3;
 
-export const Camera: FC<ICameraProps> = ({ onClose }) => {
+export const Camera: FC<ICameraProps> = ({ onClose, onCapture }) => {
   const dispatch = useAppDispatch();
 
   const capturedMedia = useAppSelector(state => state.camera.capturedMedia);
@@ -233,8 +234,10 @@ export const Camera: FC<ICameraProps> = ({ onClose }) => {
 
   const onMediaCaptured = useCallback(
     (media: PhotoFile | VideoFile, type: "photo" | "video") => {
+      const filePath = type === "photo" ? `file://${media.path}` : media.path;
       console.log(`Media captured! ${JSON.stringify(media)}`, type);
-      dispatch(setCapturedMedia({ path: media.path, type }));
+      onCapture?.(filePath, type);
+      dispatch(setCapturedMedia({ path: filePath, type }));
     },
     [],
   );

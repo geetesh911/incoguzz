@@ -26,7 +26,8 @@ export const StyledHeaderText = styled.Text`
 
 export const StyledHeaderForwardButton = styled.Pressable``;
 
-export const StyledHeaderForwardIcon = styled(Icon)`
-  color: ${({ theme }) => theme?.colors?.primary};
+export const StyledHeaderForwardIcon = styled(Icon)<{ disabled?: boolean }>`
+  color: ${({ theme, disabled }) =>
+    disabled ? theme?.colors?.inactive : theme?.colors?.primary};
   font-size: 30px;
 `;

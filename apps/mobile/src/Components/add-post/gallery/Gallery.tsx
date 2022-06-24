@@ -24,8 +24,16 @@ import { useTheme } from "../../../styles/theme";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { GalleryMediaViewer } from "./GalleryMediaViewer";
 import { Camera } from "../../camera/Camera";
-import { setPostUrl } from "@incoguzz/redux";
-import { useAppDispatch } from "../../../redux/hooks";
+import { setPostType, setPostUrl } from "@incoguzz/redux";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { AddPostHeader } from "../header";
+import { PostType } from "@incoguzz/graphql";
+import { useNavigation } from "@react-navigation/native";
+import {
+  PostUploadScreenNavigationProp,
+  RouteNames,
+} from "../../../Navigation";
+import { setCapturedMedia } from "@incoguzz/redux/dist/reducers/camera";
 
 const MAX_PHOTO_COUNT = 4;
 
@@ -37,6 +45,9 @@ export interface IGalleryRef {
 
 export const Gallery = forwardRef<IGalleryRef, {}>((_props, ref) => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation<PostUploadScreenNavigationProp>();
+
+  const capturedMedia = useAppSelector(state => state.camera.capturedMedia);
 
   const [mediaType, setMediaType] = useState<IOption>({
     label: "Photos",
@@ -180,63 +191,124 @@ export const Gallery = forwardRef<IGalleryRef, {}>((_props, ref) => {
     [mediaType, selectedImageObject, selectedImageObjects],
   );
 
+  const onSubmit = () => {
+    switch (mediaType.value) {
+      case "Photos":
+        dispatch(setPostType(PostType.Photo));
+        dispatch(
+          setPostUrl(
+            capturedMedia?.path
+              ? [capturedMedia.path]
+              : selectedImageObjects.map(
+                  imageObject => imageObject?.node?.image?.uri,
+                ),
+          ),
+        );
+        break;
+
+      case "Videos":
+        dispatch(setPostType(PostType.Video));
+        dispatch(
+          setPostUrl(
+            capturedMedia?.path
+              ? [capturedMedia.path]
+              : [selectedImageObject?.node?.image?.uri as string],
+          ),
+        );
+        break;
+
+      default:
+        return;
+    }
+
+    navigation.navigate(RouteNames.PostUpload);
+  };
+
   if (isCameraRunning)
-    return <Camera onClose={() => setIsCameraRunning(false)} />;
+    return (
+      <>
+        <AddPostHeader disabled={!capturedMedia?.path} onSubmit={onSubmit} />
+        <Camera
+          onCapture={(_, type) => {
+            const typeOfMedia = type === "photo" ? "Photos" : "Videos";
+            setMediaType({ value: typeOfMedia, label: typeOfMedia });
+          }}
+          onClose={() => {
+            dispatch(setCapturedMedia(undefined));
+            setIsCameraRunning(false);
+            setSelectedImageObjects([]);
+            setSelectedImageObject(undefined);
+          }}
+        />
+      </>
+    );
 
   return (
-    <StyledGalleryContainer>
-      <StyledImagesContainer>
-        <GalleryMediaViewer
-          media={selectedImageObject as CameraRoll.PhotoIdentifier}
-        />
-      </StyledImagesContainer>
-      <GalleryToolbar
-        albums={albums}
-        selectedAlbum={selectedAlbum}
-        setSelectedAlbum={setSelectedAlbum}
-        mediaType={mediaType}
-        setMediaType={setMediaType}
-        onAlbumChange={() => {
-          setSelectedImages([]);
-          setSelectedImageObjects([]);
-          setShowCheckboxes(false);
-        }}
-        onMultiplePageClick={() => {
-          setShowCheckboxes(!showCheckboxes);
-          setSelectedImageObjects([
-            selectedImageObject as CameraRoll.PhotoIdentifier,
-          ]);
-          setSelectedImages([selectedImageObject?.node.image.uri as string]);
+    <>
+      <AddPostHeader
+        disabled={
+          !(mediaType.value === "Videos"
+            ? !!selectedImageObject?.node?.image?.uri &&
+              selectedImageObject?.node?.type?.includes("video")
+            : selectedImageObjects?.length > 0)
+        }
+        onSubmit={onSubmit}
+      />
 
-          if (!!showCheckboxes) {
+      <StyledGalleryContainer>
+        <StyledImagesContainer>
+          <GalleryMediaViewer
+            media={selectedImageObject as CameraRoll.PhotoIdentifier}
+          />
+        </StyledImagesContainer>
+        <GalleryToolbar
+          albums={albums}
+          selectedAlbum={selectedAlbum}
+          setSelectedAlbum={setSelectedAlbum}
+          mediaType={mediaType}
+          setMediaType={setMediaType}
+          onAlbumChange={() => {
             setSelectedImages([]);
             setSelectedImageObjects([]);
-          }
-        }}
-        onCameraClick={() => {
-          setSelectedImages([]);
-          setSelectedImageObjects([]);
-          setShowCheckboxes(false);
-          setIsCameraRunning(true);
-        }}
-        isMultiplePageClickActive={showCheckboxes}
-      />
-      {photos?.edges && (
-        <LocalMasonryList
-          contentContainerStyle={masonaryListStyles.masonryList}
-          numColumns={4}
-          data={photos?.edges}
-          renderItem={renderItem}
-          onEndReached={() => {
-            if (photos.page_info.has_next_page) {
-              getPhotos(photos.page_info.end_cursor);
+            setShowCheckboxes(false);
+          }}
+          onMultiplePageClick={() => {
+            setShowCheckboxes(!showCheckboxes);
+            setSelectedImageObjects([
+              selectedImageObject as CameraRoll.PhotoIdentifier,
+            ]);
+            setSelectedImages([selectedImageObject?.node.image.uri as string]);
+
+            if (!!showCheckboxes) {
+              setSelectedImages([]);
+              setSelectedImageObjects([]);
             }
           }}
-          onEndReachedThreshold={0.2}
-          showsVerticalScrollIndicator={false}
+          onCameraClick={() => {
+            setSelectedImages([]);
+            setSelectedImageObjects([]);
+            setShowCheckboxes(false);
+            setIsCameraRunning(true);
+          }}
+          isMultiplePageClickActive={showCheckboxes}
         />
-      )}
-    </StyledGalleryContainer>
+        {photos?.edges && (
+          <LocalMasonryList
+            contentContainerStyle={masonaryListStyles.masonryList}
+            numColumns={4}
+            data={photos?.edges}
+            renderItem={renderItem}
+            onEndReached={() => {
+              if (photos.page_info.has_next_page) {
+                getPhotos(photos.page_info.end_cursor);
+              }
+            }}
+            onEndReachedThreshold={0.2}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </StyledGalleryContainer>
+    </>
   );
 });
 

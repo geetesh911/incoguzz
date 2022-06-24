@@ -15,6 +15,7 @@ const MediaPage: FC = () => {
 
   const capturedMedia = useAppSelector(state => state.camera.capturedMedia);
 
+  console.log("juh", capturedMedia.type, capturedMedia.path);
   return (
     <StyledMediaPageContainer>
       {capturedMedia.type === "video" ? (

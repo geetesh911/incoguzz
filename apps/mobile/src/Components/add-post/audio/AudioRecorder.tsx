@@ -30,6 +30,12 @@ import { connect } from "react-redux";
 import { setPostType, setPostUrl, clearPostUploadData } from "@incoguzz/redux";
 import { Dispatch } from "@reduxjs/toolkit";
 import { PostType } from "@incoguzz/graphql";
+import RNFetchBlob from "rn-fetch-blob";
+import { AddPostHeader } from "../header";
+import {
+  PostUploadScreenNavigationProp,
+  RouteNames,
+} from "../../../Navigation";
 
 interface IAudioRecorderState {
   isLoggingIn: boolean;
@@ -49,6 +55,7 @@ interface IAudioRecorderState {
 
 interface IAudioRecorderProps {
   dispatch: Dispatch;
+  navigation: PostUploadScreenNavigationProp;
 }
 
 class AudioRecorderComponent extends Component<
@@ -84,9 +91,10 @@ class AudioRecorderComponent extends Component<
     const document = await DocumentPicker.pickSingle({
       type: DocumentPicker.types.audio,
     });
-    this.props.dispatch(setPostType(PostType.Audio));
-    this.props.dispatch(setPostUrl([document.uri]));
-    console.log("file select", document, decodeURIComponent(document.uri));
+
+    const fileObj = await RNFetchBlob.fs.stat(document.uri);
+
+    this.setState({ uri: `file://${fileObj.path}` });
   };
 
   private onStatusPress = (e: any) => {
@@ -175,8 +183,6 @@ class AudioRecorderComponent extends Component<
       recordSecs: 0,
       isRecording: false,
     });
-    this.props.dispatch(setPostType(PostType.Audio));
-    this.props.dispatch(setPostUrl([this.state.uri]));
     console.log(result);
   };
 
@@ -223,85 +229,99 @@ class AudioRecorderComponent extends Component<
     });
   };
 
+  private onSubmit = () => {
+    this.props.dispatch(setPostType(PostType.Audio));
+    this.props.dispatch(setPostUrl([this.state.uri]));
+
+    this.props.navigation.navigate(RouteNames.PostUpload);
+  };
+
   public render() {
     return (
-      <StyledAudioRecorderContainer>
-        <If condition={!(this.state.isRecording || this.state.isPlaying)}>
-          <StyledFileSelectButton
-            title="Select Audio From Storage"
-            onPress={this.onFileSelect}
-          />
-        </If>
-        <If condition={!this.state.isRecording}>
-          <StyledRecordButtonContainer>
-            <StyledStartRecordButton onPress={this.onStartRecord}>
-              <StyledStartRecordButtonIcon name="microphone" />
-            </StyledStartRecordButton>
-          </StyledRecordButtonContainer>
-        </If>
-        <If condition={this.state.recordingStarted}>
-          <StyledRecordTimeText>{this.state.recordTime}</StyledRecordTimeText>
+      <>
+        <AddPostHeader
+          disabled={!(this.state.uri && !this.state.isRecording)}
+          onSubmit={this.onSubmit}
+        />
 
-          <If condition={this.state.isRecording}>
+        <StyledAudioRecorderContainer>
+          <If condition={!(this.state.isRecording || this.state.isPlaying)}>
+            <StyledFileSelectButton
+              title="Select Audio From Storage"
+              onPress={this.onFileSelect}
+            />
+          </If>
+          <If condition={!this.state.isRecording}>
             <StyledRecordButtonContainer>
-              <StyledStartRecordButton
-                onPress={
-                  this.state.isRecordingPaused
-                    ? this.onResumeRecord
-                    : this.onPauseRecord
-                }
-              >
-                <StyledStartRecordButtonIcon
-                  name={this.state.isRecordingPaused ? "microphone" : "pause"}
-                />
-              </StyledStartRecordButton>
-              <StyledStartRecordButton removeBg onPress={this.onStopRecord}>
-                <StyledStartRecordButtonIcon name={"stop"} />
+              <StyledStartRecordButton onPress={this.onStartRecord}>
+                <StyledStartRecordButtonIcon name="microphone" />
               </StyledStartRecordButton>
             </StyledRecordButtonContainer>
           </If>
-          <StyledPlayerContainer>
-            <StyledSliderContainer>
-              <Slider
-                value={this.state.currentPositionSec}
-                minimumValue={0}
-                disabled={true}
-                maximumValue={this.state.currentDurationSec}
-                step={1}
-                minimumTrackTintColor={this.theme.colors.primary}
-                maximumTrackTintColor={this.theme.textColors.primary}
-                thumbTintColor={this.theme.colors.primary}
-              />
-            </StyledSliderContainer>
-            <StyledSliderText>
-              {this.state.playTime} / {this.state.duration}
-            </StyledSliderText>
-            <StyledPlayerButtonContainer>
-              <If condition={!this.state.isPlaying}>
-                <StyledStartRecordButton onPress={this.onStartPlay}>
-                  <StyledStartRecordButtonIcon name="play" />
-                </StyledStartRecordButton>
-              </If>
-              <If condition={this.state.isPlaying}>
+          <If condition={this.state.recordingStarted}>
+            <StyledRecordTimeText>{this.state.recordTime}</StyledRecordTimeText>
+
+            <If condition={this.state.isRecording}>
+              <StyledRecordButtonContainer>
                 <StyledStartRecordButton
                   onPress={
-                    this.state.isPlayingPaused
-                      ? this.onResumePlay
-                      : this.onPausePlay
+                    this.state.isRecordingPaused
+                      ? this.onResumeRecord
+                      : this.onPauseRecord
                   }
                 >
                   <StyledStartRecordButtonIcon
-                    name={this.state.isPlayingPaused ? "play" : "pause"}
+                    name={this.state.isRecordingPaused ? "microphone" : "pause"}
                   />
                 </StyledStartRecordButton>
-              </If>
-              <StyledStartRecordButton removeBg onPress={this.onStopPlay}>
-                <StyledStartRecordButtonIcon removeBg name="stop" />
-              </StyledStartRecordButton>
-            </StyledPlayerButtonContainer>
-          </StyledPlayerContainer>
-        </If>
-      </StyledAudioRecorderContainer>
+                <StyledStartRecordButton removeBg onPress={this.onStopRecord}>
+                  <StyledStartRecordButtonIcon name={"stop"} />
+                </StyledStartRecordButton>
+              </StyledRecordButtonContainer>
+            </If>
+            <StyledPlayerContainer>
+              <StyledSliderContainer>
+                <Slider
+                  value={this.state.currentPositionSec}
+                  minimumValue={0}
+                  disabled={true}
+                  maximumValue={this.state.currentDurationSec}
+                  step={1}
+                  minimumTrackTintColor={this.theme.colors.primary}
+                  maximumTrackTintColor={this.theme.textColors.primary}
+                  thumbTintColor={this.theme.colors.primary}
+                />
+              </StyledSliderContainer>
+              <StyledSliderText>
+                {this.state.playTime} / {this.state.duration}
+              </StyledSliderText>
+              <StyledPlayerButtonContainer>
+                <If condition={!this.state.isPlaying}>
+                  <StyledStartRecordButton onPress={this.onStartPlay}>
+                    <StyledStartRecordButtonIcon name="play" />
+                  </StyledStartRecordButton>
+                </If>
+                <If condition={this.state.isPlaying}>
+                  <StyledStartRecordButton
+                    onPress={
+                      this.state.isPlayingPaused
+                        ? this.onResumePlay
+                        : this.onPausePlay
+                    }
+                  >
+                    <StyledStartRecordButtonIcon
+                      name={this.state.isPlayingPaused ? "play" : "pause"}
+                    />
+                  </StyledStartRecordButton>
+                </If>
+                <StyledStartRecordButton removeBg onPress={this.onStopPlay}>
+                  <StyledStartRecordButtonIcon removeBg name="stop" />
+                </StyledStartRecordButton>
+              </StyledPlayerButtonContainer>
+            </StyledPlayerContainer>
+          </If>
+        </StyledAudioRecorderContainer>
+      </>
     );
   }
 }

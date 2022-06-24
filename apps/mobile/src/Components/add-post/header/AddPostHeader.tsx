@@ -14,11 +14,13 @@ import {
 interface IAddPostHeaderProps {
   onSubmit: () => void;
   loading?: boolean;
+  disabled?: boolean;
 }
 
 export const AddPostHeader: FC<IAddPostHeaderProps> = ({
   onSubmit,
   loading,
+  disabled,
 }) => {
   const navigation = useNavigation();
 
@@ -32,8 +34,8 @@ export const AddPostHeader: FC<IAddPostHeaderProps> = ({
       {loading ? (
         <LoadingIcon size={25} color={theme.textColors.primary} />
       ) : (
-        <StyledHeaderForwardButton onPress={onSubmit}>
-          <StyledHeaderForwardIcon name="arrow-forward" />
+        <StyledHeaderForwardButton disabled={disabled} onPress={onSubmit}>
+          <StyledHeaderForwardIcon disabled={disabled} name="arrow-forward" />
         </StyledHeaderForwardButton>
       )}
     </StyledHeaderContainer>
