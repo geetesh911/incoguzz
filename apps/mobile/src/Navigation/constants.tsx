@@ -12,6 +12,7 @@ type RoutesType = { [key: string]: JSX.Element };
 
 export enum RouteNames {
   Messages = "Messages",
+  Inbox = "Inbox",
   Explore = "Explore",
   Notifications = "Notifications",
   User = "User",

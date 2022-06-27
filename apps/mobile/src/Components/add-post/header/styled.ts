@@ -1,6 +1,5 @@
 import styled from "styled-components/native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { TapView } from "../../shared";
 
 export const StyledHeaderContainer = styled.View`
   display: flex;

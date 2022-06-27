@@ -7,6 +7,7 @@ import { ExploreNavigator } from "./ExploreNavigator";
 import { useAppSelector } from "../redux/hooks";
 import { UserNavigator } from "./UserNavigator";
 import { AddPostNavigator } from "./AddPostNavigator";
+import { MessageNavigator } from "./MessageNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,7 +19,7 @@ export const AppNavigator: FC = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName={RouteNames.User}
+      initialRouteName={RouteNames.Messages}
       screenOptions={{ headerShown: false }}
       tabBar={props => {
         return (
@@ -31,7 +32,7 @@ export const AppNavigator: FC = () => {
       }}
     >
       <Tab.Screen
-        component={MessagesScreen}
+        component={MessageNavigator}
         name={RouteNames.Messages}
       ></Tab.Screen>
       <Tab.Screen
